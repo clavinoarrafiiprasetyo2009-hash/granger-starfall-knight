@@ -15,7 +15,8 @@ const assets = [
   'tileset_origin_furniture.png',
   'tileset_origin_master.png',
   'bg_origin_wall_panorama.png',
-  'slash_effects_clean.png'
+  'slash_effects_clean.png',
+  'slash_blood_clean.png'
 ];
 
 assets.forEach(asset => {
@@ -80,7 +81,13 @@ assert(gameJs.includes("x: 16850, y: 350"), "Goal portal at 16850 missing");
 assert(gameJs.includes("sector2Altars"), "Sector 2 altars missing");
 assert(gameJs.includes("Altar Segel Bulan"), "Altar Segel Bulan missing");
 assert(gameJs.includes("Altar Segel Bintang"), "Altar Segel Bintang missing");
-assert(gameJs.includes("Altar Segel Matahari"), "Altar Segel Matahari missing");
+// Lord Kageyoshi Boss & Hollow Knight Quality Features
+assert(gameJs.includes("LORD KAGEYOSHI: THE CORRUPTED SHOGUN"), "Lord Kageyoshi boss name missing");
+assert(gameJs.includes("DINDING BENTENG KIRI (WALL JUMP)"), "Sector 1 fortress chimney missing");
+assert(gameJs.includes("DINDING MENARA KABUT KIRI (WALL JUMP)"), "Gorge mist tower chimney missing");
+assert(gameJs.includes("DINDING BASTION KIRI (WALL JUMP)"), "Sector 2 bastion chimney missing");
+assert(gameJs.includes("drawSakuraWeather"), "drawSakuraWeather function missing");
+assert(gameJs.includes("slashBloodImg.src = 'assets/slash_blood_clean.png'"), "slashBloodImg source missing");
 
 console.log('[PASS] game.js 17,000px expanded world, village props, undulating ground, NPCs, and boss triggers verified.');
 

@@ -1057,6 +1057,11 @@ const LEVELS = {
       { x: 5330, y: 230, w: 120, h: 22,  type: 'floating_island',     label: 'BATU TURUN 2' },
       { x: 5480, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK TURUN 3' },
 
+      // --- SEKTOR 1: BENTENG PENGAWAS NGARAI & PARKOUR WALL CHIMNEY (5500 .. 5680) ---
+      { x: 5520, y: 80,  w: 32,  h: 340, type: 'ruin_wall',           label: 'DINDING BENTENG KIRI (WALL JUMP)' },
+      { x: 5660, y: 80,  w: 32,  h: 340, type: 'ruin_wall',           label: 'DINDING BENTENG KANAN (WALL JUMP)' },
+      { x: 5500, y: 80,  w: 210, h: 22,  type: 'ruin_stone',          label: 'PUNCAK BENTENG PENGAWAS' },
+
       // --- SEKTOR 1: POS PENJAGAAN AOI (5700 .. 6180) ---
       { x: 5740, y: 260, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS PERBATASAN' },
       { x: 5900, y: 310, w: 160, h: 24,  type: 'yamamon_gate',        label: 'POS PENJAGAAN AOI' },
@@ -1076,6 +1081,12 @@ const LEVELS = {
       { x: 8780,  y: 250, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGINTAI BARAT' },
       { x: 9040,  y: 190, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 2' },
       { x: 9340,  y: 150, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 2' },
+
+      // --- PERJALANAN PANJANG: MENARA KABUT PURBA & PARKOUR WALL CHIMNEY (9620 .. 9760) ---
+      { x: 9620,  y: 80,  w: 32,  h: 370, type: 'ruin_wall',           label: 'DINDING MENARA KABUT KIRI (WALL JUMP)' },
+      { x: 9760,  y: 80,  w: 32,  h: 370, type: 'ruin_wall',           label: 'DINDING MENARA KABUT KANAN (WALL JUMP)' },
+      { x: 9600,  y: 80,  w: 210, h: 22,  type: 'ruin_stone',          label: 'PUNCAK MENARA KABUT PURBA' },
+
       { x: 10100, y: 320, w: 200, h: 130, type: 'grand_gatehouse',     label: 'GERBANG BATU PERBATASAN SEKTOR 2' },
       { x: 10340, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SEKTOR 2' },
 
@@ -1098,6 +1109,12 @@ const LEVELS = {
       { x: 14000, y: 350, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT MENTARI' },
       { x: 14300, y: 260, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG MENTARI' },
       { x: 14600, y: 200, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SAKURA' },
+
+      // --- SEKTOR 2: BENTENG BASTION SANCTUM & PARKOUR WALL CHIMNEY (14840 .. 14980) ---
+      { x: 14840, y: 80,  w: 32,  h: 350, type: 'ruin_wall',           label: 'DINDING BASTION KIRI (WALL JUMP)' },
+      { x: 14980, y: 80,  w: 32,  h: 350, type: 'ruin_wall',           label: 'DINDING BASTION KANAN (WALL JUMP)' },
+      { x: 14820, y: 80,  w: 210, h: 22,  type: 'ruin_stone',          label: 'PUNCAK BASTION SANCTUM' },
+
       { x: 14900, y: 270, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS MENTARI' },
       { x: 15120, y: 280, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR MATAHARI' },
 
@@ -2702,7 +2719,7 @@ class Enemy {
       this.hp = 1800;
       this.maxHp = 1800;
       this.phase = 1;
-      this.name = 'THE BLIGHT CHIMERA';
+      this.name = 'LORD KAGEYOSHI: THE CORRUPTED SHOGUN';
       this.isFinalBoss = true;
     }
 
@@ -3408,7 +3425,7 @@ class Enemy {
       return;
     }
 
-    // Level 1 Main Boss: The Blight Chimera (Sanctum Throne Arena: 14500 .. 15700)
+    // Level 1 Main Boss: LORD KAGEYOSHI: THE CORRUPTED SHOGUN (Human Samurai Rival Warlord)
     if (this.type === 'boss_chimera') {
       this.vy += GRAVITY;
       this.x += this.vx;
@@ -3422,49 +3439,160 @@ class Enemy {
           this.isGrounded = true;
         }
       });
-      if (this.x < 14650) {
-        this.x = 14650;
-        this.vx = Math.abs(this.vx);
-        this.facing = 1;
-      } else if (this.x > 15600) {
-        this.x = 15600;
-        this.vx = -Math.abs(this.vx);
-        this.facing = -1;
+
+      // Clamp within Sanctum Throne Room Arena (15600 .. 16454)
+      if (this.x < 15640) {
+        this.x = 15640;
+        this.vx = 0;
+      } else if (this.x > 16380) {
+        this.x = 16380;
+        this.vx = 0;
       }
 
       if (this.hp <= 900 && this.phase === 1) {
         this.phase = 2;
-        screenShake = 22;
+        screenShake = 24;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(this.x, this.y - 35, '☠ APEX MUTATION: CHIMERIC ROAR! ☠', '#a855f7'));
-        enemies.push(new Enemy(this.x - 120, this.y - 60, 'bramble_drone'));
-        enemies.push(new Enemy(this.x + 120, this.y - 60, 'bramble_drone'));
+        floatingTexts.push(new FloatingText(this.x, this.y - 35, '⚡ MURAMASA AWAKENING: DUAL BLADE FURY! ⚡', '#dc2626'));
       }
       this.updateBossHud();
       this.stateTimer++;
-      this.facing = player.x < this.x ? -1 : 1;
 
-      // Pattern 1: Rapid 3-way Spore Volley
-      if (this.stateTimer % 120 === 60) {
-        window.soundEngine.playFireBlast();
-        const dir = this.facing;
-        enemyProjectiles.push(new EnemyProjectile(this.x + this.w / 2, this.y + 30, dir * 4.5, -2.5, 'spore_ball'));
-        enemyProjectiles.push(new EnemyProjectile(this.x + this.w / 2, this.y + 30, dir * 5.2, 0, 'bramble_thorn'));
-        enemyProjectiles.push(new EnemyProjectile(this.x + this.w / 2, this.y + 30, dir * 4.0, 2.0, 'bramble_thorn'));
-      }
-      // Pattern 2: Ground Quake Shockwave
-      if (this.stateTimer % 180 === 120) {
-        screenShake = 14;
-        window.soundEngine.playExplosion();
-        enemyProjectiles.push(new EnemyProjectile(this.x - 10, this.y + this.h - 14, -5.5, 0, 'shockwave'));
-        enemyProjectiles.push(new EnemyProjectile(this.x + this.w + 10, this.y + this.h - 14, 5.5, 0, 'shockwave'));
-      }
-      // Pattern 3: Phase 2 Apex Pounce & Shadow Warp
-      if (this.phase === 2 && this.stateTimer % 230 === 180) {
-        this.teleportBehindPlayer();
-        this.vx = this.facing * 8.0;
-        screenShake = 14;
-        floatingTexts.push(new FloatingText(this.x, this.y - 25, 'CHIMERIC SHADOW POUNCE!', '#ef4444'));
+      const dist = Math.abs((player.x + player.w / 2) - (this.x + this.w / 2));
+      const targetFacing = player.x < this.x ? -1 : 1;
+
+      if (!this.aiState || this.aiState === 'stalking') {
+        this.facing = targetFacing;
+        // Deliberate samurai pacing towards player
+        if (dist > 180) {
+          this.vx = this.facing * (this.phase === 2 ? 3.8 : 2.6);
+        } else if (dist < 80) {
+          this.vx = -this.facing * 1.5; // Tactical backstep
+        } else {
+          this.vx = 0;
+        }
+
+        this.attackCooldown = (this.attackCooldown || 0) + 1;
+        const reqCd = this.phase === 2 ? 65 : 90;
+        if (this.attackCooldown >= reqCd) {
+          this.attackCooldown = 0;
+          const rand = Math.random();
+          if (dist > 220 || rand < 0.35) {
+            // ABA-ABA 1: Tebasan Kilat Iaijutsu
+            this.aiState = 'telegraph_iaijutsu';
+            this.telegraphTimer = 0;
+          } else if (player.y < this.y - 20 || rand < 0.70) {
+            // ABA-ABA 2: Tebasan Bulan Sabit Overhead Cleave
+            this.aiState = 'telegraph_cleave';
+            this.telegraphTimer = 0;
+          } else {
+            // ABA-ABA 3: Tarian Pedang Muramasa Flurry
+            this.aiState = 'telegraph_flurry';
+            this.telegraphTimer = 0;
+          }
+        }
+      } else if (this.aiState === 'telegraph_iaijutsu') {
+        // ABA-ABA 1: Crouches low, blade hand gripping sheathed Odachi, warning spark
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        if (this.telegraphTimer >= 28) {
+          this.aiState = 'dashing_slash';
+          this.actionTimer = 0;
+          this.vx = this.facing * 11.5;
+          window.soundEngine.playDash();
+          floatingTexts.push(new FloatingText(this.x, this.y - 25, 'TEBASAN KILAT IAIJUTSU!', '#dc2626'));
+        }
+      } else if (this.aiState === 'dashing_slash') {
+        this.actionTimer++;
+        if (this.actionTimer % 3 === 0) {
+          particles.push(new Particle(this.x + this.w / 2, this.y + this.h / 2, -this.facing * 3, 0, '#ef4444', 4, 18));
+        }
+        if (Math.abs((player.x + player.w / 2) - (this.x + this.w / 2)) < 55 &&
+            Math.abs(player.y - this.y) < 70) {
+          if (!player.isInvulnerable) {
+            player.hp = Math.max(0, player.hp - (this.phase === 2 ? 32 : 24));
+            player.invulnTimer = 35;
+            player.isInvulnerable = true;
+            screenShake = 16;
+            window.soundEngine.playHit();
+            floatingTexts.push(new FloatingText(player.x, player.y - 15, `-${this.phase === 2 ? 32 : 24} HP (IAIJUTSU)`, '#ef4444'));
+          }
+        }
+        if (this.actionTimer >= 18) {
+          this.vx = 0;
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'telegraph_cleave') {
+        // ABA-ABA 2: Raises flaming Odachi high overhead, eyes flash crimson
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        if (this.telegraphTimer >= 30) {
+          this.aiState = 'cleaving';
+          this.actionTimer = 0;
+          this.vy = -7.0; // Leaping downward cleave
+          this.vx = this.facing * 4.5;
+          window.soundEngine.playFireBlast();
+          floatingTexts.push(new FloatingText(this.x, this.y - 25, 'TEBASAN BULAN SABIT!', '#f59e0b'));
+        }
+      } else if (this.aiState === 'cleaving') {
+        this.actionTimer++;
+        if (this.isGrounded && this.actionTimer > 6) {
+          this.vx = 0;
+          screenShake = 16;
+          window.soundEngine.playExplosion();
+          enemyProjectiles.push(new EnemyProjectile(this.x - 12, this.y + this.h - 16, -6.0, 0, 'shockwave'));
+          enemyProjectiles.push(new EnemyProjectile(this.x + this.w + 12, this.y + this.h - 16, 6.0, 0, 'shockwave'));
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'telegraph_flurry') {
+        // ABA-ABA 3: Crossed blades, dark violet demonic aura
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        if (this.telegraphTimer >= 26) {
+          this.aiState = 'flurrying';
+          this.actionTimer = 0;
+          if (this.phase === 2) {
+            this.teleportBehindPlayer();
+          }
+          this.vx = this.facing * 7.5;
+          window.soundEngine.playLaserCannon();
+          floatingTexts.push(new FloatingText(this.x, this.y - 25, 'TARIAN PEDANG MURAMASA!', '#c084fc'));
+        }
+      } else if (this.aiState === 'flurrying') {
+        this.actionTimer++;
+        if (this.actionTimer % 6 === 0) {
+          enemyProjectiles.push(new EnemyProjectile(this.x + this.w / 2, this.y + 35, this.facing * 6.5, (Math.random() - 0.5) * 3, 'laser_bullet'));
+        }
+        if (Math.abs((player.x + player.w / 2) - (this.x + this.w / 2)) < 60 &&
+            Math.abs(player.y - this.y) < 70) {
+          if (!player.isInvulnerable) {
+            player.hp = Math.max(0, player.hp - (this.phase === 2 ? 30 : 20));
+            player.invulnTimer = 35;
+            player.isInvulnerable = true;
+            screenShake = 14;
+            window.soundEngine.playHit();
+            floatingTexts.push(new FloatingText(player.x, player.y - 15, `-${this.phase === 2 ? 30 : 20} HP (FLURRY)`, '#ef4444'));
+          }
+        }
+        if (this.actionTimer >= 22) {
+          this.vx = 0;
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'recovery') {
+        // Punish window! Lord Kageyoshi resets stance, giving player time to attack
+        this.vx = 0;
+        this.actionTimer++;
+        const recTime = this.phase === 2 ? 18 : 28;
+        if (this.actionTimer >= recTime) {
+          this.aiState = 'stalking';
+          this.actionTimer = 0;
+        }
       }
       return;
     }
@@ -4377,143 +4505,280 @@ class Enemy {
       }
 
     // ------------------------------------------------
-    // 16. BLIGHT HOUND (Level 1 Feral Corrupted Hound)
+    // 16. BLIGHT HOUND (Feral Shadow Wolf Beast - Organic Mythical Creature)
     // ------------------------------------------------
     } else if (this.type === 'blight_hound') {
       const bx = this.x;
       const by = this.y;
       const bw = this.w;
       const bh = this.h;
+      const dir = this.facing;
+      const stride = Math.sin(Date.now() / 65) * 7;
+      const tailWave = Math.sin(Date.now() / 110) * 8;
+
+      // Bushy flowing lupine spirit tail
+      const tailX = dir === -1 ? bx + bw - 4 : bx + 4;
+      const tailEndX = dir === -1 ? bx + bw + 20 : bx - 20;
+      ctx.fillStyle = '#365314';
+      ctx.beginPath();
+      ctx.moveTo(tailX, by + 14);
+      ctx.quadraticCurveTo(tailX - dir * 10, by + 4 + tailWave, tailEndX, by + 10 + tailWave);
+      ctx.quadraticCurveTo(tailX - dir * 8, by + 22 + tailWave, tailX, by + 20);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#84cc16';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // 4 Organic Running Paws
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(bx + 6, by + bh - 10, 5, 10 + stride);
+      ctx.fillRect(bx + 14, by + bh - 10, 5, 10 - stride);
+      ctx.fillRect(bx + bw - 18, by + bh - 10, 5, 10 - stride);
+      ctx.fillRect(bx + bw - 10, by + bh - 10, 5, 10 + stride);
+
+      // Organic Arched Lupine Torso with Fur Ruff
       ctx.fillStyle = '#1c1917';
       ctx.beginPath();
-      ctx.roundRect(bx, by + 6, bw, bh - 14, 6);
+      ctx.ellipse(bx + bw / 2, by + bh / 2 + 2, bw / 2 - 2, bh / 2.8, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = '#3f6212';
-      ctx.fillRect(bx + 6, by + 2, bw - 14, 5);
+
+      // Corrupted Lime-Green Spine Fur & Spikes
+      ctx.fillStyle = '#4d7c0f';
+      ctx.beginPath();
+      ctx.moveTo(bx + 10, by + 10);
+      ctx.lineTo(bx + bw / 2, by + 3);
+      ctx.lineTo(bx + bw - 10, by + 10);
+      ctx.lineTo(bx + bw / 2, by + 13);
+      ctx.closePath();
+      ctx.fill();
+
+      // Lupine Head with Pointed Ears
+      const headX = dir === -1 ? bx + 8 : bx + bw - 8;
+      ctx.fillStyle = '#1c1917';
+      ctx.beginPath();
+      ctx.arc(headX, by + 12, 9, 0, Math.PI * 2);
+      ctx.fill();
+      // Pointed Wolf Ears
+      ctx.beginPath();
+      ctx.moveTo(headX - 4, by + 6);
+      ctx.lineTo(headX - 1, by - 4);
+      ctx.lineTo(headX + 2, by + 5);
+      ctx.fill();
+      // Snout with Fangs
+      ctx.beginPath();
+      ctx.moveTo(headX, by + 11);
+      ctx.lineTo(headX + dir * 11, by + 14);
+      ctx.lineTo(headX, by + 17);
+      ctx.closePath();
+      ctx.fill();
+
+      // Glowing Cursed Lime-Green Eye
       ctx.fillStyle = '#84cc16';
       ctx.shadowColor = '#84cc16';
       ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(bx + 14, by + 4, 3, 0, Math.PI * 2);
-      ctx.arc(bx + 26, by + 3, 2.5, 0, Math.PI * 2);
-      ctx.fill();
-      const eyeX = this.facing === -1 ? bx + 6 : bx + bw - 12;
-      ctx.fillStyle = '#a3e635';
-      ctx.fillRect(eyeX, by + 10, 6, 4);
-      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(headX + dir * 3, by + 10, 4, 3);
       ctx.shadowBlur = 0;
-      const fangX = this.facing === -1 ? bx + 2 : bx + bw - 6;
-      ctx.fillRect(fangX, by + 16, 4, 4);
-      ctx.fillStyle = '#292524';
-      const stride = Math.sin(Date.now() / 70) * 6;
-      ctx.fillRect(bx + 6, by + bh - 10, 7, 10 + stride);
-      ctx.fillRect(bx + bw - 14, by + bh - 10, 7, 10 - stride);
+
+      // Ivory Fangs
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(headX + dir * 8, by + 14, 2, 3);
 
     // ------------------------------------------------
-    // 17. SPORE SPITTER (Level 1 Acidic Fungal Cannon)
+    // 17. SPORE SPITTER (Horned Toad Chimera Yokai - Organic Beast)
     // ------------------------------------------------
     } else if (this.type === 'spore_spitter') {
       const bx = this.x;
       const by = this.y;
       const bw = this.w;
       const bh = this.h;
-      ctx.fillStyle = '#27272a';
+      const dir = this.facing;
+      const throatPuff = Math.sin(Date.now() / 130) * 4;
+
+      // Squat Amphibian Leg Paws
+      ctx.fillStyle = '#14532d';
+      ctx.fillRect(bx + 4, by + bh - 10, 8, 10);
+      ctx.fillRect(bx + bw - 12, by + bh - 10, 8, 10);
+      // Webbed claws
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(bx + (dir === -1 ? 1 : bw - 14), by + bh - 3, 10, 3);
+
+      // Sinuous Toad Torso
+      ctx.fillStyle = '#1c1917';
       ctx.beginPath();
-      ctx.arc(bx + bw / 2, by + 18, 16, Math.PI, 0, false);
-      ctx.lineTo(bx + bw - 4, by + 30);
-      ctx.lineTo(bx + 4, by + 30);
-      ctx.closePath();
+      ctx.ellipse(bx + bw / 2, by + bh / 2 + 4, bw / 2 - 2, bh / 2.6, 0, 0, Math.PI * 2);
       ctx.fill();
+
+      // Glowing Toxic Spore Pustules on Back
       ctx.fillStyle = '#84cc16';
       ctx.shadowColor = '#84cc16';
       ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.arc(bx + bw / 2 - 6, by + 10, 4, 0, Math.PI * 2);
-      ctx.arc(bx + bw / 2 + 7, by + 8, 3.5, 0, Math.PI * 2);
-      ctx.arc(bx + bw / 2, by + 16, 4.5, 0, Math.PI * 2);
+      ctx.arc(bx + bw / 2 - 8, by + 12, 4, 0, Math.PI * 2);
+      ctx.arc(bx + bw / 2 + 8, by + 10, 5, 0, Math.PI * 2);
+      ctx.arc(bx + bw / 2, by + 6, 3.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
-      const snoutX = this.facing === -1 ? bx - 2 : bx + bw - 10;
-      ctx.fillStyle = '#4d7c0f';
-      ctx.fillRect(snoutX, by + 20, 12, 8);
-      ctx.fillStyle = '#a3e635';
-      ctx.fillRect(snoutX + (this.facing === -1 ? 0 : 8), by + 22, 4, 4);
-      ctx.fillStyle = '#1c1917';
-      const rootWiggle = Math.sin(Date.now() / 140) * 4;
-      ctx.fillRect(bx + 6, by + bh - 12, 6, 12 + rootWiggle);
-      ctx.fillRect(bx + bw / 2 - 3, by + bh - 12, 6, 12 - rootWiggle);
-      ctx.fillRect(bx + bw - 12, by + bh - 12, 6, 12 + rootWiggle);
+
+      // Horned Toad Head with Twin Crest Horns
+      const tHeadX = dir === -1 ? bx + 12 : bx + bw - 12;
+      ctx.fillStyle = '#14532d';
+      ctx.beginPath();
+      ctx.arc(tHeadX, by + 18, 12, 0, Math.PI * 2);
+      ctx.fill();
+      // Twin Moss Horns
+      ctx.fillStyle = '#365314';
+      ctx.beginPath();
+      ctx.moveTo(tHeadX - 4, by + 10);
+      ctx.lineTo(tHeadX - 1, by + 1);
+      ctx.lineTo(tHeadX + 2, by + 9);
+      ctx.moveTo(tHeadX + 4, by + 10);
+      ctx.lineTo(tHeadX + 7, by + 1);
+      ctx.lineTo(tHeadX + 10, by + 9);
+      ctx.fill();
+
+      // Throbbing Throat Pouch (Acidic Cannon)
+      ctx.fillStyle = '#65a30d';
+      ctx.beginPath();
+      ctx.ellipse(tHeadX + dir * 6, by + 24, 7 + throatPuff, 6 + throatPuff * 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Golden Reptilian Slit Eyes
+      ctx.fillStyle = '#facc15';
+      ctx.shadowColor = '#facc15';
+      ctx.shadowBlur = 6;
+      ctx.fillRect(tHeadX + dir * 2, by + 13, 5, 3);
+      ctx.shadowBlur = 0;
 
     // ------------------------------------------------
-    // 18. WOOD STALKER (Level 1 Cursed Mask Assassin)
+    // 18. WOOD STALKER (Chibi Masked Rogue Shinobi - Humanoid Assassin)
     // ------------------------------------------------
     } else if (this.type === 'wood_stalker') {
       const bx = this.x;
       const by = this.y;
       const bw = this.w;
       const bh = this.h;
+      const dir = this.facing;
+      const sprint = Math.sin(Date.now() / 75) * 8;
+      const scarf = Math.sin(Date.now() / 85) * 8;
+
+      // Flowing Dark Green Ninja Scarf trailing behind
+      ctx.fillStyle = '#15803d';
+      const scRootX = dir === -1 ? bx + bw - 4 : bx + 4;
+      const scEndX = dir === -1 ? bx + bw + 24 : bx - 24;
+      ctx.beginPath();
+      ctx.moveTo(scRootX, by + 14);
+      ctx.quadraticCurveTo(scRootX - dir * 12, by + 6 + scarf, scEndX, by + 16 + scarf);
+      ctx.lineTo(scEndX + dir * 2, by + 22 + scarf);
+      ctx.quadraticCurveTo(scRootX - dir * 10, by + 14 + scarf, scRootX, by + 18);
+      ctx.closePath();
+      ctx.fill();
+
+      // Human Sprinting Legs with Ninja Tabi Boots
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(bx + 6, by + bh - 12, 6, 12 + sprint);
+      ctx.fillRect(bx + bw - 14, by + bh - 12, 6, 12 - sprint);
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(bx + 4, by + bh - 4, 9, 4);
+      ctx.fillRect(bx + bw - 16, by + bh - 4, 9, 4);
+
+      // Dark Green Shinobi Shozoku Tunic & Sash
       ctx.fillStyle = '#14532d';
       ctx.beginPath();
-      ctx.roundRect(bx + 6, by + 12, bw - 12, bh - 20, 6);
+      ctx.roundRect(bx + 4, by + 12, bw - 8, bh - 22, 6);
       ctx.fill();
       ctx.fillStyle = '#78350f';
+      ctx.fillRect(bx + 6, by + 24, bw - 12, 4); // Obi belt
+
+      // Chibi Human Ninja Head
+      ctx.fillStyle = '#0f172a';
       ctx.beginPath();
-      ctx.roundRect(bx + bw / 2 - 9, by + 4, 18, 16, 3);
+      ctx.arc(bx + bw / 2, by + 10, 10, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#a16207';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(bx + bw / 2 - 9, by + 4, 18, 16);
-      ctx.fillStyle = '#84cc16';
-      ctx.shadowColor = '#84cc16';
-      ctx.shadowBlur = 10;
-      const eX = this.facing === -1 ? bx + bw / 2 - 6 : bx + bw / 2;
-      ctx.fillRect(eX, by + 10, 6, 3);
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = '#65a30d';
-      ctx.lineWidth = 2.5;
+
+      // Hand-Carved Wooden Oni Demon Half-Mask
+      ctx.fillStyle = '#92400e';
       ctx.beginPath();
-      const bladeX = this.facing === -1 ? bx - 6 : bx + bw + 6;
-      ctx.moveTo(bx + bw / 2, by + 24);
-      ctx.quadraticCurveTo(bladeX, by + 14, bladeX, by + 34);
+      ctx.arc(bx + bw / 2, by + 10, 8, -0.2 * Math.PI, 1.2 * Math.PI);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 1.2;
       ctx.stroke();
-      ctx.fillStyle = '#052e16';
-      const stalkStride = Math.sin(Date.now() / 90) * 6;
-      ctx.fillRect(bx + 8, by + bh - 10, 7, 10 + stalkStride);
-      ctx.fillRect(bx + bw - 15, by + bh - 10, 7, 10 - stalkStride);
+
+      // Glowing Piercing Emerald Eyes through mask slit
+      ctx.fillStyle = '#4ade80';
+      ctx.shadowColor = '#22c55e';
+      ctx.shadowBlur = 8;
+      const maskEyeX = dir === -1 ? bx + 5 : bx + bw - 13;
+      ctx.fillRect(maskEyeX, by + 9, 6, 3);
+      ctx.shadowBlur = 0;
+
+      // Curved Jade Katana Drawn at Side
+      const kX = dir === -1 ? bx - 8 : bx + bw + 8;
+      ctx.strokeStyle = '#4ade80';
+      ctx.lineWidth = 2.4;
+      ctx.shadowColor = '#22c55e';
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.moveTo(bx + bw / 2, by + 24);
+      ctx.quadraticCurveTo(kX, by + 16, kX, by + 34);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
     // ------------------------------------------------
-    // 19. BRAMBLE DRONE (Level 1 Flying Thorn Drone)
+    // 19. BRAMBLE DRONE (Karasu Tengu Spirit Crow - Mythical Avian Yokai)
     // ------------------------------------------------
     } else if (this.type === 'bramble_drone') {
       const bx = this.x;
       const by = this.y;
       const bw = this.w;
       const bh = this.h;
-      ctx.fillStyle = '#365314';
+      const dir = this.facing;
+      const flap = Math.sin(Date.now() / 60) * 11;
+      const cx = bx + bw / 2;
+      const cy = by + bh / 2;
+
+      // Feathery Avian Body
+      ctx.fillStyle = '#1c1917';
       ctx.beginPath();
-      ctx.arc(bx + bw / 2, by + bh / 2, 12, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy, 12, 8, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#4d7c0f';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+
+      // Beating Tengu Raven Wings
+      ctx.fillStyle = '#14532d';
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 2);
+      ctx.lineTo(cx - 14, cy - 14 + flap);
+      ctx.lineTo(cx - 3, cy + 3);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 2);
+      ctx.lineTo(cx + 14, cy - 14 + flap);
+      ctx.lineTo(cx + 3, cy + 3);
+      ctx.fill();
+
+      // Raven Head & Sharp Hooked Beak
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      ctx.arc(cx + dir * 8, cy - 2, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.moveTo(cx + dir * 12, cy - 4);
+      ctx.lineTo(cx + dir * 20, cy - 1);
+      ctx.lineTo(cx + dir * 12, cy + 2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Glowing Emerald Spirit Eye
       ctx.fillStyle = '#84cc16';
       ctx.shadowColor = '#84cc16';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 8;
       ctx.beginPath();
-      ctx.arc(bx + (this.facing === -1 ? bw / 2 - 3 : bw / 2 + 3), by + bh / 2, 4.5, 0, Math.PI * 2);
+      ctx.arc(cx + dir * 10, cy - 3, 2.5, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
-      const droneRot = Date.now() / 140;
-      ctx.fillStyle = '#65a30d';
-      for (let th = 0; th < 4; th++) {
-        const ang = droneRot + (th * Math.PI / 2);
-        const thX = bx + bw / 2 + Math.cos(ang) * 16;
-        const thY = by + bh / 2 + Math.sin(ang) * 16;
-        ctx.beginPath();
-        ctx.moveTo(thX, thY);
-        ctx.lineTo(thX + Math.cos(ang) * 6, thY + Math.sin(ang) * 6);
-        ctx.stroke();
-      }
 
     // ------------------------------------------------
     // 20A. SECTOR 1 BOSS: PENDEKAR TOMBAK MISTERIUS (Spearman)
@@ -4781,66 +5046,226 @@ class Enemy {
       }
 
     // ------------------------------------------------
-    // 21. MAIN BOSS: THE BLIGHT CHIMERA (Level 1 Apex Anomaly)
+    // 21. MAIN BOSS: LORD KAGEYOSHI: THE CORRUPTED SHOGUN (Human Samurai Warlord)
     // ------------------------------------------------
     } else if (this.type === 'boss_chimera') {
       const bx = this.x;
       const by = this.y;
       const bw = this.w;
       const bh = this.h;
+      const dir = this.facing;
+      const breathe = Math.sin(Date.now() / 200) * 2;
+      const capeWave = Math.sin(Date.now() / 120) * 12;
+
+      // 1. Billowing Tattered Crimson Shogun Cape
+      ctx.fillStyle = this.phase === 2 ? '#450a0a' : '#7f1d1d';
+      ctx.beginPath();
+      const capeRootX = bx + bw / 2 - dir * 12;
+      const capeRootY = by + 26 + breathe;
+      ctx.moveTo(capeRootX, capeRootY);
+      ctx.quadraticCurveTo(capeRootX - dir * 36, by + 60 + capeWave, capeRootX - dir * 65, by + bh + 14 + capeWave);
+      ctx.lineTo(capeRootX - dir * 45, by + bh + 18 + capeWave);
+      ctx.quadraticCurveTo(capeRootX - dir * 20, by + 70 + capeWave, capeRootX, capeRootY + 20);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ca8a04'; // Gold embroidered hem
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      // 2. Heavy Armored Greaves & Hakama
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(bx + 18, by + bh - 28, 18, 28);
+      ctx.fillRect(bx + bw - 36, by + bh - 28, 18, 28);
+      ctx.fillStyle = '#991b1b'; // Red shin cords
+      ctx.fillRect(bx + 16, by + bh - 20, 22, 4);
+      ctx.fillRect(bx + bw - 38, by + bh - 20, 22, 4);
+      // Gold armored war shoes
+      ctx.fillStyle = '#ca8a04';
+      ctx.fillRect(bx + 14, by + bh - 6, 24, 6);
+      ctx.fillRect(bx + bw - 38, by + bh - 6, 24, 6);
+
+      // 3. Black Lacquer O-Yoroi Cuirass (Dou) & Armored Kusazuri Skirts
       ctx.fillStyle = '#09090b';
       ctx.beginPath();
-      ctx.roundRect(bx + 8, by + 20, bw - 16, bh - 36, 14);
+      ctx.roundRect(bx + 14, by + 32 + breathe, bw - 28, bh - 58, 8);
       ctx.fill();
-      ctx.strokeStyle = '#7e22ce';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#a855f7';
-      ctx.shadowBlur = 16;
-      ctx.strokeRect(bx + 8, by + 20, bw - 16, bh - 36);
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#3b0764';
-      ctx.beginPath();
-      const wingDir = this.facing === -1 ? 1 : -1;
-      ctx.moveTo(bx + bw / 2, by + 28);
-      ctx.quadraticCurveTo(bx + bw / 2 + wingDir * 60, by - 16, bx + bw / 2 + wingDir * 40, by + 36);
-      ctx.fill();
-      ctx.strokeStyle = '#c084fc';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2.5;
       ctx.stroke();
-      const chEyeX = this.facing === -1 ? bx + 16 : bx + bw - 36;
-      ctx.fillStyle = '#ec4899';
-      ctx.shadowColor = '#ec4899';
-      ctx.shadowBlur = 12;
-      ctx.fillRect(chEyeX, by + 28, 6, 4);
-      ctx.fillStyle = '#00f5ff';
-      ctx.shadowColor = '#00f5ff';
-      ctx.fillRect(chEyeX + 8, by + 26, 6, 4);
-      ctx.fillStyle = '#84cc16';
-      ctx.shadowColor = '#84cc16';
-      ctx.fillRect(chEyeX + 4, by + 34, 6, 4);
+
+      // Golden Imperial Dragon Crest on Chestplate
+      ctx.fillStyle = '#f59e0b';
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(bx + bw / 2, by + 50 + breathe, 9, 0, Math.PI * 2);
+      ctx.fill();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = '#18181b';
-      ctx.fillRect(chEyeX - 4, by + 42, 22, 14);
-      ctx.fillStyle = '#a3e635';
-      ctx.fillRect(chEyeX, by + 52, 4, 6);
-      ctx.fillStyle = '#1c1917';
-      ctx.fillRect(bx + 14, by + bh - 24, 24, 24);
-      ctx.fillRect(bx + bw - 38, by + bh - 24, 24, 24);
+
+      // Heavy Flared Sode Shoulder Pauldrons
+      ctx.fillStyle = '#7f1d1d';
+      ctx.fillRect(bx + 4, by + 30 + breathe, 16, 26);
+      ctx.fillRect(bx + bw - 20, by + 30 + breathe, 16, 26);
+      ctx.fillStyle = '#ca8a04';
+      ctx.fillRect(bx + 2, by + 28 + breathe, 20, 5);
+      ctx.fillRect(bx + bw - 22, by + 28 + breathe, 20, 5);
+
+      // 4. Human Samurai Head & Kabuto Helmet
+      // Flowing Silver Warrior Hair beneath helmet
       ctx.fillStyle = '#e2e8f0';
-      ctx.fillRect(bx + 10, by + bh - 6, 8, 6);
-      ctx.fillRect(bx + bw - 22, by + bh - 6, 8, 6);
+      ctx.beginPath();
+      ctx.moveTo(bx + bw / 2 - dir * 10, by + 12 + breathe);
+      ctx.quadraticCurveTo(bx + bw / 2 - dir * 28, by + 36 + breathe, bx + bw / 2 - dir * 32, by + 56 + breathe);
+      ctx.lineTo(bx + bw / 2 - dir * 24, by + 58 + breathe);
+      ctx.quadraticCurveTo(bx + bw / 2 - dir * 18, by + 36 + breathe, bx + bw / 2, by + 22 + breathe);
+      ctx.fill();
+
+      // Fierce anime human face & jaw
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.arc(bx + bw / 2, by + 18 + breathe, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Demonic Black Kabuto Helmet
+      ctx.fillStyle = '#09090b';
+      ctx.beginPath();
+      ctx.arc(bx + bw / 2, by + 12 + breathe, 16, Math.PI, 0);
+      ctx.closePath();
+      ctx.fill();
+      // Shikoro Neck Guards
+      ctx.fillStyle = '#7f1d1d';
+      ctx.fillRect(bx + bw / 2 - 18, by + 14 + breathe, 36, 6);
+
+      // Majestic Golden Crescent Moon Crest (Maedate)
+      ctx.fillStyle = '#fbbf24';
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.arc(bx + bw / 2, by - 8 + breathe, 18, 0.2 * Math.PI, 0.8 * Math.PI);
+      ctx.arc(bx + bw / 2, by - 2 + breathe, 15, 0.8 * Math.PI, 0.2 * Math.PI, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Blazing Crimson Cursed Eyes & Battle Mask (Menpo)
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(bx + bw / 2 - 10, by + 20 + breathe, 20, 10); // Iron Half-mask
+      ctx.fillStyle = '#ef4444';
+      ctx.shadowColor = '#ef4444';
+      ctx.shadowBlur = 14;
+      const lordEyeX = dir === -1 ? bx + bw / 2 - 8 : bx + bw / 2 + 2;
+      ctx.fillRect(lordEyeX, by + 14 + breathe, 6, 3);
+      ctx.shadowBlur = 0;
+
+      // Visual Telegraph Warning '!' Badge
+      if (this.aiState && this.aiState.startsWith('telegraph_')) {
+        const pulse = Math.sin(Date.now() / 90) * 2;
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowColor = '#f59e0b';
+        ctx.shadowBlur = 14;
+        ctx.beginPath();
+        ctx.arc(bx + bw / 2, by - 26 + pulse, 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('!', bx + bw / 2, by - 25 + pulse);
+      }
+
+      // 5. Dynamic 90px Flaming Cursed Odachi Greatsword with Combat Postures
+      const swordHandX = dir === 1 ? bx + bw - 6 : bx + 6;
+      let swordBaseX = swordHandX;
+      let swordBaseY = by + 50 + breathe;
+      let swordTipX = dir === 1 ? bx + bw + 48 : bx - 48;
+      let swordTipY = by - 16;
+
+      if (this.aiState === 'telegraph_iaijutsu') {
+        // Crouched low, sword held close to hip ready to draw
+        swordBaseX = swordHandX - dir * 12;
+        swordBaseY = by + 60 + breathe;
+        swordTipX = swordHandX + dir * 26;
+        swordTipY = by + 55 + breathe;
+      } else if (this.aiState === 'dashing_slash') {
+        // Horizontal thrusting slice forward
+        swordBaseX = swordHandX - dir * 18;
+        swordBaseY = by + 46;
+        swordTipX = swordHandX + dir * 68;
+        swordTipY = by + 42;
+      } else if (this.aiState === 'telegraph_cleave') {
+        // Raised high overhead
+        swordBaseX = bx + bw / 2 - dir * 8;
+        swordBaseY = by + 26;
+        swordTipX = bx + bw / 2 + dir * 16;
+        swordTipY = by - 38;
+      } else if (this.aiState === 'cleaving') {
+        // Plunged downward into earth
+        swordBaseX = swordHandX;
+        swordBaseY = by + 30;
+        swordTipX = swordHandX + dir * 24;
+        swordTipY = by + bh + 10;
+      }
+
+      ctx.strokeStyle = '#18181b';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(swordBaseX, swordBaseY);
+      ctx.lineTo(swordTipX, swordTipY);
+      ctx.stroke();
+
+      // Crimson Flaming Muramasa Blade Glow
+      ctx.strokeStyle = '#dc2626';
+      ctx.shadowColor = '#ef4444';
+      ctx.shadowBlur = 16;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(swordBaseX + dir * 6, swordBaseY - 4);
+      ctx.lineTo(swordTipX, swordTipY);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Golden Dragon Tsuba
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(swordBaseX - 3, swordBaseY - 4, 8, 8);
+
+      // Gleaming Telegraph Spark ✦ at sword tip
+      if (this.aiState && this.aiState.startsWith('telegraph_')) {
+        ctx.fillStyle = '#facc15';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 16;
+        ctx.font = 'bold 18px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('✦', swordTipX + dir * 8, swordTipY - 6);
+        ctx.shadowBlur = 0;
+      }
+
+      // Phase 2 Awakening: Dual Wielding Wakizashi & Red Lightning
       if (this.phase === 2) {
-        ctx.strokeStyle = '#a855f7';
+        // Offhand Wakizashi
+        const offX = dir === 1 ? bx + 10 : bx + bw - 10;
+        ctx.strokeStyle = '#c084fc';
         ctx.shadowColor = '#c084fc';
-        ctx.shadowBlur = 22;
+        ctx.shadowBlur = 12;
         ctx.lineWidth = 2.5;
-        for (let l = 0; l < 5; l++) {
+        ctx.beginPath();
+        ctx.moveTo(offX, by + 45 + breathe);
+        ctx.lineTo(offX - dir * 26, by + 20);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Cursed Dark Red / Violet Lightning Arcs
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2;
+        for (let l = 0; l < 4; l++) {
           ctx.beginPath();
           ctx.moveTo(bx + Math.random() * bw, by + Math.random() * bh);
           ctx.lineTo(bx + Math.random() * bw, by + Math.random() * bh);
           ctx.stroke();
         }
-        ctx.shadowBlur = 0;
       }
     }
 
@@ -5554,6 +5979,7 @@ function triggerHeroAttack() {
           enemy.flashTimer = 10;
           floatingTexts.push(new FloatingText(enemy.x, enemy.y, '-' + dmg, '#00f5ff'));
           pogoHit = true;
+          slashImpactEffects.push(new SlashImpactEffect(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 'hit_impact', 1.3));
 
           // Ronin Lifesteal
           if (currentHeroId === 'ronin') {
@@ -5585,6 +6011,7 @@ function triggerHeroAttack() {
         screenShake = 10;
         hitStopFrames = 4;
         window.soundEngine.playPogo();
+        slashImpactEffects.push(new SlashImpactEffect(player.x + player.w / 2, player.y + player.h, 'dust_impact', 1.2));
       }
       return;
     }
@@ -5614,6 +6041,7 @@ function triggerHeroAttack() {
           hitStopFrames = 3;
           window.soundEngine.playHit();
           floatingTexts.push(new FloatingText(enemy.x, enemy.y, '-' + dmg, '#00f5ff'));
+          slashImpactEffects.push(new SlashImpactEffect(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 'hit_impact', 1.25));
 
           if (currentHeroId === 'ronin') {
             player.hp = Math.min(player.maxHp, player.hp + 3);
@@ -5660,6 +6088,7 @@ function triggerHeroAttack() {
           hitStopFrames = 3;
           window.soundEngine.playHit();
           floatingTexts.push(new FloatingText(enemy.x, enemy.y, '-' + actualDmg, '#00f5ff'));
+          slashImpactEffects.push(new SlashImpactEffect(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, 'hit_impact', 1.3));
 
           if (currentHeroId === 'ronin') {
             player.hp = Math.min(player.maxHp, player.hp + 3);
@@ -6697,7 +7126,7 @@ function destroyEnemy(enemy, index) {
     const bossHud = document.getElementById('boss-hud-bar');
     if (bossHud) bossHud.classList.add('hidden');
     score += 5000;
-    floatingTexts.push(new FloatingText(player.x, player.y - 45, '👑 THE BLIGHT CHIMERA TELAH DIKALAHKAN! 👑 (+5000)', '#22c55e'));
+    floatingTexts.push(new FloatingText(player.x, player.y - 45, '👑 LORD KAGEYOSHI TELAH DIKALAHKAN! 👑 (+5000)', '#22c55e'));
     hitStopFrames = 20;
     screenShake = 24;
     window.soundEngine.playExplosion();
@@ -6780,7 +7209,7 @@ function updateEnemies() {
         levelBarriers.bossLeft.active = true;
         levelBarriers.bossRight.active = true;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SANCTUM TERKUNCI! THE BLIGHT CHIMERA! 👑', '#a855f7'));
+        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SANCTUM TERKUNCI! LORD KAGEYOSHI! 👑', '#a855f7'));
       }
     }
   } else {
@@ -10380,8 +10809,60 @@ function drawGoalPortal() {
   ctx.restore();
 }
 
+// Level 1 Atmospheric Weather: Serene Drifting Sakura Petals (Hollow Knight / Samurai Aesthetic)
+const sakuraPetals = [];
+for (let i = 0; i < 55; i++) {
+  sakuraPetals.push({
+    x: Math.random() * (V_WIDTH + 80) - 40,
+    y: Math.random() * (V_HEIGHT + 40) - 20,
+    size: Math.random() * 3.5 + 3.0,
+    speedX: Math.random() * 1.5 + 0.8,
+    speedY: Math.random() * 0.9 + 0.5,
+    angle: Math.random() * Math.PI * 2,
+    angleSpeed: (Math.random() - 0.5) * 0.04,
+    flutter: Math.random() * Math.PI * 2,
+    color: Math.random() > 0.4 ? 'rgba(255, 183, 197, 0.82)' : 'rgba(254, 215, 226, 0.72)'
+  });
+}
+
+function drawSakuraWeather() {
+  sakuraPetals.forEach(p => {
+    p.angle += p.angleSpeed;
+    p.flutter += 0.025;
+    const sway = Math.sin(p.flutter) * 1.6;
+    p.x += p.speedX + sway * 0.4;
+    p.y += p.speedY;
+
+    if (p.x > V_WIDTH + 40) {
+      p.x = -30;
+      p.y = Math.random() * V_HEIGHT;
+    }
+    if (p.y > V_HEIGHT + 20) {
+      p.y = -20;
+      p.x = Math.random() * V_WIDTH;
+    }
+
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = '#f472b6';
+    ctx.shadowBlur = 5;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.size * 1.15, p.size * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  });
+}
+
 function drawCyberWeather() {
   ctx.save();
+  if (currentLevelId === 1) {
+    drawSakuraWeather();
+    ctx.restore();
+    return;
+  }
   const camX = camera.x;
 
   if (camX < 2800) {
@@ -11013,6 +11494,87 @@ function drawHeroRonin() {
 const slashSheetImg = new Image();
 slashSheetImg.src = 'assets/slash_effects_clean.png';
 
+const slashBloodImg = new Image();
+slashBloodImg.src = 'assets/slash_blood_clean.png';
+
+const CRIMSON_SLASH_FRAMES = {
+  basic_swing: [
+    { x: 29, y: 65, w: 56, h: 30 },
+    { x: 85, y: 20, w: 75, h: 77 },
+    { x: 169, y: 41, w: 57, h: 57 },
+    { x: 229, y: 33, w: 70, h: 66 },
+    { x: 306, y: 33, w: 65, h: 67 },
+    { x: 373, y: 20, w: 132, h: 83 },
+    { x: 505, y: 20, w: 78, h: 85 }
+  ],
+  horizontal: [
+    { x: 20, y: 124, w: 67, h: 44 },
+    { x: 97, y: 124, w: 88, h: 43 },
+    { x: 185, y: 155, w: 87, h: 17 },
+    { x: 275, y: 154, w: 87, h: 19 },
+    { x: 377, y: 153, w: 83, h: 23 },
+    { x: 478, y: 147, w: 109, h: 36 }
+  ],
+  vertical: [
+    { x: 658, y: 32, w: 4, h: 69 },
+    { x: 700, y: 29, w: 12, h: 74 },
+    { x: 754, y: 20, w: 13, h: 85 },
+    { x: 803, y: 20, w: 15, h: 85 },
+    { x: 843, y: 20, w: 29, h: 85 },
+    { x: 892, y: 20, w: 38, h: 85 },
+    { x: 947, y: 20, w: 48, h: 85 }
+  ],
+  diagonal: [
+    { x: 618, y: 124, w: 64, h: 71 },
+    { x: 682, y: 124, w: 57, h: 71 },
+    { x: 751, y: 140, w: 63, h: 55 },
+    { x: 839, y: 129, w: 55, h: 66 },
+    { x: 915, y: 128, w: 71, h: 67 }
+  ],
+  hit_impact: [
+    { x: 23, y: 301, w: 51, h: 84 },
+    { x: 78, y: 301, w: 72, h: 77 },
+    { x: 163, y: 316, w: 71, h: 66 },
+    { x: 234, y: 306, w: 105, h: 73 },
+    { x: 407, y: 334, w: 19, h: 31 }
+  ],
+  dust_impact: [
+    { x: 479, y: 301, w: 143, h: 78 },
+    { x: 625, y: 331, w: 58, h: 48 },
+    { x: 683, y: 316, w: 100, h: 63 },
+    { x: 794, y: 324, w: 208, h: 57 }
+  ]
+};
+
+const slashImpactEffects = [];
+class SlashImpactEffect {
+  constructor(x, y, type = 'hit_impact', scale = 1.0) {
+    this.x = x;
+    this.y = y;
+    this.type = type;
+    this.scale = scale;
+    this.life = 0;
+    this.maxLife = type === 'hit_impact' ? 10 : 12;
+  }
+  update() {
+    this.life++;
+  }
+  draw(ctx) {
+    if (!slashBloodImg.complete || !slashBloodImg.naturalWidth) return;
+    const frames = CRIMSON_SLASH_FRAMES[this.type];
+    if (!frames) return;
+    const progress = this.life / this.maxLife;
+    const fIdx = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+    const f = frames[fIdx];
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - progress * 0.7);
+    const dw = f.w * this.scale;
+    const dh = f.h * this.scale;
+    ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, this.x - dw / 2, this.y - dh / 2, dw, dh);
+    ctx.restore();
+  }
+}
+
 const SLASH_SPRITE_FRAMES = {
   horizontal: [
     { x: 32, y: 54, w: 70, h: 5 },
@@ -11061,7 +11623,68 @@ function drawSlashSmear(ctx) {
 
   const progress = Math.max(0, Math.min(1, 1 - (s.life / s.maxLife)));
 
-  // 1. Spritesheet Rendering from User Reference
+  // 1. New Crimson / Blood Katana Slash Spritesheet Rendering
+  if (slashBloodImg.complete && slashBloodImg.naturalWidth > 0) {
+    let animKey = 'basic_swing';
+    if (s.aim === 'up') {
+      animKey = 'vertical';
+    } else if (s.aim === 'down') {
+      animKey = 'vertical';
+    } else if (s.inAir) {
+      animKey = 'diagonal';
+    } else {
+      animKey = 'horizontal';
+    }
+
+    const frames = CRIMSON_SLASH_FRAMES[animKey];
+    const frameIdx = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+    const f = frames[frameIdx];
+
+    ctx.save();
+    ctx.globalAlpha = Math.min(1.0, alpha * 1.25);
+
+    if (animKey === 'horizontal') {
+      const scale = (s.radius / 76) * 1.35;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, 10 * scale, -dh * 0.5, dw, dh);
+    } else if (animKey === 'basic_swing') {
+      const scale = (s.radius / 76) * 1.3;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, 8 * scale, -dh * 0.5, dw, dh);
+    } else if (animKey === 'diagonal') {
+      const scale = (s.radius / 76) * 1.4;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.45, dw, dh);
+    } else if (animKey === 'vertical' && s.aim === 'up') {
+      const scale = (s.radius / 76) * 1.35;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y - 12);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, -dw * 0.4, -dh * 0.9, dw, dh);
+    } else if (animKey === 'vertical' && s.aim === 'down') {
+      const scale = (s.radius / 76) * 1.35;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y + 12);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashBloodImg, f.x, f.y, f.w, f.h, -dw * 0.5, 0, dw, dh);
+    }
+
+    ctx.restore();
+    return;
+  }
+
+  // 1B. Fallback Spritesheet Rendering
   if (slashSheetImg.complete && slashSheetImg.naturalWidth > 0) {
     let animKey = 'horizontal';
     if (s.aim === 'up') {
@@ -13303,7 +13926,7 @@ function triggerVictory() {
   const vDesc = document.getElementById('victory-desc');
   if (vDesc) {
     vDesc.textContent = currentLevelId === 1
-      ? 'The Blight Chimera berhasil dimusnahkan. Ekosistem Desa Lembah Suci mulai pulih dari kutukan anomali misterius!'
+      ? 'Lord Kageyoshi sang Shogun Terkutuk telah ditaklukkan! Pedang Muramasa terkunci dan kutukan Desa Lembah Suci sirna!'
       : 'Emperor Xenos tumbang! Galaxy Starfall berhasil diselamatkan dari invasi Astral Void!';
   }
   const nextBtn = document.getElementById('btn-next-level');
@@ -13506,6 +14129,13 @@ function gameLoop() {
 
   drawPlayer();
   drawSlashSmear(ctx);
+
+  // Crimson Slash Hit Impact Bursts & Pogo Dust Shockwaves
+  for (let si = slashImpactEffects.length - 1; si >= 0; si--) {
+    slashImpactEffects[si].update();
+    slashImpactEffects[si].draw(ctx);
+    if (slashImpactEffects[si].life >= slashImpactEffects[si].maxLife) slashImpactEffects.splice(si, 1);
+  }
 
   for (let p = particles.length - 1; p >= 0; p--) {
     const pt = particles[p];

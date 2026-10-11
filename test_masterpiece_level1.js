@@ -61,8 +61,17 @@ assert(gameJs.includes("telegraph_vault"), "Spearman telegraph_vault state missi
 assert(gameJs.includes("aiState === 'stalking'"), "Spearman stalking state missing");
 console.log('[PASS] Spearman Boss duelist AI with wind-up telegraphs (aba-aba) verified.');
 
+// 5B. Check Lord Kageyoshi Boss AI: Human samurai rival with wind-up telegraphs
+assert(gameJs.includes("LORD KAGEYOSHI: THE CORRUPTED SHOGUN"), "Lord Kageyoshi boss missing");
+assert(gameJs.includes("telegraph_iaijutsu"), "Lord Kageyoshi telegraph_iaijutsu state missing");
+assert(gameJs.includes("telegraph_cleave"), "Lord Kageyoshi telegraph_cleave state missing");
+assert(gameJs.includes("telegraph_flurry"), "Lord Kageyoshi telegraph_flurry state missing");
+console.log('[PASS] Lord Kageyoshi Samurai Warlord Boss AI with wind-up telegraphs (aba-aba) verified.');
+
 // 6. Check authentic anime katana slash spritesheet & proper thickness from user reference
 assert(gameJs.includes("slash_effects_clean.png"), "assets/slash_effects_clean.png reference missing");
+assert(gameJs.includes("slash_blood_clean.png"), "assets/slash_blood_clean.png reference missing");
+assert(gameJs.includes("CRIMSON_SLASH_FRAMES"), "CRIMSON_SLASH_FRAMES sprite definitions missing");
 assert(gameJs.includes("SLASH_SPRITE_FRAMES"), "SLASH_SPRITE_FRAMES sprite definitions missing");
 assert(gameJs.includes("const rInner = s.radius * 0.74;"), "Authentic crescent thickness (0.74) missing");
 assert(gameJs.includes("player.slashTimer = 14;"), "player.slashTimer initialization missing");
