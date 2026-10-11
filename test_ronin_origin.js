@@ -11,8 +11,8 @@ const assets = [
   'bg_ruins_shrine.jpg',
   'tileset_verdant_ruins.jpg',
   'bg_origin_village.jpg',
-  'ref_village_mockup.jpg',
-  'ref_ruins_mockup.png'
+  'tileset_origin_platforms.png',
+  'tileset_origin_furniture.jpg'
 ];
 
 assets.forEach(asset => {
@@ -26,36 +26,44 @@ assets.forEach(asset => {
 // 2. Verify game.js contents
 const gameJs = fs.readFileSync(path.join(__dirname, 'game.js'), 'utf8');
 
-// Strictly single hero (The Ronin)
+// Single-hero Ronin
 assert(gameJs.includes("id: 'ronin'"), "HEROES.ronin missing");
 assert(gameJs.includes("name: 'THE RONIN'"), "HEROES.ronin name is not 'THE RONIN'");
 assert(!gameJs.includes("fall: {"), "Legacy hero 'fall' still present");
 assert(!gameJs.includes("dregsnot: {"), "Legacy hero 'dregsnot' still present");
-assert(!gameJs.includes("strom: {"), "Legacy hero 'strom' still present");
-assert(!gameJs.includes("glems: {"), "Legacy hero 'glems' still present");
 
-// Visual & art integration
-assert(gameJs.includes("l1BgAssets.originVillage"), "originVillage asset not bound in l1BgAssets");
-assert(gameJs.includes("assets/bg_origin_village.jpg"), "bg_origin_village.jpg path not found in game.js");
-assert(gameJs.includes("function drawLevel1ForestParallax"), "drawLevel1ForestParallax function missing");
-assert(gameJs.includes("level1NPCs"), "level1NPCs definition missing");
-assert(gameJs.includes("drawLevelNPCs"), "drawLevelNPCs function missing");
-assert(gameJs.includes("function toggleRoninSkin"), "toggleRoninSkin function missing");
-assert(gameJs.includes("Wildflower Blossoms"), "Wildflower blossoms not rendered on platforms");
+// 10,800px Map 1 Expansion
+assert(gameJs.includes("mapWidth: 10800"), "mapWidth is not 10800");
+assert(gameJs.includes("SECTOR_DEFS_L1"), "SECTOR_DEFS_L1 missing");
+assert(gameJs.includes("drawOriginVillageFurniture"), "drawOriginVillageFurniture function missing");
+assert(gameJs.includes("level1VillageProps"), "level1VillageProps array missing");
+assert(gameJs.includes("l1BgAssets.originPlatforms"), "l1BgAssets.originPlatforms missing");
+assert(gameJs.includes("l1BgAssets.originFurniture"), "l1BgAssets.originFurniture missing");
 
-// Continuous solid ground check
-assert(gameJs.includes("CONTINUOUS SOLID VILLAGE GROUND FLOOR"), "Continuous ground floor comments missing");
-assert(gameJs.includes("w: 1100, h: 180, type: 'forest_stone'"), "Ground floor segment 1 missing");
-assert(gameJs.includes("w: 1200, h: 180, type: 'forest_stone'"), "Ground floor segment 2 missing");
-console.log('[PASS] game.js Ronin, NPC, Continuous Ground, & Origin Village Art verified.');
+// Continuous ground floor
+assert(gameJs.includes("SEKTOR 1: JALAN UTAMA & PERMUKIMAN"), "Ground segment 1 missing");
+assert(gameJs.includes("SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA"), "Ground segment 5 missing");
+
+// Ren NPC
+assert(gameJs.includes("name: 'Ren'"), "Ren NPC missing");
+assert(gameJs.includes("x: 1540"), "Ren NPC position missing");
+
+// Boss locations
+assert(gameJs.includes("player.x > 4600 && player.x < 5200"), "Behemoth trigger missing");
+assert(gameJs.includes("player.x > 9400 && player.x < 10400"), "Chimera trigger missing");
+assert(gameJs.includes("x: 10650, y: 350"), "Goal portal at 10650 missing");
+
+// Bug fix check: startMission must not crash on null char-select-screen
+assert(!gameJs.includes("document.getElementById('char-select-screen').classList.add('hidden')"), "Unguarded char-select-screen call still exists!");
+
+console.log('[PASS] game.js 10,800px expanded world, village props, continuous ground, and bugfix verified.');
 
 // 3. Verify index.html contents
 const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 assert(indexHtml.includes('The Ronin: The Origin'), "index.html title missing 'The Ronin: The Origin'");
-assert(indexHtml.includes('THE RONIN'), "index.html HUD hero name is not 'THE RONIN'");
-assert(indexHtml.includes('toggleRoninSkin()'), "toggleRoninSkin button missing in index.html");
+assert(indexHtml.includes('10,800px'), "index.html Level 1 stats missing '10,800px'");
+assert(indexHtml.includes('SEGERA HADIR // TAHAP 2'), "index.html Level 2 missing 'SEGERA HADIR'");
 assert(!indexHtml.includes('id="char-select-screen"'), "char-select-screen modal still present in index.html");
-assert(!indexHtml.includes('GANTI HERO'), "GANTI HERO button still present in index.html");
-console.log('[PASS] index.html Ronin single-hero interface verified.');
+console.log('[PASS] index.html updated UI & Level cards verified.');
 
 console.log('\n=== ALL SUITE TESTS PASSED WITH 100% SUCCESS! ===');

@@ -331,6 +331,15 @@ for (let i = 0; i < 90; i++) {
 // ============================================================================
 // SECTOR DEFINITIONS & CINEMATIC ANNOUNCEMENT SYSTEM
 // ============================================================================
+const SECTOR_DEFS_L1 = [
+  { id: 1, name: 'SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL', shortName: 'SEKTOR 1 // GERBANG DESA', sub: 'RERUNTUHAN RUMAH WARGA & JEJAK PENYERANGAN GUILD', startX: 0, endX: 1800 },
+  { id: 2, name: 'SEKTOR 2: PASAR DESA & JEMBATAN SUNGAI SAKURA', shortName: 'SEKTOR 2 // PASAR & SUNGAI', sub: 'DERETAN KIOS PEDAGANG & JEMBATAN TAIKO-BASHI', startX: 1800, endX: 3800 },
+  { id: 3, name: 'SEKTOR 3: HUTAN BAMBU & KUIL ZEN BERLUMUT', shortName: 'SEKTOR 3 // HUTAN BAMBU', sub: 'WILAYAH PENJAGAAN BLIGHT FANG BEHEMOTH', startX: 3800, endX: 5600 },
+  { id: 4, name: 'SEKTOR 4: MENARA BATU & TEROWONGAN RAHASIA', shortName: 'SEKTOR 4 // TEROWONGAN PURBA', sub: 'PULAU BATU GANTUNG & JALUR RAHASIA LELUHUR', startX: 5600, endX: 7500 },
+  { id: 5, name: 'SEKTOR 5: SANCTUM POHON BERINGIN SUCI', shortName: 'SEKTOR 5 // POHON BERINGIN', sub: 'KANOPI POHON PURBA & ALTAR RESTORASI JIWA', startX: 7500, endX: 9200 },
+  { id: 6, name: 'SEKTOR 6: TAHTA KUIL UTAMA & INTI PETAKA', shortName: 'SEKTOR 6 // TAHTA CHIMERA', sub: 'SARANG THE BLIGHT CHIMERA & GERBANG KEBEBASAN', startX: 9200, endX: 11000 }
+];
+
 const SECTOR_DEFS = [
   { id: 1, name: 'SEKTOR 1: HIGHWAY SIBERNETIK', shortName: 'SEKTOR 1 // HIGHWAY', sub: 'ATAP METROPOLIS NEO-TOKYO & JALUR EVAKUASI', startX: 0, endX: 2800 },
   { id: 2, name: 'SEKTOR 2: KUIL PURBA ELYSIUM', shortName: 'SEKTOR 2 // KUIL PURBA', sub: 'RERUNTUHAN PERADABAN ASTRAL & RUANG RAHASIA', startX: 2800, endX: 5800 },
@@ -343,7 +352,8 @@ let lastAnnouncedSectorId = 0;
 let sectorBannerTimer = null;
 
 function checkSectorTransition(playerX) {
-  const currentSec = SECTOR_DEFS.find(s => playerX >= s.startX && playerX <= s.endX) || SECTOR_DEFS[0];
+  const secDefs = (currentLevelId === 1) ? SECTOR_DEFS_L1 : SECTOR_DEFS;
+  const currentSec = secDefs.find(s => playerX >= s.startX && playerX <= s.endX) || secDefs[0];
 
   // Update Top HUD Sector Name
   const hudSectorEl = document.getElementById('hud-sector-name');
@@ -904,10 +914,10 @@ const arenaGates = {
 };
 
 const levelBarriers = {
-  miniBossLeft: { x: 2560, y: 240, w: 26, h: 260, active: false, type: 'bramble' },
-  miniBossRight: { x: 3210, y: 240, w: 26, h: 260, active: false, type: 'bramble' },
-  bossLeft: { x: 4460, y: 230, w: 28, h: 280, active: false, type: 'abyssal_spire' },
-  bossRight: { x: 5350, y: 230, w: 28, h: 280, active: false, type: 'abyssal_spire' }
+  miniBossLeft: { x: 4560, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
+  miniBossRight: { x: 5240, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
+  bossLeft: { x: 9460, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' },
+  bossRight: { x: 10420, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' }
 };
 
 let isArenaLocked = false;
@@ -926,8 +936,8 @@ let activeBossEnemy = null;
 let activeLoreTabletNear = null;
 
 const goalPortal = {
-  x: 5410,
-  y: 420,
+  x: 10650,
+  y: 350,
   w: 64,
   h: 90,
   active: true
@@ -941,80 +951,112 @@ const LEVELS = {
     id: 1,
     name: 'LEVEL 1 // THE ORIGIN',
     title: 'RUINS OF VERDANT GLADE',
-    subtitle: 'DESA LEMBAH SUCI YANG HANCUR // INVESTIGASI MAHLUK ANEH',
-    mapWidth: 5500,
-    mapHeight: 850,
+    subtitle: 'LEMBAH SUCI RERUNTUHAN ASAL // INVESTIGASI KEHANCURAN & BALAS DENDAM',
+    mapWidth: 10800,
+    mapHeight: 900,
     playerStart: { x: 120, y: 350 },
-    goalPortal: { x: 5410, y: 350, w: 64, h: 90, active: true },
+    goalPortal: { x: 10650, y: 350, w: 64, h: 90, active: true },
     platforms: [
       // ==========================================================
       // CONTINUOUS SOLID VILLAGE GROUND FLOOR (NO DEADLY CHASMS!)
-      // Spanning from x = 0 to 5500, player will never fall to death!
+      // Spanning from x = 0 to 10800, player will never fall to death!
       // ==========================================================
-      { x: 0,    y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'GERBANG DESA & JALAN UTAMA' },
-      { x: 1080, y: 440, w: 1200, h: 180, type: 'forest_stone', label: 'PASAR DESA & RERUNTUHAN GERBANG' },
-      { x: 2260, y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'TAMAN KUIL & LEMBAH SUNGAI' },
-      { x: 3340, y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'POHON BERINGIN SUCI LELUHUR' },
-      { x: 4420, y: 440, w: 1080, h: 180, type: 'forest_stone', label: 'JANTUNG DESA & TAHTA CHIMERA' },
+      { x: 0,    y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 1: JALAN UTAMA & PERMUKIMAN' },
+      { x: 2180, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 2: PASAR DESA & TEPI SUNGAI' },
+      { x: 4360, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 3: HUTAN BAMBU & KUIL ZEN' },
+      { x: 6540, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 4: MENARA PURBA & TEROWONGAN' },
+      { x: 8720, y: 440, w: 2180, h: 180, type: 'forest_stone', label: 'SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA' },
 
       // ==========================================================
-      // ELEVATED VILLAGE PLATFORMS, ARCHES, STAIRS & STRUCTURES
-      // (As inspired by user reference mockups ref_ruins_mockup & ref_village_mockup)
+      // MULTI-TIERED ELEVATED VILLAGE PLATFORMS, ARCHES, ISLANDS & BRIDGES
+      // Directly matching user assets tileset_origin_platforms & tileset_origin_furniture!
       // ==========================================================
-      // 1. Entrance Village Archway & House Stalls (0 .. 1100)
-      { x: 380,  y: 360, w: 220, h: 80,  type: 'forest_stone', label: 'GERBANG BATU KUNO KUIL' },
-      { x: 570,  y: 395, w: 60,  h: 45,  type: 'forest_stone', label: 'TANGGA BATU' },
-      { x: 740,  y: 350, w: 180, h: 22,  type: 'wooden_ruins', label: 'WARUNG DESA (MARKET STALL)' },
-      { x: 960,  y: 310, w: 130, h: 20,  type: 'wooden_ruins', label: 'ATAP RUMAH KAYU' },
+      // --- SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL (0 .. 1800) ---
+      { x: 80,   y: 350, w: 140, h: 90,  type: 'torii_gate',     label: 'GERBANG TORII DEPAN' },
+      { x: 360,  y: 330, w: 240, h: 24,  type: 'village_roof',   label: 'ATAP RUMAH WARGA 1' },
+      { x: 620,  y: 360, w: 80,  h: 80,  type: 'forest_stone',   label: 'SUMUR BATU DESA' },
+      { x: 780,  y: 330, w: 160, h: 22,  type: 'wooden_ruins',   label: 'WARUNG MAKAN DESA' },
+      { x: 960,  y: 260, w: 150, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG 1' },
+      { x: 1140, y: 190, w: 170, h: 26,  type: 'floating_island', label: 'PULAU MELAYANG TINGGI 1' },
+      { x: 1340, y: 260, w: 150, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG 2' },
+      { x: 1480, y: 360, w: 220, h: 80,  type: 'forest_stone',   label: 'TERAS DESA // POS WARGA REN' },
+      { x: 1720, y: 350, w: 120, h: 90,  type: 'yamamon_gate',   label: 'GERBANG YAMAMON' },
 
-      // 2. Modular Floating Mossy Stone Platforms with Hanging Vines (1100 .. 2260)
-      // (Directly matching ref_ruins_mockup.png)
-      { x: 1160, y: 350, w: 170, h: 24,  type: 'forest_stone', label: 'BATU GANTUNG BERLUMUT 1' },
-      { x: 1370, y: 340, w: 180, h: 24,  type: 'forest_stone', label: 'BATU GANTUNG BERLUMUT 2' },
-      { x: 1590, y: 220, w: 160, h: 22,  type: 'forest_stone', label: 'TEBING BATU ATAS' },
-      { x: 1420, y: 190, w: 24,  h: 150, type: 'hanging_rope', label: 'SULUR GANTUNG 1' },
-      { x: 1780, y: 330, w: 220, h: 18,  type: 'rope_bridge',  label: 'JEMBATAN TALI DESA' },
-      
-      // 3. Elevated Village Terrace with Red-Haired NPC! (1980 .. 2260)
-      { x: 2020, y: 360, w: 240, h: 80,  type: 'forest_stone', label: 'TERAS DESA // POS WARGA' },
+      // --- SEKTOR 2: PASAR DESA & JEMBATAN SUNGAI SAKURA (1800 .. 3800) ---
+      { x: 1940, y: 330, w: 240, h: 24,  type: 'village_roof',   label: 'TOKO PASAR TRADISIONAL' },
+      { x: 2220, y: 350, w: 160, h: 20,  type: 'wooden_ruins',   label: 'KIOS PASAR' },
+      { x: 2480, y: 390, w: 240, h: 24,  type: 'taiko_bridge',   label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
+      { x: 2800, y: 330, w: 180, h: 20,  type: 'hanging_wood',   label: 'DERMAGA TEPI SUNGAI' },
+      { x: 3040, y: 250, w: 180, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN GANTUNG KAYU' },
+      { x: 3280, y: 170, w: 180, h: 24,  type: 'floating_island', label: 'PULAU MELAYANG SUNGAI SAKURA' },
+      { x: 3520, y: 260, w: 160, h: 22,  type: 'floating_stone', label: 'BATU GANTUNG PASAR' },
+      { x: 3720, y: 360, w: 180, h: 80,  type: 'forest_stone',   label: 'TANGGA MASUK HUTAN BAMBU' },
 
-      // 4. Sacred Shrine Arena & Upper Beams (2500 .. 3340)
-      // Mini Boss: Blight Fang Behemoth fights here on the solid ground at y=440!
-      { x: 2660, y: 340, w: 160, h: 20,  type: 'wooden_ruins', label: 'BALOK KUIL KIRI' },
-      { x: 2980, y: 340, w: 160, h: 20,  type: 'wooden_ruins', label: 'BALOK KUIL KANAN' },
-      { x: 3180, y: 370, w: 140, h: 20,  type: 'wooden_ruins', label: 'TANGGA KUIL' },
+      // --- SEKTOR 3: HUTAN BAMBU & KUIL ZEN BERLUMUT (3800 .. 5600) ---
+      // Mini Boss: Blight Fang Behemoth fights on solid ground at y=440!
+      { x: 3960, y: 340, w: 180, h: 22,  type: 'forest_stone',   label: 'PAGAR BATU TAMAN ZEN' },
+      { x: 4200, y: 270, w: 160, h: 22,  type: 'floating_stone', label: 'BATU TAMAN ZEN 1' },
+      { x: 4420, y: 200, w: 180, h: 24,  type: 'floating_island', label: 'PULAU ZEN TERTINGGI' },
+      { x: 4660, y: 320, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA BEHEMOTH KIRI' },
+      { x: 5040, y: 320, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA BEHEMOTH KANAN' },
+      { x: 5280, y: 370, w: 140, h: 20,  type: 'forest_stone',   label: 'TANGGA KELUAR ARENA' },
+      { x: 5460, y: 330, w: 160, h: 22,  type: 'wooden_ruins',   label: 'PONDOK PENJAGA PURBA' },
 
-      // 5. Sacred Banyan Grove & Canopy Terraces (3340 .. 4420)
-      { x: 3420, y: 350, w: 180, h: 22,  type: 'canopy_branch', label: 'DAHAN BERINGIN 1' },
-      { x: 3640, y: 270, w: 200, h: 22,  type: 'canopy_branch', label: 'DAHAN BERINGIN 2' },
-      { x: 3880, y: 190, w: 220, h: 24,  type: 'canopy_branch', label: 'KANOPI TERTINGGI' },
-      { x: 3720, y: 150, w: 24,  h: 220, type: 'hanging_rope',  label: 'SULUR BERINGIN' },
-      { x: 4120, y: 310, w: 190, h: 20,  type: 'wooden_ruins',  label: 'GUDANG KANOPI' },
-      { x: 4330, y: 370, w: 130, h: 20,  type: 'forest_stone',  label: 'GERBANG BATU DALAM' },
+      // --- SEKTOR 4: MENARA BATU & TEROWONGAN RAHASIA (5600 .. 7500) ---
+      { x: 5740, y: 310, w: 220, h: 130, type: 'stone_tunnel',   label: 'PINTU TEROWONGAN BATU PURBA' },
+      { x: 6020, y: 350, w: 160, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG GUA 1' },
+      { x: 6240, y: 270, w: 180, h: 24,  type: 'floating_island', label: 'PULAU BATU STALAKTIT' },
+      { x: 6480, y: 180, w: 200, h: 26,  type: 'floating_island', label: 'PULAU RAHASIA EMAS LELUHUR' },
+      { x: 6740, y: 270, w: 160, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN KAYU MENARA' },
+      { x: 6960, y: 340, w: 180, h: 100, type: 'forest_stone',   label: 'DASAR MENARA BATU' },
+      { x: 7200, y: 260, w: 160, h: 22,  type: 'floating_stone', label: 'BATU GANTUNG MENARA' },
+      { x: 7420, y: 360, w: 180, h: 80,  type: 'forest_stone',   label: 'TERAS BERINGIN SUCI' },
 
-      // 6. Village Core & Apex Arena (4420 .. 5500)
-      // Main Boss: The Blight Chimera fights here on the solid ground at y=440!
-      { x: 4620, y: 340, w: 160, h: 20,  type: 'canopy_branch', label: 'DAHAN ARENA KIRI' },
-      { x: 4860, y: 280, w: 180, h: 20,  type: 'wooden_ruins',  label: 'ALTAR LELUHUR DESA' },
-      { x: 5120, y: 340, w: 160, h: 20,  type: 'canopy_branch', label: 'DAHAN ARENA KANAN' }
+      // --- SEKTOR 5: SANCTUM POHON BERINGIN SUCI (7500 .. 9200) ---
+      { x: 7640, y: 350, w: 200, h: 22,  type: 'canopy_branch',  label: 'AKAR BERINGIN SUCI 1' },
+      { x: 7900, y: 270, w: 220, h: 24,  type: 'canopy_branch',  label: 'DAHAN KANOPI PURBA 2' },
+      { x: 8180, y: 190, w: 240, h: 26,  type: 'canopy_branch',  label: 'DAHAN KANOPI TERTINGGI' },
+      { x: 8480, y: 270, w: 200, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN SULUR POHON' },
+      { x: 8740, y: 340, w: 180, h: 24,  type: 'wooden_ruins',   label: 'ALTAR RESTORASI SUCI' },
+      { x: 8980, y: 350, w: 160, h: 90,  type: 'torii_gate',     label: 'GERBANG TORII SANCTUM' },
+
+      // --- SEKTOR 6: TAHTA KUIL UTAMA & INTI PETAKA (9200 .. 10800) ---
+      // Main Boss: The Blight Chimera fights on solid ground at y=440!
+      { x: 9280, y: 360, w: 160, h: 80,  type: 'forest_stone',   label: 'TANGGA MASUK SANCTUM' },
+      { x: 9540, y: 330, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA CHIMERA KIRI' },
+      { x: 9820, y: 260, w: 220, h: 22,  type: 'wooden_ruins',   label: 'ALTAR TAHTA TERTINGGI' },
+      { x: 10120, y: 330, w: 180, h: 20, type: 'wooden_ruins',   label: 'BALOK ARENA CHIMERA KANAN' },
+      { x: 10400, y: 360, w: 160, h: 80, type: 'forest_stone',   label: 'TIANG GERBANG KEMENANGAN' }
     ],
     traps: [
       { x: 2060, y: 490, w: 120, h: 18, type: 'crumble' },
-      { x: 1840, y: 475, w: 32, h: 18, type: 'spore_pod' },
-      { x: 3740, y: 295, w: 32, h: 18, type: 'spore_pod' }
+      { x: 3840, y: 475, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 6140, y: 475, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 8320, y: 475, w: 32,  h: 18, type: 'spore_pod' }
     ],
     crates: [
-      { x: 920, y: 360 },
-      { x: 1040, y: 290 },
-      { x: 1860, y: 440 },
-      { x: 2720, y: 330 },
-      { x: 3020, y: 330 },
-      { x: 4020, y: 190 }
+      { x: 420,  y: 360 },
+      { x: 680,  y: 360 },
+      { x: 1020, y: 290 },
+      { x: 1500, y: 440 },
+      { x: 2220, y: 350 },
+      { x: 2840, y: 330 },
+      { x: 3100, y: 250 },
+      { x: 4240, y: 270 },
+      { x: 4700, y: 320 },
+      { x: 5080, y: 320 },
+      { x: 6040, y: 350 },
+      { x: 6760, y: 270 },
+      { x: 7920, y: 270 },
+      { x: 8500, y: 270 },
+      { x: 9560, y: 330 }
     ],
     checkpoints: [
-      { id: 1, x: 180, y: 420, name: 'GERBANG DESA ASAL', reached: true, lastHealTime: 0 },
-      { id: 2, x: 2220, y: 370, name: 'GUA LEMBAH BERLUMUT', reached: false, lastHealTime: 0 },
-      { id: 3, x: 3520, y: 420, name: 'KANOPI POHON PURBA', reached: false, lastHealTime: 0 }
+      { id: 1, x: 180,  y: 420, name: 'GERBANG DESA ASAL',        reached: true,  lastHealTime: 0 },
+      { id: 2, x: 2520, y: 420, name: 'PASAR SUNGAI SAKURA',      reached: false, lastHealTime: 0 },
+      { id: 3, x: 5420, y: 420, name: 'TAMAN KUIL ZEN',           reached: false, lastHealTime: 0 },
+      { id: 4, x: 7460, y: 420, name: 'RERUNTUHAN MENARA PURBA',  reached: false, lastHealTime: 0 },
+      { id: 5, x: 8820, y: 420, name: 'POHON BERINGIN LELUHUR',   reached: false, lastHealTime: 0 }
     ],
     loreTablets: [
       {
@@ -1022,61 +1064,99 @@ const LEVELS = {
         x: 620,
         y: 430,
         title: 'ARSIP 01: TRAGEDI LEMBAH SUCI',
-        sector: 'AREA 1 // GERBANG DESA ASAL',
-        content: `Dahulu desa ini adalah pemukiman damai yang hidup berdampingan dengan alam purba. Hingga suatu malam, langit robek dan makhluk bayangan aneh jatuh menghantam kuil pusat.
+        sector: 'SEKTOR 1 // GERBANG DESA ASAL',
+        content: `Dahulu desa ini adalah pemukiman damai yang hidup harmonis dengan alam leluhur. Hingga suatu malam, guild bayangan bertopeng hitam menyerbu, membakar rumah warga dan melepaskan spora petaka kegelapan.
 
-Dalam hitungan jam, spora kegelapan mengubah flora dan fauna menjadi monster buas, membakar desa hingga menjadi abu. Agen Ronin, selidiki reruntuhan ini dan temukan entitas pembawa petaka!`
+Hanya Ronin yang selamat. Katana pusaka baja tempa ini adalah satu-satunya saksi sumpah pembalasan darah.`
       },
       {
         id: 2,
-        x: 3320,
+        x: 2700,
         y: 430,
-        title: 'ARSIP 02: PENJAGA YANG TERKUTUK',
-        sector: 'AREA 3 // KUIL SUCI PURBA',
-        content: `Blight Fang Behemoth dulunya adalah binatang pelindung desa yang disucikan oleh para tetua.
+        title: 'ARSIP 02: PRASASTI SUNGAI SAKURA',
+        sector: 'SEKTOR 2 // JEMBATAN TAIKO-BASHI',
+        content: `Air suci sungai ini mengalir dari mata air puncak gunung salju. Dikisahkan air ini mampu memurnikan racun spora dan mengasah ketajaman bilah pedang pendekar sejati.
 
-Ketika spora The Blight Chimera menyusup ke jantung desa, binatang pelindung ini menjadi gila dan bermutasi menjadi monster bertanduk kayu beracun. Dia mengunci kuil suci dengan dinding akar berduri raksasa.`
+Tebas proyektil musuhmu di udara, pantulkan kembali serangannya ke arah mereka!`
       },
       {
         id: 3,
-        x: 4320,
+        x: 4800,
         y: 430,
-        title: 'ARSIP 03: ENTITAS UTAMA (THE BLIGHT CHIMERA)',
-        sector: 'AREA 4 // KANOPI POHON PURBA',
-        content: `Catatan tetua desa terakhir:
-"Makhluk aneh itu... dia bersarang di jantung beringin raksasa desa kami. Tubuhnya dipenuhi mata ungu kehampaan dan akar parasit.
+        title: 'ARSIP 03: PENJAGA KUIL YANG TERKUTUK',
+        sector: 'SEKTOR 3 // KUIL ZEN BERLUMUT',
+        content: `Blight Fang Behemoth dulunya adalah binatang suci pelindung kuil Zen.
+Ketika spora meracuni tubuhnya, akarnya berubah menjadi duri pembunuh dan mengurung gerbang kuil.
 
-Kalahkan The Blight Chimera untuk membebaskan tanah leluhur ini dari infeksi parasit, dan aktifkan gerbang ekstraksi pulang!"`
+Kalahkan Behemoth untuk membuka jalan menuju menara purba dan terowongan rahasia leluhur.`
+      },
+      {
+        id: 4,
+        x: 6520,
+        y: 160,
+        title: 'ARSIP 04: GULUNGAN JURUS PEDANG BAYANGAN',
+        sector: 'SEKTOR 4 // PULAU BATU TINGGI',
+        content: `Ditemukan di pulau melayang tersembunyi:
+"Pendekar yang menyatukan jiwa dengan katananya takkan tersentuh oleh serbuan senjata musuh.
+Gunakan Shadow Dash untuk melesat tak berwujud menembus tubuh musuh, lalu tebas dari belakang tanpa belas kasihan!"`
+      },
+      {
+        id: 5,
+        x: 8780,
+        y: 430,
+        title: 'ARSIP 05: DOA TERAKHIR TETUA DESA',
+        sector: 'SEKTOR 5 // POHON BERINGIN SUCI',
+        content: `Pesan terakhir tetua desa sebelum gugur:
+"Entitas utama petaka ini bersemayam di kuil sanctum terdalam: The Blight Chimera.
+Ia memangsa jiwa warga kami untuk membangun kekuatannya. Ronin... bebaskan jiwa para leluhur dan tegakkan keadilan!"`
       }
     ],
     relics: [
-      { id: 1, x: 1980, y: 320, type: 'hp_core', name: 'Amulet Suci Desa (+50 HP)', collected: false },
-      { id: 2, x: 4120, y: 190, type: 'energy_core', name: 'Kristal Spora Purba (+100 Energy)', collected: false }
+      { id: 1, x: 1150, y: 160, type: 'hp_core',     name: 'Topeng Rubah Suci Kitsune (+50 HP)',     collected: false },
+      { id: 2, x: 3300, y: 140, type: 'energy_core', name: 'Bel Kencana Suzu (+60 Energy)',         collected: false },
+      { id: 3, x: 6540, y: 150, type: 'hp_core',     name: 'Jimat Magatama Purba (+50 HP)',          collected: false },
+      { id: 4, x: 8200, y: 160, type: 'energy_core', name: 'Lambang Klan Bunga Sakura (+100 Energy)', collected: false }
     ],
     breakableWalls: [
-      { x: 1960, y: 370, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
+      { x: 5700, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
     ],
     stationedEnemies: [
-      { x: 460, y: 390, type: 'bramble_drone' },
-      { x: 620, y: 410, type: 'blight_hound' },
+      { x: 460,  y: 390, type: 'bramble_drone' },
+      { x: 620,  y: 410, type: 'blight_hound' },
       { x: 1050, y: 260, type: 'spore_spitter' },
       { x: 1300, y: 380, type: 'bramble_drone' },
-      { x: 1880, y: 410, type: 'blight_hound' },
-      { x: 1960, y: 290, type: 'wood_stalker' },
+      { x: 1620, y: 410, type: 'blight_hound' },
+      { x: 1980, y: 290, type: 'wood_stalker' },
       { x: 2260, y: 360, type: 'spore_spitter' },
       { x: 2420, y: 320, type: 'bramble_drone' },
+      { x: 2920, y: 410, type: 'blight_hound' },
+      { x: 3180, y: 240, type: 'wood_stalker' },
       { x: 3540, y: 330, type: 'wood_stalker' },
       { x: 3780, y: 230, type: 'spore_spitter' },
-      { x: 4050, y: 160, type: 'wood_stalker' },
+      { x: 4050, y: 390, type: 'blight_hound' },
       { x: 4260, y: 300, type: 'bramble_drone' },
-      { x: 4360, y: 420, type: 'blight_hound' }
+      { x: 4460, y: 180, type: 'wood_stalker' },
+      { x: 5360, y: 420, type: 'blight_hound' },
+      { x: 5880, y: 390, type: 'bramble_drone' },
+      { x: 6120, y: 330, type: 'spore_spitter' },
+      { x: 6360, y: 250, type: 'wood_stalker' },
+      { x: 6820, y: 410, type: 'blight_hound' },
+      { x: 7100, y: 320, type: 'bramble_drone' },
+      { x: 7520, y: 410, type: 'blight_hound' },
+      { x: 7800, y: 330, type: 'spore_spitter' },
+      { x: 8060, y: 250, type: 'wood_stalker' },
+      { x: 8360, y: 170, type: 'bramble_drone' },
+      { x: 8640, y: 410, type: 'blight_hound' },
+      { x: 9160, y: 390, type: 'bramble_drone' },
+      { x: 9380, y: 340, type: 'spore_spitter' }
     ]
   },
   2: {
     id: 2,
-    name: 'LEVEL 2 // MEGAPOLIS & ASTRAL CITADEL',
-    title: 'THE 5-SECTOR EXPEDITION',
-    subtitle: 'CYBER HIGHWAY // KUIL ELYSIUM // GUA MAGMA // KOLOSEUM // TAHTA XENOS',
+    name: 'LEVEL 2 // KOTA MISTERIUS (COMING SOON)',
+    title: 'THE SHADOW GUILD BASTION',
+    subtitle: 'KOTA SIBERNETIK & MARKAS GUILD // DALAM PENGEMBANGAN (REVISI TEMA)',
+    locked: true,
     mapWidth: 15000,
     mapHeight: 800,
     playerStart: { x: 120, y: 330 },
@@ -5987,12 +6067,12 @@ function destroyEnemy(enemy, index) {
 
 function updateEnemies() {
   if (currentLevelId === 1) {
-    // Level 1 Mini Boss: Blight Fang Behemoth (Ruins Arena: 2600 .. 3200)
-    if (player.x > 2600 && player.x < 3200 && !defeatedBosses.treant) {
+    // Level 1 Mini Boss: Blight Fang Behemoth (Sector 3: 4600 .. 5200)
+    if (player.x > 4600 && player.x < 5200 && !defeatedBosses.treant) {
       if (!enemies.some(e => e.type === 'boss_treant')) {
-        enemies.push(new Enemy(2850, 335, 'boss_treant'));
+        enemies.push(new Enemy(4850, 335, 'boss_treant'));
       }
-      if (player.x > 2630 && player.x < 3140 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
+      if (player.x > 4630 && player.x < 5140 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
         levelBarriers.miniBossLeft.active = true;
         levelBarriers.miniBossRight.active = true;
         screenShake = 16;
@@ -6001,12 +6081,12 @@ function updateEnemies() {
       }
     }
 
-    // Level 1 Main Boss: The Blight Chimera (Sunken Hollow Arena: 4500 .. 5320)
-    if (player.x > 4500 && player.x < 5320 && !defeatedBosses.chimera && !isBossDefeated) {
+    // Level 1 Main Boss: The Blight Chimera (Sector 6: 9400 .. 10400)
+    if (player.x > 9400 && player.x < 10400 && !defeatedBosses.chimera && !isBossDefeated) {
       if (!enemies.some(e => e.type === 'boss_chimera')) {
-        enemies.push(new Enemy(4850, 324, 'boss_chimera'));
+        enemies.push(new Enemy(9850, 324, 'boss_chimera'));
       }
-      if (player.x > 4530 && player.x < 5280 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
+      if (player.x > 9430 && player.x < 10350 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
         levelBarriers.bossLeft.active = true;
         levelBarriers.bossRight.active = true;
         screenShake = 20;
@@ -6213,12 +6293,16 @@ const L1_BUSHES = [
 // ============================================================================
 const l1BgAssets = {
   originVillage: new Image(),
+  originPlatforms: new Image(),
+  originFurniture: new Image(),
   mistyWoods: new Image(),
   ancientTotem: new Image(),
   ruinsShrine: new Image(),
   tilesetRuins: new Image()
 };
 l1BgAssets.originVillage.src = 'assets/bg_origin_village.jpg';
+l1BgAssets.originPlatforms.src = 'assets/tileset_origin_platforms.png';
+l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.jpg';
 l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
 l1BgAssets.ancientTotem.src = 'assets/bg_ancient_totem.jpg';
 l1BgAssets.ruinsShrine.src = 'assets/bg_ruins_shrine.jpg';
@@ -6331,10 +6415,10 @@ function drawLevel1ForestParallax(cam) {
 // ============================================================================
 const level1NPCs = [
   {
-    x: 2120,
+    x: 1540,
     y: 360,
     name: 'Ren',
-    speech: 'Ronin! Selamatkan desa kita dari petaka ini!',
+    speech: 'Ronin! Desa kita diserang guild bertopeng hitam... Kalahkan monster petaka di kuil utama!',
     hairColor: '#ef4444',
     tunicColor: '#2563eb'
   }
@@ -6438,6 +6522,292 @@ function drawLevelNPCs(ctx, cam) {
       ctx.restore();
     }
 
+    ctx.restore();
+  });
+}
+
+// ============================================================================
+// VILLAGE FURNITURE & ARCHITECTURAL PROPS (THE ORIGIN VILLAGE)
+// Directly matching user asset sheet: tileset_origin_furniture.jpg
+// ============================================================================
+const level1VillageProps = [
+  // Sektor 1: Gerbang Kuil & Permukiman Asal (0 .. 1800)
+  { type: 'torii_gate',          x: 80,   y: 440, w: 140, h: 90 },
+  { type: 'stone_lantern',       x: 260,  y: 440 },
+  { type: 'bamboo_fence',        x: 300,  y: 440, w: 80 },
+  { type: 'house_tiled',         x: 360,  y: 440, w: 240, h: 110 },
+  { type: 'wooden_cart',         x: 640,  y: 440 },
+  { type: 'stone_well',          x: 680,  y: 440 },
+  { type: 'house_thatched',      x: 1200, y: 440, w: 180, h: 100 },
+  { type: 'stone_lantern',       x: 1440, y: 440 },
+  { type: 'wooden_lantern_post', x: 1680, y: 440 },
+  { type: 'yamamon_gate',        x: 1720, y: 440, w: 120, h: 90 },
+
+  // Sektor 2: Pasar Tradisional & Jembatan Sungai Sakura (1800 .. 3800)
+  { type: 'crows_fence',         x: 1860, y: 440 },
+  { type: 'house_shop',          x: 1940, y: 440, w: 240, h: 110 },
+  { type: 'shiba_inu',           x: 2160, y: 440 },
+  { type: 'market_stall',        x: 2220, y: 440, w: 160, h: 90 },
+  { type: 'wooden_cart',         x: 2360, y: 440 },
+  { type: 'river_waterfall',     x: 2460, y: 440, w: 280, h: 70 },
+  { type: 'wooden_lantern_post', x: 2780, y: 440 },
+  { type: 'stone_lantern',       x: 3420, y: 440 },
+  { type: 'bamboo_fence',        x: 3600, y: 440, w: 180 },
+
+  // Sektor 3: Hutan Bambu & Kuil Zen Berlumut (3800 .. 5600)
+  { type: 'jizo_statue',         x: 4120, y: 440 },
+  { type: 'stone_lantern',       x: 4400, y: 440 },
+  { type: 'shrine_hokora',       x: 5460, y: 440, w: 140, h: 100 },
+  { type: 'crows_fence',         x: 5620, y: 440 },
+
+  // Sektor 4: Menara Purba & Terowongan Rahasia (5600 .. 7500)
+  { type: 'stone_lantern',       x: 6760, y: 440 },
+  { type: 'jizo_statue',         x: 7460, y: 440 },
+
+  // Sektor 5: Sanctum Pohon Beringin Suci (7500 .. 9200)
+  { type: 'shrine_altar',        x: 8740, y: 440, w: 180, h: 100 },
+  { type: 'wooden_lantern_post', x: 8940, y: 440 },
+  { type: 'torii_gate',          x: 8980, y: 440, w: 160, h: 90 },
+
+  // Sektor 6: Tahta Kuil & Arena Akhir (9200 .. 10800)
+  { type: 'stone_lantern',       x: 9320,  y: 440 },
+  { type: 'temple_ruins_pagoda', x: 9780,  y: 440, w: 260, h: 180 },
+  { type: 'stone_lantern',       x: 10420, y: 440 }
+];
+
+function drawOriginVillageFurniture(ctx, cam) {
+  if (currentLevelId !== 1) return;
+  const now = Date.now();
+  const furnImg = l1BgAssets.originFurniture;
+  const hasFurnImg = furnImg && furnImg.complete && furnImg.naturalWidth > 0;
+
+  level1VillageProps.forEach(prop => {
+    const pw = prop.w || 60;
+    if (prop.x + pw < cam.x - 120 || prop.x > cam.x + V_WIDTH + 120) return;
+
+    ctx.save();
+    switch (prop.type) {
+      case 'torii_gate':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 396, 158, 86, 72, prop.x, prop.y - 85, prop.w, 85);
+        } else {
+          const gx = prop.x;
+          const gy = prop.y;
+          const gw = prop.w;
+          const gh = 85;
+          ctx.fillStyle = '#991b1b';
+          ctx.fillRect(gx + 14, gy - gh, 15, gh);
+          ctx.fillRect(gx + gw - 29, gy - gh, 15, gh);
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(gx + 10, gy - 6, 23, 6);
+          ctx.fillRect(gx + gw - 33, gy - 6, 23, 6);
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(gx, gy - gh, gw, 12);
+          ctx.fillStyle = '#dc2626';
+          ctx.fillRect(gx + 8, gy - gh + 16, gw - 16, 8);
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(gx + 22, gy - gh + 26);
+          ctx.quadraticCurveTo(gx + gw / 2, gy - gh + 34, gx + gw - 22, gy - gh + 26);
+          ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+        ctx.fillRect(prop.x + 18, prop.y - 75, prop.w - 36, 75);
+        break;
+
+      case 'house_tiled':
+      case 'house_thatched':
+      case 'house_shop':
+      case 'shrine_hokora':
+      case 'shrine_altar':
+      case 'temple_ruins_pagoda':
+        if (hasFurnImg) {
+          const slices = {
+            house_tiled: { sx: 14, sy: 34, sw: 196, sh: 108 },
+            house_thatched: { sx: 216, sy: 50, sw: 156, sh: 92 },
+            house_shop: { sx: 382, sy: 42, sw: 186, sh: 100 },
+            shrine_hokora: { sx: 584, sy: 46, sw: 116, sh: 96 },
+            shrine_altar: { sx: 584, sy: 46, sw: 116, sh: 96 },
+            temple_ruins_pagoda: { sx: 14, sy: 34, sw: 196, sh: 108 }
+          };
+          const sl = slices[prop.type] || slices.house_tiled;
+          ctx.drawImage(furnImg, sl.sx, sl.sy, sl.sw, sl.sh, prop.x, prop.y - prop.h, prop.w, prop.h);
+        } else {
+          const hx = prop.x;
+          const hy = prop.y - prop.h;
+          const hw = prop.w;
+          const hh = prop.h;
+          ctx.fillStyle = '#451a03';
+          ctx.fillRect(hx + 10, hy + 30, hw - 20, hh - 30);
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(hx + 14, hy + 34, hw - 28, hh - 38);
+          const winGlow = 0.7 + Math.sin(now / 400 + hx) * 0.15;
+          ctx.fillStyle = `rgba(251, 191, 36, ${winGlow})`;
+          ctx.fillRect(hx + 28, hy + 45, 32, 28);
+          if (hw > 160) ctx.fillRect(hx + hw - 60, hy + 45, 32, 28);
+          ctx.fillStyle = prop.type === 'house_thatched' ? '#a16207' : '#1e1b4b';
+          ctx.beginPath();
+          ctx.moveTo(hx - 10, hy + 32);
+          ctx.lineTo(hx + hw / 2, hy);
+          ctx.lineTo(hx + hw + 10, hy + 32);
+          ctx.closePath();
+          ctx.fill();
+        }
+        break;
+
+      case 'stone_lantern':
+      case 'wooden_lantern_post':
+        if (hasFurnImg) {
+          if (prop.type === 'stone_lantern') {
+            ctx.drawImage(furnImg, 168, 250, 48, 76, prop.x - 14, prop.y - 48, 28, 48);
+          } else {
+            ctx.drawImage(furnImg, 20, 248, 82, 78, prop.x - 20, prop.y - 68, 46, 68);
+          }
+        } else {
+          const lx = prop.x;
+          const ly = prop.y;
+          ctx.fillStyle = prop.type === 'stone_lantern' ? '#64748b' : '#78350f';
+          ctx.fillRect(lx - 3, ly - 34, 6, 34);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(lx - 5, ly - 42, 10, 8);
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(lx - 7, ly - 46, 14, 4);
+        }
+        const flicker = Math.sin(now / 180 + prop.x * 0.05) * 4;
+        const lg = ctx.createRadialGradient(prop.x, prop.y - 32, 2, prop.x, prop.y - 32, 42 + flicker);
+        lg.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+        lg.addColorStop(0.6, 'rgba(245, 158, 11, 0.15)');
+        lg.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = lg;
+        ctx.beginPath();
+        ctx.arc(prop.x, prop.y - 32, 42 + flicker, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+
+      case 'river_waterfall':
+        const rx = prop.x;
+        const ry = prop.y;
+        const rw = prop.w;
+        const rh = prop.h;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(rx, ry, rw, rh);
+        const waterGrad = ctx.createLinearGradient(0, ry, 0, ry + rh);
+        waterGrad.addColorStop(0, '#0e7490');
+        waterGrad.addColorStop(0.5, '#06b6d4');
+        waterGrad.addColorStop(1, '#083344');
+        ctx.fillStyle = waterGrad;
+        ctx.fillRect(rx, ry, rw, rh);
+        for (let rip = rx + 6; rip < rx + rw - 6; rip += 28) {
+          const ripOffset = Math.sin(now / 220 + rip * 0.08) * 3;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+          ctx.fillRect(rip + ripOffset, ry + 4, 16, 2);
+        }
+        for (let lp = rx + 24; lp < rx + rw - 30; lp += 64) {
+          ctx.fillStyle = '#15803d';
+          ctx.beginPath();
+          ctx.arc(lp, ry + 12, 6, 0, Math.PI * 1.8);
+          ctx.fill();
+          ctx.fillStyle = '#f472b6';
+          ctx.beginPath();
+          ctx.arc(lp - 1, ry + 10, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+
+      case 'wooden_cart':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 326, 268, 74, 52, prop.x, prop.y - 42, 54, 42);
+        } else {
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x, prop.y - 24, 44, 14);
+          ctx.strokeStyle = '#451a03';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(prop.x + 12, prop.y - 8, 8, 0, Math.PI * 2);
+          ctx.arc(prop.x + 36, prop.y - 8, 8, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        break;
+
+      case 'market_stall':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 470, 254, 74, 66, prop.x, prop.y - prop.h, prop.w, prop.h);
+        } else {
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x + 8, prop.y - prop.h + 20, prop.w - 16, prop.h - 20);
+          ctx.fillStyle = '#b91c1c';
+          ctx.fillRect(prop.x, prop.y - prop.h, prop.w, 18);
+        }
+        break;
+
+      case 'stone_well':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 560, 260, 58, 60, prop.x, prop.y - 48, 46, 48);
+        } else {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(prop.x, prop.y - 24, 38, 24);
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x + 4, prop.y - 42, 30, 6);
+        }
+        break;
+
+      case 'jizo_statue':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 748, 368, 62, 52, prop.x - 14, prop.y - 36, 34, 36);
+        } else {
+          ctx.fillStyle = '#64748b';
+          ctx.beginPath();
+          ctx.arc(prop.x, prop.y - 20, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillRect(prop.x - 7, prop.y - 14, 14, 14);
+          ctx.fillStyle = '#ef4444';
+          ctx.fillRect(prop.x - 6, prop.y - 14, 12, 6);
+        }
+        break;
+
+      case 'shiba_inu':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 678, 385, 28, 25, prop.x, prop.y - 20, 24, 20);
+        } else {
+          ctx.fillStyle = '#d97706';
+          ctx.fillRect(prop.x, prop.y - 16, 20, 12);
+          ctx.fillRect(prop.x + 14, prop.y - 22, 10, 10);
+        }
+        break;
+
+      case 'crows_fence':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 604, 368, 78, 52, prop.x, prop.y - 42, 60, 42);
+        } else {
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x, prop.y - 26, 48, 4);
+          ctx.fillRect(prop.x + 6, prop.y - 26, 6, 26);
+          ctx.fillRect(prop.x + 36, prop.y - 26, 6, 26);
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.arc(prop.x + 14, prop.y - 30, 4, 0, Math.PI * 2);
+          ctx.arc(prop.x + 38, prop.y - 30, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+
+      case 'bamboo_fence':
+        ctx.fillStyle = '#65a30d';
+        for (let bfx = prop.x; bfx < prop.x + (prop.w || 80); bfx += 10) {
+          ctx.fillRect(bfx, prop.y - 24, 6, 24);
+          ctx.fillStyle = '#4d7c0f';
+          ctx.fillRect(bfx, prop.y - 14, 6, 2);
+          ctx.fillStyle = '#65a30d';
+        }
+        ctx.fillStyle = '#3f6212';
+        ctx.fillRect(prop.x, prop.y - 18, prop.w || 80, 3);
+        ctx.fillRect(prop.x, prop.y - 8, prop.w || 80, 3);
+        break;
+
+      default:
+        break;
+    }
     ctx.restore();
   });
 }
@@ -7165,6 +7535,143 @@ function drawPlatforms() {
         ctx.arc(vx + sway, p.y + p.h + vLen, 2.2, 0, Math.PI * 2);
         ctx.fill();
       }
+      ctx.restore();
+
+    // LEVEL 1: FLOATING MOSSY ROCK ISLAND (MATCHING tileset_origin_platforms.png)
+    } else if (p.type === 'floating_island') {
+      ctx.save();
+      const platImg = l1BgAssets.originPlatforms;
+      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+        ctx.drawImage(platImg, 24, 52, 156, 120, p.x, p.y, p.w, p.h + 35);
+      } else {
+        ctx.fillStyle = '#1c192c';
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y + 4);
+        ctx.lineTo(p.x + p.w * 0.2, p.y + p.h + 20);
+        ctx.lineTo(p.x + p.w * 0.5, p.y + p.h + 38);
+        ctx.lineTo(p.x + p.w * 0.8, p.y + p.h + 16);
+        ctx.lineTo(p.x + p.w, p.y + 4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#15803d';
+        ctx.fillRect(p.x, p.y, p.w, 6);
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+        ctx.fillStyle = '#84cc16';
+        ctx.fillRect(p.x, p.y, p.w, 2);
+      }
+      for (let vx = p.x + 12; vx < p.x + p.w - 12; vx += 24) {
+        const vLen = 14 + ((vx * 13) % 18);
+        const sway = Math.sin(Date.now() / 600 + vx * 0.05) * 3;
+        ctx.strokeStyle = '#16a34a';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(vx, p.y + 10);
+        ctx.quadraticCurveTo(vx + sway * 0.5, p.y + vLen * 0.6, vx + sway, p.y + vLen + 10);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+    // LEVEL 1: FLOATING MOSSY STONE SLAB
+    } else if (p.type === 'floating_stone') {
+      ctx.save();
+      const platImg = l1BgAssets.originPlatforms;
+      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+        ctx.drawImage(platImg, 295, 164, 168, 34, p.x, p.y, p.w, p.h);
+      } else {
+        ctx.fillStyle = '#242234';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#15803d';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+        ctx.fillStyle = '#84cc16';
+        ctx.fillRect(p.x, p.y, p.w, 2);
+      }
+      ctx.restore();
+
+    // LEVEL 1: HANGING WOODEN BOARDWALK & BRIDGES (WITH ROPE LOOPS)
+    } else if (p.type === 'hanging_wood') {
+      ctx.save();
+      const platImg = l1BgAssets.originPlatforms;
+      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+        ctx.drawImage(platImg, 642, 230, 174, 38, p.x, p.y, p.w, p.h);
+      } else {
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(p.x + 8, p.y);
+        ctx.lineTo(p.x + 8, p.y + p.h + 12);
+        ctx.moveTo(p.x + p.w - 8, p.y);
+        ctx.lineTo(p.x + p.w - 8, p.y + p.h + 12);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+    // LEVEL 1: ANCIENT STONE ARCHWAY TUNNEL ENTRANCE
+    } else if (p.type === 'stone_tunnel') {
+      ctx.save();
+      const platImg = l1BgAssets.originPlatforms;
+      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+        ctx.drawImage(platImg, 18, 190, 188, 130, p.x, p.y - 35, p.w, p.h + 35);
+      } else {
+        ctx.fillStyle = '#1e1b2e';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#0a0910';
+        ctx.beginPath();
+        ctx.arc(p.x + p.w / 2, p.y + 40, 32, Math.PI, 0);
+        ctx.lineTo(p.x + p.w / 2 + 32, p.y + p.h);
+        ctx.lineTo(p.x + p.w / 2 - 32, p.y + p.h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#39364f';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+    // LEVEL 1: TAIKO-BASHI ARCHED RED WOODEN BRIDGE OVER RIVER
+    } else if (p.type === 'taiko_bridge') {
+      ctx.save();
+      ctx.fillStyle = '#7f1d1d';
+      ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - 12);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 22, p.x + p.w, p.y - 12);
+      ctx.stroke();
+      for (let bx = p.x + 12; bx < p.x + p.w - 10; bx += 24) {
+        const archUp = Math.sin(((bx - p.x) / p.w) * Math.PI) * 8;
+        ctx.fillStyle = '#b91c1c';
+        ctx.fillRect(bx, p.y - 12 - archUp, 3, 14 + archUp);
+      }
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+      ctx.restore();
+
+    // LEVEL 1: WALKABLE JAPANESE HOUSE ROOF
+    } else if (p.type === 'village_roof') {
+      ctx.save();
+      ctx.fillStyle = '#1e1b4b';
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+      ctx.fillStyle = '#312e81';
+      for (let rx = p.x; rx < p.x + p.w; rx += 14) {
+        ctx.fillRect(rx, p.y, 2.5, p.h);
+      }
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x, p.y + p.h - 3, p.w, 3);
+      ctx.restore();
+
+    // LEVEL 1: WALKABLE TORII / YAMAMON GATE TOP BEAM
+    } else if (p.type === 'torii_gate' || p.type === 'yamamon_gate') {
+      ctx.save();
+      ctx.fillStyle = '#991b1b';
+      ctx.fillRect(p.x, p.y, p.w, 10);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(p.x - 6, p.y - 4, p.w + 12, 6);
       ctx.restore();
 
     // LEVEL 1: DILAPIDATED WOODEN RUINS & ROOFS
@@ -10578,18 +11085,22 @@ function updateInspectorPanel() {
 }
 
 function goToCharSelect() {
-  window.soundEngine.playMenuClick();
-  document.getElementById('lobby-screen').classList.add('hidden');
-  document.getElementById('char-select-screen').classList.remove('hidden');
+  if (window.soundEngine) window.soundEngine.playMenuClick();
+  const lobbyScr = document.getElementById('lobby-screen');
+  if (lobbyScr) lobbyScr.classList.add('hidden');
+  const charScr = document.getElementById('char-select-screen');
+  if (charScr) charScr.classList.remove('hidden');
   selectedHeroInRoster = currentHeroId;
   selectedSkinInRoster = currentSkinId;
   renderHeroRosterGrid();
 }
 
 function goToLobby() {
-  window.soundEngine.playMenuClick();
-  document.getElementById('char-select-screen').classList.add('hidden');
-  document.getElementById('lobby-screen').classList.remove('hidden');
+  if (window.soundEngine) window.soundEngine.playMenuClick();
+  const charScr = document.getElementById('char-select-screen');
+  if (charScr) charScr.classList.add('hidden');
+  const lobbyScr = document.getElementById('lobby-screen');
+  if (lobbyScr) lobbyScr.classList.remove('hidden');
   updateLobbyHeroPreview();
 }
 
@@ -10647,18 +11158,26 @@ function startMission(levelId) {
 
   window.soundEngine.playCharSelect();
 
-  document.getElementById('lobby-screen').classList.add('hidden');
-  document.getElementById('char-select-screen').classList.add('hidden');
-  document.getElementById('game-over-modal').classList.add('hidden');
-  document.getElementById('victory-modal').classList.add('hidden');
-  document.getElementById('pause-modal').classList.add('hidden');
+  const lobbyScreen = document.getElementById('lobby-screen');
+  if (lobbyScreen) lobbyScreen.classList.add('hidden');
+  const charScreen = document.getElementById('char-select-screen');
+  if (charScreen) charScreen.classList.add('hidden');
+  const overModal = document.getElementById('game-over-modal');
+  if (overModal) overModal.classList.add('hidden');
+  const vicModal = document.getElementById('victory-modal');
+  if (vicModal) vicModal.classList.add('hidden');
+  const pauseModal = document.getElementById('pause-modal');
+  if (pauseModal) pauseModal.classList.add('hidden');
   const lvlModal = document.getElementById('level-select-modal');
   if (lvlModal) lvlModal.classList.add('hidden');
 
-  document.getElementById('hud-layer').classList.remove('hidden');
-  document.getElementById('controls-hint').classList.remove('hidden');
-  if (window.innerWidth <= 900) {
-    document.getElementById('mobile-controls').classList.remove('hidden');
+  const hudLayer = document.getElementById('hud-layer');
+  if (hudLayer) hudLayer.classList.remove('hidden');
+  const ctrlHint = document.getElementById('controls-hint');
+  if (ctrlHint) ctrlHint.classList.remove('hidden');
+  const mobControls = document.getElementById('mobile-controls');
+  if (mobControls && window.innerWidth <= 900) {
+    mobControls.classList.remove('hidden');
   }
 
   score = 0;
@@ -10927,6 +11446,7 @@ function gameLoop() {
   drawPlatforms();
   drawBreakableWalls();
   drawArenaGates();
+  drawOriginVillageFurniture(ctx, camera);
   traps.forEach(t => t.draw(ctx));
   crates.forEach(c => c.draw(ctx));
   enemyCorpses.forEach(ec => ec.draw(ctx));
