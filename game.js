@@ -969,72 +969,65 @@ const LEVELS = {
       { x: 8720, y: 440, w: 2180, h: 180, type: 'forest_stone', label: 'SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA' },
 
       // ==========================================================
-      // MULTI-TIERED AIRBORNE PLATFORMS, BRIDGES & SACRED ISLANDS
-      // Organised with smooth jump parabolas and authentic pixel art assets!
+      // MULTI-TIERED GROUNDED ARCHITECTURE & SACRED CELESTIAL ISLANDS
+      // Master-class parkour flow: every structure is grounded or celestial!
       // ==========================================================
       // --- SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL (0 .. 1800) ---
-      { x: 80,   y: 350, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII DEPAN' },
-      { x: 370,  y: 305, w: 180, h: 22,  type: 'village_roof',        label: 'ATAP RUMAH WARGA' },
-      { x: 620,  y: 260, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM KAYU BANNER 1' },
-      { x: 820,  y: 320, w: 140, h: 24,  type: 'wooden_arch_bridge',  label: 'JEMBATAN KAYU LENGKUNG' },
-      { x: 1060, y: 332, w: 150, h: 22,  type: 'village_roof',        label: 'ATAP PONDOK WARGA' },
-      { x: 1260, y: 260, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU SEDANG 1' },
-      { x: 1440, y: 180, w: 130, h: 50,  type: 'floating_island',     label: 'PULAU MELAYANG TINGGI 1' },
-      { x: 1620, y: 240, w: 120, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SULUR' },
-      { x: 1720, y: 344, w: 100, h: 20,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON' },
+      { x: 80,   y: 330, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII DEPAN' },
+      { x: 320,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 1 // ATAP TILED' },
+      { x: 580,  y: 250, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 1' },
+      { x: 820,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 2 // ATAP THATCED' },
+      { x: 1100, y: 190, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU MELAYANG TERTINGGI 1' },
+      { x: 1340, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 2' },
+      { x: 1640, y: 330, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON DESA' },
 
-      // --- SEKTOR 2: PASAR DESA & JEMBATAN SUNGAI SAKURA (1800 .. 3800) ---
-      { x: 1940, y: 311, w: 180, h: 22,  type: 'village_roof',        label: 'TOKO PASAR TRADISIONAL' },
-      { x: 2180, y: 260, w: 110, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM KAYU BANNER 2' },
-      { x: 2460, y: 375, w: 160, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
-      { x: 2680, y: 340, w: 140, h: 26,  type: 'stone_bridge',        label: 'JEMBATAN BATU SUNGAI' },
-      { x: 2880, y: 270, w: 120, h: 22,  type: 'hanging_wood',        label: 'DERMAGA GANTUNG KAYU' },
-      { x: 3060, y: 200, w: 90,  h: 36,  type: 'floating_island_small', label: 'PULAU BATU KECIL 1' },
-      { x: 3220, y: 150, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU MELAYANG SAKURA' },
-      { x: 3420, y: 230, w: 120, h: 22,  type: 'hanging_wood',        label: 'JEMBATAN GANTUNG KAYU' },
-      { x: 3600, y: 310, w: 130, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG PASAR' },
+      // --- SEKTOR 2: PASAR TRADISIONAL & JEMBATAN SUNGAI SAKURA (1800 .. 3800) ---
+      { x: 1920, y: 310, w: 180, h: 22,  type: 'village_house',       label: 'TOKO PASAR TRADISIONAL' },
+      { x: 2180, y: 240, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS PASAR' },
+      { x: 2420, y: 360, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS TEPI SUNGAI KIRI' },
+      { x: 2600, y: 370, w: 200, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
+      { x: 2860, y: 330, w: 160, h: 24,  type: 'hanging_wood_banner', label: 'DERMAGA NELAYAN SUNGAI' },
+      { x: 3100, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU SUNGAI SAKURA' },
+      { x: 3320, y: 170, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU SAKURA TERTINGGI' },
+      { x: 3560, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU PASAR' },
+      { x: 3760, y: 360, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK HUTAN BAMBU' },
 
       // --- SEKTOR 3: HUTAN BAMBU & KUIL ZEN BERLUMUT (3800 .. 5600) ---
       // Mini Boss: Blight Fang Behemoth fights on ground at y=440!
-      { x: 3950, y: 340, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU TAMAN ZEN 1' },
-      { x: 4130, y: 270, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU ZEN 2' },
-      { x: 4300, y: 210, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR ZEN' },
-      { x: 4490, y: 160, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU ZEN TERTINGGI' },
-      { x: 4680, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KIRI' },
-      { x: 5020, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KANAN' },
-      { x: 5260, y: 340, w: 130, h: 24,  type: 'floating_stone',      label: 'BATU KELUAR ARENA' },
-      { x: 5460, y: 330, w: 120, h: 22,  type: 'village_roof',        label: 'ATAP KUIL HOKORA' },
+      { x: 3960, y: 340, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TERAS BATU TAMAN ZEN' },
+      { x: 4180, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU ZEN' },
+      { x: 4400, y: 180, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU ZEN TERTINGGI' },
+      { x: 4680, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KIRI' },
+      { x: 5020, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KANAN' },
+      { x: 5280, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS KELUAR ARENA' },
+      { x: 5460, y: 310, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL HOKORA PURBA' },
 
-      // --- SEKTOR 4: MENARA BATU & TEROWONGAN RAHASIA (5600 .. 7500) ---
-      { x: 5740, y: 344, w: 160, h: 96,  type: 'stone_tunnel',        label: 'PINTU TEROWONGAN BATU PURBA' },
-      { x: 5930, y: 385, w: 90,  h: 55,  type: 'stairs_stone',        label: 'TANGGA BATU TEROWONGAN' },
-      { x: 6060, y: 320, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG GUA 1' },
-      { x: 6240, y: 240, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU STALAKTIT' },
-      { x: 6420, y: 160, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU RAHASIA EMAS LELUHUR' },
-      { x: 6620, y: 230, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG MENARA' },
-      { x: 6810, y: 345, w: 220, h: 95,  type: 'grand_gatehouse',     label: 'GERBANG BENTENG PURBA' },
-      { x: 7080, y: 330, w: 100, h: 110, type: 'watchtower',          label: 'MENARA PENGAWAS BATU' },
-      { x: 7220, y: 385, w: 110, h: 55,  type: 'stairs_railing',      label: 'TANGGA PAGAR KAYU' },
-      { x: 7380, y: 320, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG MENARA' },
+      // --- SEKTOR 4: BENTENG BATU PURBA & TEROWONGAN (5600 .. 7500) ---
+      { x: 5740, y: 330, w: 200, h: 110, type: 'grand_gatehouse',     label: 'PINTU GERBANG TEROWONGAN' },
+      { x: 6020, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU STALAKTIT 1' },
+      { x: 6240, y: 190, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU STALAKTIT 2' },
+      { x: 6440, y: 140, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU RAHASIA EMAS LELUHUR' },
+      { x: 6660, y: 220, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG MENARA' },
+      { x: 6860, y: 320, w: 200, h: 120, type: 'grand_gatehouse',     label: 'GERBANG BENTENG PURBA' },
+      { x: 7120, y: 230, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS BATU' },
+      { x: 7340, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT BERINGIN' },
 
       // --- SEKTOR 5: SANCTUM POHON BERINGIN SUCI (7500 .. 9200) ---
-      { x: 7660, y: 340, w: 140, h: 24,  type: 'floating_stone',      label: 'AKAR BERINGIN SUCI 1' },
-      { x: 7860, y: 260, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM BANNER SUCI' },
-      { x: 8040, y: 200, w: 150, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN BATU KANOPI' },
-      { x: 8250, y: 150, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU KANOPI TERTINGGI' },
-      { x: 8450, y: 220, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR POHON' },
-      { x: 8640, y: 300, w: 120, h: 22,  type: 'hanging_wood',        label: 'DERMAGA RESTORASI SUCI' },
-      { x: 8820, y: 340, w: 130, h: 24,  type: 'wooden_ruins',        label: 'ALTAR RESTORASI SUCI' },
-      { x: 8980, y: 344, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII SANCTUM' },
+      { x: 7600, y: 340, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR BERINGIN SUCI 1' },
+      { x: 7860, y: 260, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM BANNER SUCI' },
+      { x: 8080, y: 190, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR KANOPI TERTINGGI' },
+      { x: 8340, y: 130, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU KANOPI LELUHUR' },
+      { x: 8560, y: 220, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR POHON' },
+      { x: 8760, y: 320, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'ALTAR RESTORASI SUCI' },
+      { x: 8980, y: 330, w: 140, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII SANCTUM' },
 
       // --- SEKTOR 6: TAHTA KUIL UTAMA & INTI PETAKA (9200 .. 10800) ---
       // Main Boss: The Blight Chimera fights on ground at y=440!
-      { x: 9280, y: 385, w: 100, h: 55,  type: 'stairs_stone',        label: 'TANGGA MASUK SANCTUM' },
-      { x: 9420, y: 345, w: 220, h: 95,  type: 'grand_gatehouse',     label: 'GERBANG TAHTA KUIL' },
-      { x: 9680, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
-      { x: 9880, y: 230, w: 160, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
-      { x: 10120, y: 310, w: 120, h: 24, type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
-      { x: 10380, y: 330, w: 100, h: 110, type: 'watchtower',         label: 'MENARA PENGAWAS KEMENANGAN' },
+      { x: 9260, y: 360, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SANCTUM' },
+      { x: 9580, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
+      { x: 9860, y: 230, w: 180, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
+      { x: 10140, y: 320, w: 140, h: 24, type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
+      { x: 10380, y: 330, w: 140, h: 24, type: 'watchtower',          label: 'MENARA PENGAWAS KEMENANGAN' },
       { x: 10560, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
     ],
     traps: [
@@ -1044,21 +1037,19 @@ const LEVELS = {
       { x: 8320, y: 475, w: 32,  h: 18, type: 'spore_pod' }
     ],
     crates: [
-      { x: 420,  y: 360 },
-      { x: 680,  y: 360 },
-      { x: 1020, y: 290 },
-      { x: 1500, y: 440 },
-      { x: 2220, y: 350 },
-      { x: 2840, y: 330 },
-      { x: 3100, y: 250 },
-      { x: 4240, y: 270 },
-      { x: 4700, y: 320 },
-      { x: 5080, y: 320 },
-      { x: 6040, y: 350 },
-      { x: 6760, y: 270 },
-      { x: 7920, y: 270 },
-      { x: 8500, y: 270 },
-      { x: 9560, y: 330 }
+      { x: 390,  y: 285 },
+      { x: 890,  y: 285 },
+      { x: 1180, y: 165 },
+      { x: 1990, y: 285 },
+      { x: 2250, y: 215 },
+      { x: 3400, y: 145 },
+      { x: 4480, y: 155 },
+      { x: 4740, y: 295 },
+      { x: 5080, y: 295 },
+      { x: 6520, y: 115 },
+      { x: 7190, y: 205 },
+      { x: 8420, y: 105 },
+      { x: 9940, y: 205 }
     ],
     checkpoints: [
       { id: 1, x: 180,  y: 420, name: 'GERBANG DESA ASAL',        reached: true,  lastHealTime: 0 },
@@ -1121,42 +1112,42 @@ Ia memangsa jiwa warga kami untuk membangun kekuatannya. Ronin... bebaskan jiwa 
       }
     ],
     relics: [
-      { id: 1, x: 1150, y: 160, type: 'hp_core',     name: 'Topeng Rubah Suci Kitsune (+50 HP)',     collected: false },
-      { id: 2, x: 3300, y: 140, type: 'energy_core', name: 'Bel Kencana Suzu (+60 Energy)',         collected: false },
-      { id: 3, x: 6540, y: 150, type: 'hp_core',     name: 'Jimat Magatama Purba (+50 HP)',          collected: false },
-      { id: 4, x: 8200, y: 160, type: 'energy_core', name: 'Lambang Klan Bunga Sakura (+100 Energy)', collected: false }
+      { id: 1, x: 1180, y: 150, type: 'hp_core',     name: 'Topeng Rubah Suci Kitsune (+50 HP)',     collected: false },
+      { id: 2, x: 3400, y: 130, type: 'energy_core', name: 'Bel Kencana Suzu (+60 Energy)',         collected: false },
+      { id: 3, x: 6520, y: 100, type: 'hp_core',     name: 'Jimat Magatama Purba (+50 HP)',          collected: false },
+      { id: 4, x: 8420, y: 90,  type: 'energy_core', name: 'Lambang Klan Bunga Sakura (+100 Energy)', collected: false }
     ],
     breakableWalls: [
       { x: 5700, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
     ],
     stationedEnemies: [
-      { x: 460,  y: 320, type: 'bramble_drone' },
+      { x: 460,  y: 300, type: 'bramble_drone' },
       { x: 520,  y: 408, type: 'blight_hound' },
-      { x: 1060, y: 290, type: 'spore_spitter' },
-      { x: 1300, y: 300, type: 'bramble_drone' },
+      { x: 860,  y: 268, type: 'spore_spitter' },
+      { x: 1220, y: 220, type: 'bramble_drone' },
       { x: 1360, y: 408, type: 'blight_hound' },
-      { x: 1940, y: 257, type: 'wood_stalker' },
-      { x: 2420, y: 280, type: 'bramble_drone' },
-      { x: 2680, y: 298, type: 'spore_spitter' },
-      { x: 2920, y: 408, type: 'blight_hound' },
-      { x: 3220, y: 96,  type: 'wood_stalker' },
-      { x: 3950, y: 298, type: 'spore_spitter' },
-      { x: 4050, y: 408, type: 'blight_hound' },
-      { x: 4260, y: 240, type: 'bramble_drone' },
-      { x: 4490, y: 106, type: 'wood_stalker' },
+      { x: 1940, y: 256, type: 'wood_stalker' },
+      { x: 2360, y: 260, type: 'bramble_drone' },
+      { x: 2450, y: 318, type: 'spore_spitter' },
+      { x: 2940, y: 408, type: 'blight_hound' },
+      { x: 3340, y: 116, type: 'wood_stalker' },
+      { x: 3980, y: 298, type: 'spore_spitter' },
+      { x: 4060, y: 408, type: 'blight_hound' },
+      { x: 4280, y: 220, type: 'bramble_drone' },
+      { x: 4420, y: 126, type: 'wood_stalker' },
       { x: 5360, y: 408, type: 'blight_hound' },
       { x: 5880, y: 280, type: 'bramble_drone' },
-      { x: 6060, y: 278, type: 'spore_spitter' },
+      { x: 6060, y: 218, type: 'spore_spitter' },
       { x: 6240, y: 408, type: 'blight_hound' },
-      { x: 6420, y: 106, type: 'wood_stalker' },
-      { x: 7100, y: 260, type: 'bramble_drone' },
+      { x: 6460, y: 86,  type: 'wood_stalker' },
+      { x: 7200, y: 260, type: 'bramble_drone' },
       { x: 7420, y: 408, type: 'blight_hound' },
-      { x: 7660, y: 298, type: 'spore_spitter' },
-      { x: 8250, y: 96,  type: 'wood_stalker' },
-      { x: 8360, y: 180, type: 'bramble_drone' },
+      { x: 7620, y: 298, type: 'spore_spitter' },
+      { x: 8360, y: 76,  type: 'wood_stalker' },
+      { x: 8480, y: 180, type: 'bramble_drone' },
       { x: 8560, y: 408, type: 'blight_hound' },
       { x: 9160, y: 300, type: 'bramble_drone' },
-      { x: 9680, y: 268, type: 'spore_spitter' }
+      { x: 9600, y: 278, type: 'spore_spitter' }
     ]
   },
   2: {
@@ -6384,10 +6375,7 @@ function drawLevel1ForestParallax(cam) {
   const nowTime = Date.now();
 
   // 1. Far Majestic Origin Village & Sacred Mountains (User reference art bg_origin_village.jpg)
-  const renderedOriginVillage = drawSeamlessParallaxImage(ctx, l1BgAssets.originVillage, cam.x, 0.08, V_HEIGHT, 0, 1.0);
-
-  // 1b. Seamless Stone Fortress Wall Panorama (User asset bg_origin_wall_panorama.png at midground 0.18x speed)
-  drawSeamlessParallaxImage(ctx, l1BgAssets.originWallPanorama, cam.x, 0.18, 240, V_HEIGHT - 310, 0.88);
+  const renderedOriginVillage = drawSeamlessParallaxImage(ctx, l1BgAssets.originVillage, cam.x, 0.05, V_HEIGHT, 0, 1.0);
   if (!renderedOriginVillage) {
     // Fallback to misty woods
     const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
@@ -6589,69 +6577,61 @@ function drawLevelNPCs(ctx, cam) {
 // ============================================================================
 const level1VillageProps = [
   // Sektor 1: Gerbang Kuil & Permukiman Asal (0 .. 1800)
-  { type: 'torii_gate',          x: 80,   y: 440, w: 100, h: 96 },
-  { type: 'notice_board',        x: 200,  y: 440 },
-  { type: 'stone_lantern',       x: 240,  y: 440 },
-  { type: 'bamboo_fence',        x: 270,  y: 440, w: 90 },
-  { type: 'house_tiled',         x: 370,  y: 440, w: 180, h: 135 },
-  { type: 'crate_sacks',         x: 565,  y: 440 },
-  { type: 'wooden_cart',         x: 640,  y: 440 },
-  { type: 'stone_well',          x: 720,  y: 440 },
-  { type: 'bamboo_fence',        x: 775,  y: 440, w: 90 },
-  { type: 'flowering_shrub',     x: 880,  y: 440 },
-  { type: 'house_thatched',      x: 1060, y: 440, w: 150, h: 108 },
-  { type: 'hanging_lantern_post', x: 1230, y: 440 },
-  { type: 'stone_monument',      x: 1380, y: 440 },
-  { type: 'crate_sacks',         x: 1580, y: 440 },
-  { type: 'yamamon_gate',        x: 1720, y: 440, w: 92, h: 96 },
+  { type: 'notice_board',        x: 215,  y: 440 },
+  { type: 'stone_lantern',       x: 250,  y: 440 },
+  { type: 'bamboo_fence',        x: 275,  y: 440, w: 40 },
+  { type: 'crate_sacks',         x: 520,  y: 440 },
+  { type: 'wooden_cart',         x: 595,  y: 440 },
+  { type: 'stone_well',          x: 675,  y: 440 },
+  { type: 'flowering_shrub',     x: 745,  y: 440 },
+  { type: 'bamboo_fence',        x: 1030, y: 440, w: 55 },
+  { type: 'hanging_lantern_post', x: 1120, y: 440 },
+  { type: 'stone_monument',      x: 1260, y: 440 },
+  { type: 'crows_fence',         x: 1380, y: 440 },
+  { type: 'flowering_shrub',     x: 1480, y: 440 },
+  { type: 'stone_lantern',       x: 1560, y: 440 },
 
   // Sektor 2: Pasar Tradisional & Jembatan Sungai Sakura (1800 .. 3800)
-  { type: 'crows_fence',         x: 1860, y: 440 },
-  { type: 'house_shop',          x: 1940, y: 440, w: 180, h: 129 },
-  { type: 'notice_board',        x: 2130, y: 440 },
-  { type: 'shiba_inu',           x: 2165, y: 440 },
-  { type: 'market_stall',        x: 2200, y: 440, w: 80, h: 98 },
-  { type: 'crate_sacks',         x: 2310, y: 440 },
-  { type: 'river_waterfall',     x: 2460, y: 440, w: 240, h: 70 },
-  { type: 'hanging_lantern_post', x: 2740, y: 440 },
-  { type: 'flowering_shrub',     x: 2980, y: 440 },
-  { type: 'wooden_cart',         x: 3200, y: 440 },
-  { type: 'stone_lantern',       x: 3420, y: 440 },
-  { type: 'bamboo_fence',        x: 3580, y: 440, w: 140 },
+  { type: 'stone_lantern',       x: 1840, y: 440 },
+  { type: 'notice_board',        x: 1880, y: 440 },
+  { type: 'shiba_inu',           x: 2135, y: 440 },
+  { type: 'market_stall',        x: 2340, y: 440, w: 75, h: 90 },
+  { type: 'river_waterfall',     x: 2600, y: 440, w: 200, h: 40 },
+  { type: 'hanging_lantern_post', x: 2825, y: 440 },
+  { type: 'bamboo_fence',        x: 3030, y: 440, w: 55 },
+  { type: 'flowering_shrub',     x: 3260, y: 440 },
+  { type: 'wooden_cart',         x: 3380, y: 440 },
+  { type: 'stone_lantern',       x: 3500, y: 440 },
+  { type: 'crows_fence',         x: 3620, y: 440 },
 
   // Sektor 3: Hutan Bambu & Kuil Zen Berlumut (3800 .. 5600)
-  { type: 'small_torii',         x: 3880, y: 440 },
-  { type: 'jizo_statue',         x: 4120, y: 440 },
-  { type: 'stone_lantern',       x: 4400, y: 440 },
-  { type: 'ruined_arch',         x: 4580, y: 440 },
-  { type: 'flowering_shrub',     x: 5260, y: 440 },
-  { type: 'shrine_hokora',       x: 5460, y: 440, w: 110, h: 110 },
-  { type: 'crows_fence',         x: 5600, y: 440 },
+  { type: 'small_torii',         x: 3910, y: 440 },
+  { type: 'jizo_statue',         x: 4130, y: 440 },
+  { type: 'stone_lantern',       x: 4350, y: 440 },
+  { type: 'flowering_shrub',     x: 4570, y: 440 },
+  { type: 'crate_sacks',         x: 4620, y: 440 },
+  { type: 'crows_fence',         x: 5210, y: 440 },
 
   // Sektor 4: Menara Purba & Terowongan Rahasia (5600 .. 7500)
-  { type: 'wall_door',           x: 5660, y: 440 },
-  { type: 'notice_board',        x: 6020, y: 440 },
-  { type: 'crate_sacks',         x: 6360, y: 440 },
-  { type: 'stone_lantern',       x: 6760, y: 440 },
-  { type: 'watchtower',          x: 7080, y: 440 },
-  { type: 'stone_monument',      x: 7460, y: 440 },
+  { type: 'notice_board',        x: 5670, y: 440 },
+  { type: 'crate_sacks',         x: 6160, y: 440 },
+  { type: 'stone_lantern',       x: 6600, y: 440 },
+  { type: 'stone_monument',      x: 7300, y: 440 },
 
   // Sektor 5: Sanctum Pohon Beringin Suci (7500 .. 9200)
-  { type: 'small_torii',         x: 7580, y: 440 },
-  { type: 'flowering_shrub',     x: 7780, y: 440 },
-  { type: 'jizo_statue',         x: 8200, y: 440 },
-  { type: 'crate_sacks',         x: 8520, y: 440 },
-  { type: 'shrine_altar',        x: 8740, y: 440, w: 110, h: 110 },
+  { type: 'small_torii',         x: 7520, y: 440 },
+  { type: 'flowering_shrub',     x: 7810, y: 440 },
+  { type: 'jizo_statue',         x: 8020, y: 440 },
+  { type: 'stone_lantern',       x: 8300, y: 440 },
+  { type: 'crate_sacks',         x: 8680, y: 440 },
   { type: 'wooden_lantern_post', x: 8940, y: 440 },
-  { type: 'torii_gate',          x: 8980, y: 440, w: 100, h: 96 },
 
   // Sektor 6: Tahta Kuil & Arena Akhir (9200 .. 10800)
-  { type: 'hanging_lantern_post', x: 9240, y: 440 },
-  { type: 'stone_lantern',       x: 9340,  y: 440 },
-  { type: 'ruined_arch',         x: 9460,  y: 440 },
-  { type: 'temple_ruins_pagoda', x: 9780,  y: 440, w: 200, h: 150 },
-  { type: 'watchtower',          x: 10380, y: 440 },
-  { type: 'stone_monument',      x: 10520, y: 440 }
+  { type: 'hanging_lantern_post', x: 9180, y: 440 },
+  { type: 'stone_lantern',       x: 9440,  y: 440 },
+  { type: 'ruined_arch',         x: 9480,  y: 440 },
+  { type: 'stone_monument',      x: 10320, y: 440 },
+  { type: 'stone_monument',      x: 10530, y: 440 }
 ];
 
 function drawOriginVillageFurniture(ctx, cam) {
@@ -7546,22 +7526,6 @@ function drawPlatforms() {
     // 0. LEVEL 1: ANCIENT MOSS-COVERED COBBLESTONE BRICKS (EXACT PIXEL ART REFERENCE STYLE)
     if (p.type === 'forest_stone') {
       ctx.save();
-      const platImg = l1BgAssets.originPlatforms;
-      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        const tileW = 576;
-        const tileH = 96;
-        for (let gx = p.x; gx < p.x + p.w; gx += tileW) {
-          const segW = Math.min(tileW, p.x + p.w - gx);
-          ctx.drawImage(platImg, 12, 230, segW, tileH, gx, p.y - 12, segW, Math.min(p.h + 12, tileH));
-          if (p.h + 12 > tileH) {
-            ctx.fillStyle = '#171522';
-            ctx.fillRect(gx, p.y - 12 + tileH, segW, p.h + 12 - tileH);
-          }
-        }
-        ctx.restore();
-        return;
-      }
-
       // Foundation fill
       ctx.fillStyle = '#171522';
       ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -7758,268 +7722,932 @@ function drawPlatforms() {
       }
       ctx.restore();
 
-    // LEVEL 1: FLOATING MOSSY ROCK ISLAND (MATCHING tileset_origin_master.png & platforms.png)
-    } else if (p.type === 'floating_island') {
+    // LEVEL 1: SACRED CELESTIAL SPIRIT ISLAND (STALACTITE MONOLITH & GLOWING SPIRIT RUNES)
+    } else if (p.type === 'floating_island' || p.type === 'floating_island_med' || p.type === 'floating_island_small' || p.type === 'floating_stone') {
       ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      const platImg = l1BgAssets.originPlatforms;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 340, 37, 110, 118, p.x, p.y, p.w, p.h + 50);
-      } else if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 18, 39, 110, 80, p.x, p.y, p.w, p.h + 35);
-      } else {
-        ctx.fillStyle = '#1c192c';
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y + 4);
-        ctx.lineTo(p.x + p.w * 0.2, p.y + p.h + 20);
-        ctx.lineTo(p.x + p.w * 0.5, p.y + p.h + 38);
-        ctx.lineTo(p.x + p.w * 0.8, p.y + p.h + 16);
-        ctx.lineTo(p.x + p.w, p.y + 4);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = '#15803d';
-        ctx.fillRect(p.x, p.y, p.w, 6);
+      const stalactiteLen = Math.min(65, p.w * 0.45);
+
+      // 1. Natural sculpted rock stalactite core
+      ctx.fillStyle = '#171522';
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y + 6);
+      ctx.lineTo(p.x + p.w * 0.2, p.y + p.h + stalactiteLen * 0.6);
+      ctx.lineTo(p.x + p.w * 0.48, p.y + p.h + stalactiteLen);
+      ctx.lineTo(p.x + p.w * 0.78, p.y + p.h + stalactiteLen * 0.5);
+      ctx.lineTo(p.x + p.w, p.y + 6);
+      ctx.closePath();
+      ctx.fill();
+
+      // Stone facet highlights and shadow strata
+      ctx.fillStyle = '#242234';
+      ctx.beginPath();
+      ctx.moveTo(p.x + 4, p.y + 6);
+      ctx.lineTo(p.x + p.w * 0.22, p.y + p.h + stalactiteLen * 0.55);
+      ctx.lineTo(p.x + p.w * 0.48, p.y + p.h + stalactiteLen);
+      ctx.lineTo(p.x + p.w * 0.48, p.y + 6);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#312d47';
+      ctx.beginPath();
+      ctx.moveTo(p.x + 10, p.y + 8);
+      ctx.lineTo(p.x + p.w * 0.2, p.y + p.h + 16);
+      ctx.lineTo(p.x + p.w * 0.35, p.y + 8);
+      ctx.closePath();
+      ctx.fill();
+
+      // 2. Carved Ancient Celestial Spirit Rune in the center
+      const runePulse = 0.5 + Math.sin(Date.now() / 550 + p.x * 0.04) * 0.35;
+      const rx = p.x + p.w * 0.48;
+      const ry = p.y + p.h + stalactiteLen * 0.4;
+      ctx.strokeStyle = `rgba(56, 189, 248, ${runePulse})`;
+      ctx.fillStyle = `rgba(103, 232, 249, ${runePulse})`;
+      ctx.lineWidth = 1.8;
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 10;
+      // Sacred spirit diamond glyph
+      ctx.beginPath();
+      ctx.moveTo(rx, ry - 7);
+      ctx.lineTo(rx + 6, ry);
+      ctx.lineTo(rx, ry + 7);
+      ctx.lineTo(rx - 6, ry);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fillRect(rx - 2, ry - 2, 4, 4);
+      ctx.shadowBlur = 0;
+
+      // 3. Triple-tier lush grass & moss carpet on top surface
+      ctx.fillStyle = '#14532d';
+      ctx.fillRect(p.x, p.y, p.w, 6);
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(p.x, p.y, p.w, 2);
+
+      // Drooping scalloped grass fringes
+      for (let fx = p.x + 3; fx < p.x + p.w - 4; fx += 8) {
+        const fLen = 3 + ((fx * 7) % 5);
         ctx.fillStyle = '#22c55e';
-        ctx.fillRect(p.x, p.y, p.w, 4);
+        ctx.fillRect(fx, p.y + 4, 3.5, fLen);
         ctx.fillStyle = '#84cc16';
-        ctx.fillRect(p.x, p.y, p.w, 2);
+        ctx.fillRect(fx, p.y + 2, 3.5, 2);
+        ctx.fillStyle = '#14532d';
+        ctx.fillRect(fx + 0.5, p.y + 4 + fLen, 2.5, 1.5);
       }
-      for (let vx = p.x + 12; vx < p.x + p.w - 12; vx += 24) {
-        const vLen = 14 + ((vx * 13) % 18);
-        const sway = Math.sin(Date.now() / 600 + vx * 0.05) * 3;
+
+      // Fairy mushrooms
+      for (let mx = p.x + 16; mx < p.x + p.w - 16; mx += 60) {
+        if ((mx * 11) % 2 === 0) {
+          ctx.fillStyle = '#f1f5f9';
+          ctx.fillRect(mx + 2, p.y - 4, 3, 4);
+          ctx.fillStyle = '#ef4444';
+          ctx.beginPath();
+          ctx.arc(mx + 3.5, p.y - 4, 4, Math.PI, 0);
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(mx + 2, p.y - 6, 1.2, 1.2);
+        }
+      }
+
+      // Wildflowers
+      for (let fx = p.x + 24; fx < p.x + p.w - 24; fx += 48) {
+        ctx.strokeStyle = '#22c55e';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(fx, p.y);
+        ctx.lineTo(fx, p.y - 5);
+        ctx.stroke();
+        ctx.fillStyle = '#fef08a';
+        ctx.beginPath();
+        ctx.arc(fx, p.y - 6, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(fx - 0.5, p.y - 6.5, 1, 1);
+      }
+
+      // 4. Trailing Ivy Tendrils & Hanging Roots below stalactite
+      for (let vx = p.x + 14; vx < p.x + p.w - 14; vx += 28) {
+        const vLen = 14 + ((vx * 13) % 20);
+        const sway = Math.sin(Date.now() / 620 + vx * 0.05) * 3.5;
         ctx.strokeStyle = '#16a34a';
         ctx.lineWidth = 1.6;
         ctx.beginPath();
-        ctx.moveTo(vx, p.y + 10);
-        ctx.quadraticCurveTo(vx + sway * 0.5, p.y + vLen * 0.6, vx + sway, p.y + vLen + 10);
+        ctx.moveTo(vx, p.y + p.h + 8);
+        ctx.quadraticCurveTo(vx + sway * 0.5, p.y + p.h + vLen * 0.5, vx + sway, p.y + p.h + vLen + 8);
         ctx.stroke();
-      }
-      ctx.restore();
-
-    // LEVEL 1: MEDIUM FLOATING ISLAND
-    } else if (p.type === 'floating_island_med') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 160, 70, 50, 60, p.x, p.y, p.w, p.h + 25);
-      } else {
-        ctx.fillStyle = '#1c192c';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#22c55e';
-        ctx.fillRect(p.x, p.y, p.w, 4);
-      }
-      ctx.restore();
-
-    // LEVEL 1: SMALL TEARDROP FLOATING ISLAND
-    } else if (p.type === 'floating_island_small') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 210, 70, 50, 60, p.x, p.y, p.w, p.h + 20);
-      } else {
-        ctx.fillStyle = '#1c192c';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#22c55e';
-        ctx.fillRect(p.x, p.y, p.w, 4);
-      }
-      ctx.restore();
-
-    // LEVEL 1: FLOATING MOSSY STONE SLAB
-    } else if (p.type === 'floating_stone') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      const platImg = l1BgAssets.originPlatforms;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 295, 70, 105, 45, p.x, p.y, p.w, p.h + 15);
-      } else if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 206, 115, 118, 24, p.x, p.y, p.w, p.h);
-      } else {
-        ctx.fillStyle = '#242234';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#15803d';
-        ctx.fillRect(p.x, p.y, p.w, 4);
         ctx.fillStyle = '#84cc16';
-        ctx.fillRect(p.x, p.y, p.w, 2);
-      }
-      ctx.restore();
-
-    // LEVEL 1: HANGING WOODEN BOARDWALK & BRIDGES (WITH ROPE LOOPS)
-    } else if (p.type === 'hanging_wood') {
-      ctx.save();
-      const platImg = l1BgAssets.originPlatforms;
-      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 450, 160, 124, 28, p.x, p.y, p.w, p.h);
-      } else {
-        ctx.fillStyle = '#451a03';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#78350f';
-        ctx.fillRect(p.x, p.y, p.w, 4);
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(p.x + 8, p.y);
-        ctx.lineTo(p.x + 8, p.y + p.h + 12);
-        ctx.moveTo(p.x + p.w - 8, p.y);
-        ctx.lineTo(p.x + p.w - 8, p.y + p.h + 12);
-        ctx.stroke();
+        ctx.arc(vx + sway, p.y + p.h + vLen + 8, 2, 0, Math.PI * 2);
+        ctx.fill();
       }
       ctx.restore();
 
-    // LEVEL 1: WOODEN PLATFORM WITH CEREMONIAL BANNER
-    } else if (p.type === 'hanging_wood_banner') {
+    // LEVEL 1: GROUNDED JAPANESE VILLAGE HOUSE (GROUND TO P.Y)
+    } else if (p.type === 'village_house' || p.type === 'village_roof') {
       ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 525, 42, 100, 113, p.x, p.y, p.w, p.h + 75);
-      } else {
-        ctx.fillStyle = '#451a03';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
+      const groundY = 440;
+      const houseH = Math.max(40, groundY - p.y);
+      const isThatched = p.label && p.label.includes('THATCED');
+
+      // 1. Foundation stone plinths (soseki) at ground y=440
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(p.x + 10, groundY - 8, 22, 8);
+      ctx.fillRect(p.x + p.w / 2 - 11, groundY - 8, 22, 8);
+      ctx.fillRect(p.x + p.w - 32, groundY - 8, 22, 8);
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(p.x + 10, groundY - 8, 22, 2);
+      ctx.fillRect(p.x + p.w / 2 - 11, groundY - 8, 22, 2);
+      ctx.fillRect(p.x + p.w - 32, groundY - 8, 22, 2);
+
+      // 2. Engawa (raised wooden porch/veranda deck) at groundY - 14
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x + 12, groundY - 14, p.w - 24, 6);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x + 8, groundY - 18, p.w - 16, 4);
+
+      // 3. House walls & timber framework between (p.y + 20) and (groundY - 18)
+      const wallY = p.y + 20;
+      const wallH = (groundY - 18) - wallY;
+      if (wallH > 0) {
+        // Shoji paper wall background
+        ctx.fillStyle = '#fef3c7';
+        ctx.fillRect(p.x + 8, wallY, p.w - 16, wallH);
+
+        // Warm candlelight window glow from inside
+        const winGlow = 0.45 + Math.sin(Date.now() / 450 + p.x * 0.05) * 0.12;
+        ctx.fillStyle = `rgba(251, 191, 36, ${winGlow})`;
+        ctx.fillRect(p.x + 16, wallY + 8, p.w - 32, Math.max(10, wallH - 16));
+
+        // Dark cedar posts and beams
+        ctx.fillStyle = '#3e1d08';
+        // Left & right corner pillars
+        ctx.fillRect(p.x + 8, wallY, 8, wallH);
+        ctx.fillRect(p.x + p.w - 16, wallY, 8, wallH);
+        // Center pillar
+        ctx.fillRect(p.x + p.w / 2 - 4, wallY, 8, wallH);
+        // Horizontal lintel & sill
+        ctx.fillRect(p.x + 8, wallY, p.w - 16, 5);
+        ctx.fillRect(p.x + 8, wallY + wallH - 5, p.w - 16, 5);
+
+        // Kumiko wood lattice grid lines (shoji screens)
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 1;
+        for (let lx = p.x + 22; lx < p.x + p.w - 20; lx += 14) {
+          if (Math.abs(lx - (p.x + p.w / 2)) < 8) continue;
+          ctx.beginPath();
+          ctx.moveTo(lx, wallY + 5);
+          ctx.lineTo(lx, wallY + wallH - 5);
+          ctx.stroke();
+        }
+        for (let ly = wallY + 12; ly < wallY + wallH - 8; ly += 12) {
+          ctx.beginPath();
+          ctx.moveTo(p.x + 16, ly);
+          ctx.lineTo(p.x + p.w / 2 - 4, ly);
+          ctx.moveTo(p.x + p.w / 2 + 4, ly);
+          ctx.lineTo(p.x + p.w - 16, ly);
+          ctx.stroke();
+        }
+
+        // Sliding door handle (hikite)
+        ctx.fillStyle = '#d97706';
+        ctx.fillRect(p.x + p.w / 2 - 12, wallY + wallH / 2 - 3, 3, 6);
+        ctx.fillRect(p.x + p.w / 2 + 9, wallY + wallH / 2 - 3, 3, 6);
+      }
+
+      // 4. Exposed rafters (taruki) beneath eave
+      ctx.fillStyle = '#451a03';
+      for (let tx = p.x - 6; tx <= p.x + p.w + 6; tx += 10) {
+        ctx.fillRect(tx, p.y + 16, 3, 5);
+      }
+
+      // 5. Curved Japanese Gable Roof (p.y to p.y + 20, overhangs p.x - 14 to p.x + p.w + 14)
+      const roofOverhang = 14;
+      const roofLeft = p.x - roofOverhang;
+      const roofW = p.w + roofOverhang * 2;
+      const roofTop = p.y;
+      const roofH = 20;
+
+      if (isThatched) {
+        // Thatched straw roof (Kaya / Warabuki)
         ctx.fillStyle = '#78350f';
-        ctx.fillRect(p.x, p.y, p.w, 4);
-      }
-      ctx.restore();
-
-    // LEVEL 1: ANCIENT STONE ARCH BRIDGE
-    } else if (p.type === 'stone_bridge') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 243, 419, 127, 58, p.x, p.y - 12, p.w, p.h + 20);
+        ctx.fillRect(roofLeft, roofTop + 4, roofW, roofH - 4);
+        ctx.fillStyle = '#a16207';
+        ctx.fillRect(roofLeft, roofTop + 2, roofW, 6);
+        ctx.fillStyle = '#ca8a04';
+        ctx.fillRect(roofLeft + 4, roofTop, roofW - 8, 3);
+        // Straw fringe textures
+        for (let sx = roofLeft + 2; sx < roofLeft + roofW - 2; sx += 6) {
+          ctx.fillStyle = '#eab308';
+          ctx.fillRect(sx, roofTop + roofH - 2, 2.5, 3);
+        }
       } else {
-        ctx.fillStyle = '#334155';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#22c55e';
-        ctx.fillRect(p.x, p.y, p.w, 4);
-      }
-      ctx.restore();
+        // Traditional Indigo/Slate Ceramic Tile Roof (Kawara)
+        ctx.fillStyle = '#1e1b4b';
+        ctx.fillRect(roofLeft, roofTop + 4, roofW, roofH - 4);
+        // Ridge cap (mune)
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(roofLeft + 6, roofTop, roofW - 12, 4);
+        ctx.fillStyle = '#312e81';
+        ctx.fillRect(roofLeft + 2, roofTop + 4, roofW - 4, 3);
 
-    // LEVEL 1: WOODEN ARCHED BRIDGE
-    } else if (p.type === 'wooden_arch_bridge') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 8, 419, 120, 59, p.x, p.y - 10, p.w, p.h + 20);
-      } else {
-        ctx.fillStyle = '#78350f';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      }
-      ctx.restore();
+        // Vertical tile ribs
+        for (let rx = roofLeft + 6; rx < roofLeft + roofW - 6; rx += 10) {
+          ctx.fillStyle = '#312e81';
+          ctx.fillRect(rx, roofTop + 4, 2, roofH - 4);
+          ctx.fillStyle = '#4338ca';
+          ctx.fillRect(rx + 1, roofTop + 4, 1, 3);
+        }
 
-    // LEVEL 1: GRAND FORTRESS GATEHOUSE PLATFORM
-    } else if (p.type === 'grand_gatehouse') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 675, 300, 245, 95, p.x, p.y - 10, p.w, p.h + 10);
-      } else {
-        ctx.fillStyle = '#1e293b';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      }
-      ctx.restore();
-
-    // LEVEL 1: STONE WATCHTOWER PARAPET
-    } else if (p.type === 'watchtower') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 830, 190, 70, 97, p.x, p.y, p.w, p.h);
-      } else {
-        ctx.fillStyle = '#334155';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      }
-      ctx.restore();
-
-    // LEVEL 1: STAIRS WITH RAILING
-    } else if (p.type === 'stairs_railing') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 525, 321, 85, 54, p.x, p.y, p.w, p.h);
-      } else {
-        ctx.fillStyle = '#78350f';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      }
-      ctx.restore();
-
-    // LEVEL 1: STONE STAIRS RAMP
-    } else if (p.type === 'stairs_stone') {
-      ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        ctx.drawImage(masterImg, 610, 325, 60, 50, p.x, p.y, p.w, p.h);
-      } else {
-        ctx.fillStyle = '#475569';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-      }
-      ctx.restore();
-
-    // LEVEL 1: ANCIENT STONE ARCHWAY TUNNEL ENTRANCE
-    } else if (p.type === 'stone_tunnel') {
-      ctx.save();
-      const platImg = l1BgAssets.originPlatforms;
-      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 13, 130, 138, 96, p.x, p.y - 35, p.w, p.h + 35);
-      } else {
-        ctx.fillStyle = '#1e1b2e';
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = '#0a0910';
+        // Upturned eave tips (sori)
+        ctx.fillStyle = '#0f172a';
         ctx.beginPath();
-        ctx.arc(p.x + p.w / 2, p.y + 40, 32, Math.PI, 0);
-        ctx.lineTo(p.x + p.w / 2 + 32, p.y + p.h);
-        ctx.lineTo(p.x + p.w / 2 - 32, p.y + p.h);
+        ctx.moveTo(roofLeft, roofTop + roofH);
+        ctx.lineTo(roofLeft - 5, roofTop + roofH - 5);
+        ctx.lineTo(roofLeft + 4, roofTop + roofH - 2);
         ctx.closePath();
         ctx.fill();
-        ctx.strokeStyle = '#39364f';
-        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(roofLeft + roofW, roofTop + roofH);
+        ctx.lineTo(roofLeft + roofW + 5, roofTop + roofH - 5);
+        ctx.lineTo(roofLeft + roofW - 4, roofTop + roofH - 2);
+        ctx.closePath();
+        ctx.fill();
+
+        // Golden onigawara ridge ornaments
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(roofLeft + 6, roofTop - 3, 5, 4);
+        ctx.fillRect(roofLeft + roofW - 11, roofTop - 3, 5, 4);
+      }
+
+      // 6. Swaying Red Paper Lantern (Chōchin)
+      const lanSway = Math.sin(Date.now() / 450 + p.x * 0.05) * 3;
+      const lanX = p.x + 28 + lanSway;
+      const lanY = p.y + roofH + 6;
+      ctx.strokeStyle = '#451a03';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(p.x + 28, p.y + roofH);
+      ctx.lineTo(lanX, lanY);
+      ctx.stroke();
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(lanX - 5, lanY, 10, 2);
+      ctx.fillRect(lanX - 5, lanY + 16, 10, 2);
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.ellipse(lanX, lanY + 9, 7, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(lanX, lanY + 9, 3, 0, Math.PI * 2);
+      ctx.fill();
+      const lanFlicker = Math.sin(Date.now() / 200 + p.x) * 3;
+      const lanGlow = ctx.createRadialGradient(lanX, lanY + 9, 2, lanX, lanY + 9, 26 + lanFlicker);
+      lanGlow.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+      lanGlow.addColorStop(0.6, 'rgba(239, 68, 68, 0.15)');
+      lanGlow.addColorStop(1, 'rgba(239, 68, 68, 0)');
+      ctx.fillStyle = lanGlow;
+      ctx.beginPath();
+      ctx.arc(lanX, lanY + 9, 26 + lanFlicker, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+    // LEVEL 1: GROUNDED TIMBER WATCHTOWER (GROUND TO P.Y)
+    } else if (p.type === 'watchtower') {
+      ctx.save();
+      const groundY = 440;
+      const towerH = Math.max(40, groundY - p.y);
+
+      // 1. Stone footing plinths at ground
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(p.x + 2, groundY - 10, 18, 10);
+      ctx.fillRect(p.x + p.w - 20, groundY - 10, 18, 10);
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(p.x + 2, groundY - 10, 18, 2);
+      ctx.fillRect(p.x + p.w - 20, groundY - 10, 18, 2);
+
+      // 2. Heavy timber stilt legs reaching all the way to ground
+      ctx.fillStyle = '#3e1d08';
+      ctx.fillRect(p.x + 6, p.y + 12, 10, towerH - 12);
+      ctx.fillRect(p.x + p.w - 16, p.y + 12, 10, towerH - 12);
+      ctx.fillStyle = '#5c2e0b';
+      ctx.fillRect(p.x + 9, p.y + 12, 4, towerH - 12);
+      ctx.fillRect(p.x + p.w - 13, p.y + 12, 4, towerH - 12);
+
+      // 3. Structural horizontal cross-beams and diagonal X-bracing tiers
+      const tierH = 42;
+      const tiers = Math.floor((towerH - 20) / tierH);
+      for (let t = 0; t < tiers; t++) {
+        const ty1 = p.y + 14 + t * tierH;
+        const ty2 = ty1 + tierH;
+        ctx.fillStyle = '#5c2e0b';
+        ctx.fillRect(p.x + 4, ty2 - 5, p.w - 8, 6);
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(p.x + 4, ty2 - 5, p.w - 8, 2);
+
+        ctx.strokeStyle = '#451a03';
+        ctx.lineWidth = 2.8;
+        ctx.beginPath();
+        ctx.moveTo(p.x + 12, ty1);
+        ctx.lineTo(p.x + p.w - 12, ty2);
+        ctx.moveTo(p.x + p.w - 12, ty1);
+        ctx.lineTo(p.x + 12, ty2);
         ctx.stroke();
+      }
+
+      // 4. Wooden climbing ladder along right stilt leg
+      ctx.fillStyle = '#451a03';
+      const ladX = p.x + p.w - 26;
+      ctx.fillRect(ladX, p.y + 16, 3, towerH - 24);
+      ctx.fillRect(ladX + 16, p.y + 16, 3, towerH - 24);
+      for (let ry = p.y + 22; ry < groundY - 14; ry += 12) {
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(ladX, ry, 19, 3);
+      }
+
+      // 5. Timber Lookout Deck at p.y
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x - 6, p.y + 4, p.w + 12, 10);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x - 8, p.y, p.w + 16, 4);
+
+      // Wooden Guardrails above p.y
+      ctx.fillStyle = '#5c2e0b';
+      ctx.fillRect(p.x - 4, p.y - 18, 5, 18);
+      ctx.fillRect(p.x + p.w / 2 - 2, p.y - 18, 5, 18);
+      ctx.fillRect(p.x + p.w - 1, p.y - 18, 5, 18);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x - 6, p.y - 20, p.w + 12, 4);
+      ctx.fillRect(p.x - 4, p.y - 10, p.w + 8, 2);
+
+      // 6. Lookout canopy roof
+      ctx.fillStyle = '#1e1b4b';
+      ctx.beginPath();
+      ctx.moveTo(p.x - 12, p.y - 36);
+      ctx.lineTo(p.x + p.w / 2, p.y - 50);
+      ctx.lineTo(p.x + p.w + 12, p.y - 36);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#312e81';
+      ctx.fillRect(p.x - 10, p.y - 36, p.w + 20, 3);
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x + 2, p.y - 36, 4, 16);
+      ctx.fillRect(p.x + p.w - 6, p.y - 36, 4, 16);
+
+      // 7. Hanging iron cage lantern with flame
+      const flk = Math.sin(Date.now() / 190 + p.x) * 2;
+      const lanX = p.x + 18;
+      const lanY = p.y + 20;
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(lanX - 4, lanY, 8, 10);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(lanX - 2.5, lanY + 2, 5, 6);
+      const lg = ctx.createRadialGradient(lanX, lanY + 5, 1, lanX, lanY + 5, 24 + flk);
+      lg.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+      lg.addColorStop(1, 'rgba(251, 191, 36, 0)');
+      ctx.fillStyle = lg;
+      ctx.beginPath();
+      ctx.arc(lanX, lanY + 5, 24 + flk, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+    // LEVEL 1: GROUNDED STEPPED STONE TERRACE (GROUND TO P.Y)
+    } else if (p.type === 'stepped_terrace' || p.type === 'stairs_stone' || p.type === 'stairs_railing') {
+      ctx.save();
+      const groundY = 440;
+      const wallH = Math.max(40, groundY - p.y);
+
+      // Ashlar stone retaining wall fill
+      ctx.fillStyle = '#171522';
+      ctx.fillRect(p.x, p.y, p.w, wallH);
+
+      // Stone block masonry
+      const bW = 20;
+      const bH = 16;
+      const bRows = Math.ceil(wallH / bH);
+      for (let r = 0; r < bRows; r++) {
+        const by = p.y + r * bH;
+        const curH = Math.min(bH, groundY - by);
+        const off = (r % 2) * 10;
+        for (let bx = p.x - off; bx < p.x + p.w; bx += bW) {
+          const dx = Math.max(p.x, bx);
+          const dw = Math.min(bx + bW, p.x + p.w) - dx;
+          if (dw <= 0) continue;
+          ctx.fillStyle = (r + Math.floor(bx / bW)) % 2 === 0 ? '#272437' : '#201e2e';
+          ctx.fillRect(dx, by, dw, curH);
+          ctx.fillStyle = '#39364f';
+          ctx.fillRect(dx, by, dw, 1.5);
+          ctx.fillStyle = '#0f0e17';
+          ctx.fillRect(dx, by + curH - 1, dw, 1);
+        }
+      }
+
+      // Stepped stairs
+      const stepCount = 4;
+      const stepW = 14;
+      const stepH = 12;
+      for (let s = 0; s < stepCount; s++) {
+        const sx = p.x + s * stepW;
+        const sy = p.y + s * stepH;
+        ctx.fillStyle = '#39364f';
+        ctx.fillRect(sx, sy, stepW, 3);
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(sx, sy, stepW, 2);
+      }
+
+      // Top grass carpet & fringes
+      ctx.fillStyle = '#14532d';
+      ctx.fillRect(p.x, p.y, p.w, 6);
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(p.x, p.y, p.w, 2);
+
+      for (let fx = p.x + 4; fx < p.x + p.w - 4; fx += 8) {
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(fx, p.y + 4, 3, 4);
       }
       ctx.restore();
 
-    // LEVEL 1: TAIKO-BASHI ARCHED RED WOODEN BRIDGE OVER RIVER
+    // LEVEL 1: TAIKO-BASHI ARCHED VERMILION BRIDGE (OVER RUSHING RIVER WATERFALL)
     } else if (p.type === 'taiko_bridge') {
       ctx.save();
-      const furnImg = l1BgAssets.originFurniture;
-      if (furnImg && furnImg.complete && furnImg.naturalWidth > 0) {
-        ctx.drawImage(furnImg, 7, 276, 92, 79, p.x, p.y - 15, p.w, p.h + 15);
-      } else {
-        ctx.fillStyle = '#7f1d1d';
-        ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
-        ctx.strokeStyle = '#dc2626';
-        ctx.lineWidth = 2.5;
+      const groundY = 440;
+
+      // 1. Rushing riverbed & waterfall beneath the bridge (y = 405 to 440)
+      const riverY = 405;
+      const riverH = groundY - riverY;
+      ctx.fillStyle = '#082f49';
+      ctx.fillRect(p.x - 20, riverY, p.w + 40, riverH);
+
+      const waterGrad = ctx.createLinearGradient(0, riverY, 0, groundY);
+      waterGrad.addColorStop(0, '#0284c7');
+      waterGrad.addColorStop(0.5, '#38bdf8');
+      waterGrad.addColorStop(1, '#0369a1');
+      ctx.fillStyle = waterGrad;
+      ctx.fillRect(p.x - 20, riverY, p.w + 40, riverH);
+
+      // Foaming river ripples
+      for (let rip = p.x - 10; rip < p.x + p.w + 10; rip += 26) {
+        const ripOff = Math.sin(Date.now() / 180 + rip * 0.08) * 3;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
+        ctx.fillRect(rip + ripOff, riverY + 8, 18, 2.5);
+      }
+
+      // Drifting pink sakura petals in the current
+      for (let sp = p.x; sp < p.x + p.w; sp += 42) {
+        const drift = ((Date.now() / 40 + sp * 3) % (p.w + 40)) - 20;
+        ctx.fillStyle = '#f472b6';
         ctx.beginPath();
-        ctx.moveTo(p.x, p.y - 12);
-        ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 22, p.x + p.w, p.y - 12);
-        ctx.stroke();
-        for (let bx = p.x + 12; bx < p.x + p.w - 10; bx += 24) {
-          const archUp = Math.sin(((bx - p.x) / p.w) * Math.PI) * 8;
-          ctx.fillStyle = '#b91c1c';
-          ctx.fillRect(bx, p.y - 12 - archUp, 3, 14 + archUp);
-        }
-        ctx.fillStyle = '#451a03';
-        ctx.fillRect(p.x, p.y, p.w, 4);
+        ctx.arc(p.x + drift, riverY + 14, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Timber pier pilings anchored into riverbed
+      ctx.fillStyle = '#3e1d08';
+      ctx.fillRect(p.x + 35, p.y + 16, 8, groundY - (p.y + 16));
+      ctx.fillRect(p.x + p.w - 43, p.y + 16, 8, groundY - (p.y + 16));
+
+      // 2. Taiko-Bashi Arched Vermilion Bridge Structure
+      const archH = 22;
+      ctx.strokeStyle = '#991b1b';
+      ctx.lineWidth = 14;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y + p.h);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y + p.h - archH, p.x + p.w, p.y + p.h);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y + p.h);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y + p.h - archH, p.x + p.w, p.y + p.h);
+      ctx.stroke();
+
+      // Curved walking deck planks
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x, p.y + 2, p.w, 4);
+
+      // 3. Elegant Curved Handrails with Giboshi Finials
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - 12);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 12 - archH * 0.6, p.x + p.w, p.y - 12);
+      ctx.stroke();
+
+      // Handrail balusters & posts
+      const postCount = 7;
+      for (let i = 0; i <= postCount; i++) {
+        const t = i / postCount;
+        const px = p.x + t * p.w;
+        const archRise = Math.sin(t * Math.PI) * (archH * 0.6);
+        const postTop = p.y - 12 - archRise;
+        const postBot = p.y + 4 - archRise * 0.8;
+
+        // Black lacquered post
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(px - 2, postTop, 4, postBot - postTop);
+
+        // Golden onion-shaped giboshi finial on top of post
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(px, postTop - 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(px - 1.5, postTop - 5, 3, 2);
       }
       ctx.restore();
 
-    // LEVEL 1: WALKABLE JAPANESE HOUSE ROOF
-    } else if (p.type === 'village_roof') {
+    // LEVEL 1: GROUNDED ASHLAR STONE GRAND GATEHOUSE (GROUND TO P.Y)
+    } else if (p.type === 'grand_gatehouse') {
       ctx.save();
-      ctx.fillStyle = '#1e1b4b';
-      ctx.fillRect(p.x, p.y, p.w, p.h);
-      ctx.fillStyle = '#312e81';
-      for (let rx = p.x; rx < p.x + p.w; rx += 14) {
-        ctx.fillRect(rx, p.y, 2.5, p.h);
+      const groundY = 440;
+      const gateH = Math.max(60, groundY - p.y);
+
+      // 1. Massive ashlar granite fortress gatehouse walls
+      ctx.fillStyle = '#171522';
+      ctx.fillRect(p.x, p.y, p.w, gateH);
+
+      const bW = 24;
+      const bH = 16;
+      const bRows = Math.ceil(gateH / bH);
+      for (let r = 0; r < bRows; r++) {
+        const by = p.y + r * bH;
+        const curH = Math.min(bH, groundY - by);
+        const off = (r % 2) * 12;
+        for (let bx = p.x - off; bx < p.x + p.w; bx += bW) {
+          const dx = Math.max(p.x, bx);
+          const dw = Math.min(bx + bW, p.x + p.w) - dx;
+          if (dw <= 0) continue;
+          ctx.fillStyle = (r + Math.floor(bx / bW)) % 2 === 0 ? '#272437' : '#201e2e';
+          ctx.fillRect(dx, by, dw, curH);
+          ctx.fillStyle = '#39364f';
+          ctx.fillRect(dx, by, dw, 1.5);
+          ctx.fillStyle = '#0f0e17';
+          ctx.fillRect(dx, by + curH - 1, dw, 1);
+        }
       }
-      ctx.fillStyle = '#78350f';
-      ctx.fillRect(p.x, p.y + p.h - 3, p.w, 3);
+
+      // 2. Grand Central Arched Gateway Tunnel
+      const archW = 60;
+      const archH = 75;
+      const archX = p.x + (p.w - archW) / 2;
+      const archY = groundY - archH;
+
+      ctx.fillStyle = '#08070d';
+      ctx.beginPath();
+      ctx.moveTo(archX, groundY);
+      ctx.lineTo(archX, archY + archW / 2);
+      ctx.arc(archX + archW / 2, archY + archW / 2, archW / 2, Math.PI, 0);
+      ctx.lineTo(archX + archW, groundY);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#39364f';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Heavy double timber fortress doors
+      ctx.fillStyle = '#3e1d08';
+      ctx.fillRect(archX + 4, archY + 16, archW - 8, archH - 16);
+      ctx.fillStyle = '#64748b';
+      for (let sy = archY + 24; sy < groundY - 6; sy += 14) {
+        ctx.fillRect(archX + 12, sy, 3, 3);
+        ctx.fillRect(archX + archW - 15, sy, 3, 3);
+      }
+
+      // 3. Wall Torch Braziers with crackling fire on either side
+      [archX - 18, archX + archW + 14].forEach(tx => {
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(tx - 3, archY + 20, 6, 12);
+        ctx.fillRect(tx - 6, archY + 16, 12, 4);
+        const flk = Math.sin(Date.now() / 150 + tx) * 3;
+        ctx.fillStyle = '#f97316';
+        ctx.beginPath();
+        ctx.arc(tx, archY + 12 + flk, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(tx, archY + 11 + flk, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 4. Upper Parapet Walkway with Battlements / Crenellations at p.y
+      ctx.fillStyle = '#39364f';
+      ctx.fillRect(p.x, p.y - 2, p.w, 4);
+
+      for (let cx = p.x; cx < p.x + p.w; cx += 22) {
+        ctx.fillStyle = '#272437';
+        ctx.fillRect(cx, p.y - 12, 12, 12);
+        ctx.fillStyle = '#39364f';
+        ctx.fillRect(cx, p.y - 12, 12, 2);
+      }
+
+      // Crimson Samurai Clan War Banners
+      [p.x + 14, p.x + p.w - 18].forEach(bx => {
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(bx, p.y - 38, 3, 38);
+        const bSway = Math.sin(Date.now() / 350 + bx) * 4;
+        ctx.fillStyle = '#dc2626';
+        ctx.beginPath();
+        ctx.moveTo(bx + 3, p.y - 36);
+        ctx.lineTo(bx + 18 + bSway, p.y - 32);
+        ctx.lineTo(bx + 16 + bSway, p.y - 14);
+        ctx.lineTo(bx + 3, p.y - 16);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillRect(bx + 6, p.y - 28, 4, 4);
+      });
       ctx.restore();
 
-    // LEVEL 1: WALKABLE TORII / YAMAMON GATE TOP BEAM
+    // LEVEL 1: GROUNDED SHINTO SHRINE PAVILION & ALTAR (GROUND TO P.Y)
+    } else if (p.type === 'shrine_pavilion') {
+      ctx.save();
+      const groundY = 440;
+      const pavH = Math.max(50, groundY - p.y);
+
+      // 1. White stone foundation plinths at ground
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillRect(p.x + 8, groundY - 10, 18, 10);
+      ctx.fillRect(p.x + p.w - 26, groundY - 10, 18, 10);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillRect(p.x + 8, groundY - 10, 18, 2);
+      ctx.fillRect(p.x + p.w - 26, groundY - 10, 18, 2);
+
+      // 2. Vermilion Pillars rising to roof
+      ctx.fillStyle = '#991b1b';
+      ctx.fillRect(p.x + 12, p.y + 16, 10, pavH - 16);
+      ctx.fillRect(p.x + p.w - 22, p.y + 16, 10, pavH - 16);
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(p.x + 14, p.y + 16, 5, pavH - 16);
+      ctx.fillRect(p.x + p.w - 20, p.y + 16, 5, pavH - 16);
+
+      // 3. Sacred Stone Altar (Hokora) inside pavilion
+      const altarW = 38;
+      const altarH = 34;
+      const altarX = p.x + (p.w - altarW) / 2;
+      const altarY = groundY - altarH - 10;
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(altarX, altarY, altarW, altarH);
+      ctx.fillStyle = '#64748b';
+      ctx.fillRect(altarX - 2, altarY, altarW + 4, 4);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(altarX + altarW / 2, altarY - 6, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Curling white spirit incense smoke
+      const smokeSway = Math.sin(Date.now() / 400) * 5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(altarX + altarW / 2, altarY - 12);
+      ctx.quadraticCurveTo(altarX + altarW / 2 + smokeSway, altarY - 24, altarX + altarW / 2 + smokeSway * 1.5, altarY - 36);
+      ctx.stroke();
+
+      // 4. Sacred Shimenawa Straw Rope with Shide Paper Streamers
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(p.x + 12, p.y + 24);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y + 32, p.x + p.w - 12, p.y + 24);
+      ctx.stroke();
+
+      for (let sx = p.x + 35; sx < p.x + p.w - 30; sx += 30) {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(sx, p.y + 28);
+        ctx.lineTo(sx + 4, p.y + 34);
+        ctx.lineTo(sx, p.y + 40);
+        ctx.lineTo(sx + 4, p.y + 46);
+        ctx.lineTo(sx + 2, p.y + 46);
+        ctx.lineTo(sx - 2, p.y + 40);
+        ctx.lineTo(sx + 2, p.y + 34);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // 5. Curved Irimoya Shinto Roof at p.y
+      const roofOver = 16;
+      ctx.fillStyle = '#065f46';
+      ctx.fillRect(p.x - roofOver, p.y + 4, p.w + roofOver * 2, 16);
+      ctx.fillStyle = '#047857';
+      ctx.fillRect(p.x - roofOver + 4, p.y + 2, p.w + roofOver * 2 - 8, 4);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(p.x - roofOver + 4, p.y - 6, 4, 8);
+      ctx.fillRect(p.x + p.w + roofOver - 8, p.y - 6, 4, 8);
+      ctx.fillRect(p.x + p.w / 2 - 2, p.y - 4, 4, 6);
+      ctx.restore();
+
+    // LEVEL 1: HEAVY TIMBER PLATFORM WITH CEREMONIAL SAMURAI CLAN BANNER
+    } else if (p.type === 'hanging_wood_banner' || p.type === 'hanging_wood') {
+      ctx.save();
+      // 1. Suspension chains extending upward
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x + 16, p.y);
+      ctx.lineTo(p.x + 16, p.y - 90);
+      ctx.moveTo(p.x + p.w - 16, p.y);
+      ctx.lineTo(p.x + p.w - 16, p.y - 90);
+      ctx.stroke();
+
+      // 2. Heavy Timber Platform Deck
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+
+      // Iron corner reinforcement plates & rivets
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(p.x, p.y, 8, p.h);
+      ctx.fillRect(p.x + p.w - 8, p.y, 8, p.h);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillRect(p.x + 3, p.y + 3, 2.5, 2.5);
+      ctx.fillRect(p.x + p.w - 6, p.y + 3, 2.5, 2.5);
+
+      // 3. Ceremonial Samurai Clan War Banner hanging beneath
+      const bW = Math.min(52, p.w * 0.42);
+      const bH = 68;
+      const bX = p.x + (p.w - bW) / 2;
+      const bY = p.y + p.h;
+      const bSway = Math.sin(Date.now() / 420 + p.x * 0.04) * 4;
+
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(bX - 4, bY, bW + 8, 4);
+
+      ctx.fillStyle = '#991b1b';
+      ctx.beginPath();
+      ctx.moveTo(bX, bY + 4);
+      ctx.lineTo(bX + bW, bY + 4);
+      ctx.lineTo(bX + bW + bSway, bY + bH - 12);
+      ctx.lineTo(bX + bW / 2 + bSway, bY + bH);
+      ctx.lineTo(bX + bSway, bY + bH - 12);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      // Golden Clan Mon
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(bX + bW / 2 + bSway * 0.5, bY + 28, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#991b1b';
+      ctx.beginPath();
+      ctx.arc(bX + bW / 2 + bSway * 0.5, bY + 28, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(bX + bW / 2 + bSway - 2, bY + bH, 4, 8);
+      ctx.restore();
+
+    // LEVEL 1: GROUNDED SACRED TORII & YAMAMON GATES (GROUND TO P.Y)
     } else if (p.type === 'torii_gate' || p.type === 'yamamon_gate') {
       ctx.save();
-      ctx.fillStyle = '#991b1b';
-      ctx.fillRect(p.x, p.y, p.w, 10);
+      const groundY = 440;
+      const gateH = Math.max(50, groundY - p.y);
+      const isYamamon = p.type === 'yamamon_gate';
+
+      // 1. Stone pedestal bases (kamebara) at ground
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(p.x + 10, groundY - 12, 18, 12);
+      ctx.fillRect(p.x + p.w - 28, groundY - 12, 18, 12);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(p.x + 10, groundY - 12, 18, 3);
+      ctx.fillRect(p.x + p.w - 28, groundY - 12, 18, 3);
+
+      // 2. Twin Pillars rising to crossbeams
+      const pillarColor = isYamamon ? '#451a03' : '#dc2626';
+      const pillarShadow = isYamamon ? '#271406' : '#991b1b';
+      ctx.fillStyle = pillarShadow;
+      ctx.fillRect(p.x + 14, p.y + 10, 10, gateH - 10);
+      ctx.fillRect(p.x + p.w - 24, p.y + 10, 10, gateH - 10);
+      ctx.fillStyle = pillarColor;
+      ctx.fillRect(p.x + 16, p.y + 10, 5, gateH - 10);
+      ctx.fillRect(p.x + p.w - 22, p.y + 10, 5, gateH - 10);
+
+      // 3. Lower Crossbeam (Nuki)
+      ctx.fillStyle = pillarColor;
+      ctx.fillRect(p.x + 4, p.y + 18, p.w - 8, 8);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(p.x + 2, p.y + 19, 4, 6);
+      ctx.fillRect(p.x + p.w - 6, p.y + 19, 4, 6);
+
+      // 4. Upper Curved Crossbeam (Kasagi & Shimaki) at p.y
+      const over = 14;
+      ctx.fillStyle = pillarColor;
+      ctx.fillRect(p.x - over, p.y + 4, p.w + over * 2, 8);
+
+      // Black Copper Roof Cap
       ctx.fillStyle = '#0f172a';
-      ctx.fillRect(p.x - 6, p.y - 4, p.w + 12, 6);
+      ctx.beginPath();
+      ctx.moveTo(p.x - over - 6, p.y + 2);
+      ctx.lineTo(p.x + p.w + over + 6, p.y + 2);
+      ctx.lineTo(p.x + p.w + over + 2, p.y + 6);
+      ctx.lineTo(p.x - over - 2, p.y + 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillRect(p.x - over, p.y, p.w + over * 2, 4);
+
+      // Central Tablet (Gakuzuka)
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(p.x + p.w / 2 - 8, p.y + 6, 16, 14);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillRect(p.x + p.w / 2 - 4, p.y + 9, 8, 8);
+      ctx.restore();
+
+    // LEVEL 1: GROUNDED ANCIENT BANYAN TREE ROOT (GROUND TO P.Y)
+    } else if (p.type === 'tree_root') {
+      ctx.save();
+      const groundY = 440;
+      const rootH = Math.max(40, groundY - p.y);
+
+      ctx.fillStyle = '#271406';
+      ctx.beginPath();
+      ctx.moveTo(p.x + 8, groundY);
+      ctx.quadraticCurveTo(p.x + 20, p.y + rootH * 0.5, p.x, p.y + 10);
+      ctx.lineTo(p.x + p.w, p.y + 10);
+      ctx.quadraticCurveTo(p.x + p.w - 16, p.y + rootH * 0.5, p.x + p.w - 4, groundY);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x + 18, p.y + 12, 14, rootH - 12);
+      ctx.fillRect(p.x + p.w - 32, p.y + 12, 14, rootH - 12);
+      ctx.fillStyle = '#78350f';
+      ctx.fillRect(p.x + 22, p.y + 12, 5, rootH - 12);
+
+      // Walkable mossy shelf at p.y
+      ctx.fillStyle = '#14532d';
+      ctx.fillRect(p.x, p.y, p.w, 6);
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(p.x, p.y, p.w, 4);
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(p.x, p.y, p.w, 2);
+
+      for (let fx = p.x + 4; fx < p.x + p.w - 4; fx += 8) {
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(fx, p.y + 4, 3, 4);
+      }
+
+      for (let ax = p.x + 16; ax < p.x + p.w - 16; ax += 32) {
+        const aLen = 14 + ((ax * 13) % 18);
+        const aSway = Math.sin(Date.now() / 600 + ax * 0.05) * 3;
+        ctx.strokeStyle = '#15803d';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(ax, p.y + 10);
+        ctx.quadraticCurveTo(ax + aSway * 0.5, p.y + aLen * 0.6, ax + aSway, p.y + aLen + 10);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+    // LEVEL 1: ANCIENT STONE ARCH BRIDGE / MEGALITH
+    } else if (p.type === 'stone_bridge' || p.type === 'wooden_arch_bridge') {
+      ctx.save();
+      ctx.fillStyle = '#1e1b2e';
+      ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
+      ctx.fillStyle = '#272437';
+      ctx.fillRect(p.x, p.y + 2, p.w, p.h - 2);
+
+      for (let bx = p.x; bx < p.x + p.w; bx += 20) {
+        ctx.fillStyle = '#39364f';
+        ctx.fillRect(bx, p.y + 2, 19, 2);
+        ctx.fillStyle = '#0f0e17';
+        ctx.fillRect(bx + 19, p.y + 2, 1, p.h - 2);
+      }
+
+      ctx.fillStyle = '#14532d';
+      ctx.fillRect(p.x, p.y, p.w, 5);
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(p.x, p.y, p.w, 3);
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(p.x, p.y, p.w, 1.5);
+
+      for (let px = p.x; px <= p.x + p.w - 6; px += 24) {
+        ctx.fillStyle = '#39364f';
+        ctx.fillRect(px, p.y - 12, 6, 12);
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(px - 1, p.y - 14, 8, 3);
+      }
+      ctx.fillStyle = '#272437';
+      ctx.fillRect(p.x, p.y - 10, p.w, 3);
+
+      for (let vx = p.x + 12; vx < p.x + p.w - 12; vx += 28) {
+        const vLen = 12 + ((vx * 11) % 16);
+        const sway = Math.sin(Date.now() / 650 + vx * 0.04) * 3;
+        ctx.strokeStyle = '#16a34a';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(vx, p.y + p.h);
+        ctx.quadraticCurveTo(vx + sway * 0.5, p.y + p.h + vLen * 0.5, vx + sway, p.y + p.h + vLen);
+        ctx.stroke();
+      }
       ctx.restore();
 
     // LEVEL 1: DILAPIDATED WOODEN RUINS & ROOFS
@@ -8086,58 +8714,43 @@ function drawPlatforms() {
     // LEVEL 1: SUSPENDED ROPE BRIDGES OVER CHASMS
     } else if (p.type === 'rope_bridge') {
       ctx.save();
-      const masterImg = l1BgAssets.originMaster;
-      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
-        for (let bx = p.x; bx < p.x + p.w; bx += 95) {
-          const segW = Math.min(95, p.x + p.w - bx);
-          ctx.drawImage(masterImg, 139, 421, segW, 47, bx, p.y - 12, segW, p.h + 20);
-        }
-      } else {
-        // Wooden anchor pilings at bridge ends
-        ctx.fillStyle = '#451a03';
-        ctx.fillRect(p.x - 6, p.y - 14, 10, p.h + 18);
-        ctx.fillRect(p.x + p.w - 4, p.y - 14, 10, p.h + 18);
-        // Coiled hemp rope wraps on pilings
-        ctx.fillStyle = '#b45309';
-        ctx.fillRect(p.x - 6, p.y - 10, 10, 5);
-        ctx.fillRect(p.x + p.w - 4, p.y - 10, 10, 5);
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(p.x - 6, p.y - 14, 10, p.h + 18);
+      ctx.fillRect(p.x + p.w - 4, p.y - 14, 10, p.h + 18);
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(p.x - 6, p.y - 10, 10, 5);
+      ctx.fillRect(p.x + p.w - 4, p.y - 10, 10, 5);
 
-        // Sagging top guide rope
-        const sagMax = Math.min(18, p.w * 0.08);
-        ctx.strokeStyle = '#92400e';
-        ctx.lineWidth = 3.5;
+      const sagMax = Math.min(18, p.w * 0.08);
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - 10);
+      ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 10 + sagMax, p.x + p.w, p.y - 10);
+      ctx.stroke();
+
+      const plankCount = Math.floor(p.w / 16);
+      for (let i = 0; i <= plankCount; i++) {
+        const t = i / plankCount;
+        const bx = p.x + t * (p.w - 14);
+        const sag = Math.sin(t * Math.PI) * (sagMax * 0.5);
+        const by = p.y + sag;
+
+        const topRopeY = (p.y - 10) + Math.sin(t * Math.PI) * sagMax;
+        ctx.strokeStyle = '#d97706';
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
-        ctx.moveTo(p.x, p.y - 10);
-        ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 10 + sagMax, p.x + p.w, p.y - 10);
+        ctx.moveTo(bx + 6, topRopeY);
+        ctx.lineTo(bx + 6, by);
         ctx.stroke();
 
-        // Slatted wooden bridge planks along bottom deck
-        const plankCount = Math.floor(p.w / 16);
-        for (let i = 0; i <= plankCount; i++) {
-          const t = i / plankCount;
-          const bx = p.x + t * (p.w - 14);
-          const sag = Math.sin(t * Math.PI) * (sagMax * 0.5);
-          const by = p.y + sag;
-
-          // Vertical suspension cord connecting top rope to plank
-          const topRopeY = (p.y - 10) + Math.sin(t * Math.PI) * sagMax;
-          ctx.strokeStyle = '#d97706';
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.moveTo(bx + 6, topRopeY);
-          ctx.lineTo(bx + 6, by);
-          ctx.stroke();
-
-          // Wooden plank
-          ctx.fillStyle = (i % 2 === 0) ? '#5c2e0b' : '#451a03';
-          ctx.fillRect(bx, by, 12, p.h);
-          ctx.fillStyle = '#78350f';
-          ctx.fillRect(bx, by, 12, 3);
-          // Iron rivets
-          ctx.fillStyle = '#94a3b8';
-          ctx.fillRect(bx + 2, by + 4, 2, 2);
-          ctx.fillRect(bx + 8, by + 4, 2, 2);
-        }
+        ctx.fillStyle = (i % 2 === 0) ? '#5c2e0b' : '#451a03';
+        ctx.fillRect(bx, by, 12, p.h);
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(bx, by, 12, 3);
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillRect(bx + 2, by + 4, 2, 2);
+        ctx.fillRect(bx + 8, by + 4, 2, 2);
       }
       ctx.restore();
 

@@ -38,16 +38,17 @@ assert(!gameJs.includes("dregsnot: {"), "Legacy hero 'dregsnot' still present");
 assert(gameJs.includes("mapWidth: 10800"), "mapWidth is not 10800");
 assert(gameJs.includes("ctx.imageSmoothingEnabled = false"), "Crisp HD pixel art smoothing disabled missing");
 assert(gameJs.includes("l1BgAssets.originMaster.src = 'assets/tileset_origin_master.png'"), "originMaster asset missing");
-assert(gameJs.includes("l1BgAssets.originWallPanorama.src = 'assets/bg_origin_wall_panorama.png'"), "originWallPanorama asset missing");
-assert(gameJs.includes("drawSeamlessParallaxImage(ctx, l1BgAssets.originWallPanorama"), "Wall panorama parallax call missing");
 
-// Airborne & Ground Platforms using new master asset types
+// Grounded Japanese Architecture & Celestial Island platform types
+assert(gameJs.includes("village_house"), "village_house platform type missing");
+assert(gameJs.includes("watchtower"), "watchtower platform type missing");
+assert(gameJs.includes("stepped_terrace"), "stepped_terrace platform type missing");
+assert(gameJs.includes("taiko_bridge"), "taiko_bridge platform type missing");
+assert(gameJs.includes("floating_island"), "floating_island platform type missing");
 assert(gameJs.includes("hanging_wood_banner"), "hanging_wood_banner platform type missing");
-assert(gameJs.includes("floating_island_med"), "floating_island_med platform type missing");
-assert(gameJs.includes("floating_island_small"), "floating_island_small platform type missing");
 assert(gameJs.includes("stone_bridge"), "stone_bridge platform type missing");
-assert(gameJs.includes("wooden_arch_bridge"), "wooden_arch_bridge platform type missing");
 assert(gameJs.includes("grand_gatehouse"), "grand_gatehouse platform type missing");
+assert(gameJs.includes("shrine_pavilion"), "shrine_pavilion platform type missing");
 
 // Expanded Village Props
 assert(gameJs.includes("notice_board"), "notice_board prop missing");
