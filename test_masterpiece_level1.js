@@ -62,9 +62,12 @@ assert(gameJs.includes("aiState === 'stalking'"), "Spearman stalking state missi
 console.log('[PASS] Spearman Boss duelist AI with wind-up telegraphs (aba-aba) verified.');
 
 // 6. Check sleek, thin katana blade slash arc
-assert(gameJs.includes("const rInner = s.radius * 0.76;"), "Thin katana blade inner radius missing");
+assert(gameJs.includes("const rInner = s.radius * 0.82;"), "Thin katana blade inner radius missing");
 assert(gameJs.includes("ctx.lineWidth = 2.4;"), "Razor-sharp cutting edge stroke missing");
-console.log('[PASS] Sleek, razor-sharp thin katana slash arc verified.');
+assert(gameJs.includes("player.slashTimer = 14;"), "player.slashTimer initialization missing");
+assert(gameJs.includes("function drawSlashSmear(ctx)"), "drawSlashSmear function missing");
+assert(gameJs.includes("drawSlashSmear(ctx);"), "drawSlashSmear foreground call missing");
+console.log('[PASS] Sleek, razor-sharp thin katana slash arc & foreground rendering verified.');
 
 // 7. Check that Ronin hero is active with Hiraishin no Jutsu
 assert(gameJs.includes("id: 'ronin'"), "Ronin hero missing");

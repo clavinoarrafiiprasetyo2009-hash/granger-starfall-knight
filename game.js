@@ -5485,9 +5485,14 @@ function triggerHeroSkill() {
 // ============================================================================
 function triggerHeroAttack() {
   const hero = HEROES[currentHeroId];
-  if (player.attackCooldown > 0 || player.energy < 12) return;
+  if (player.attackCooldown > 0) return;
 
-  player.energy = Math.max(0, player.energy - 12);
+  // Melee katana attacks do not consume energy; only ranged hero weapons consume energy
+  if (hero.attackType !== 'KATANA_SMEAR' && hero.attackType !== 'HYBRID_BLADE' && hero.attackType !== 'VOID_SPEAR') {
+    if (player.energy < 10) return;
+    player.energy = Math.max(0, player.energy - 10);
+  }
+
   const aim = player.aimDirection;
   const dmgBonus = player.damageBoostTimer > 0 ? 1.5 : 1.0;
 
@@ -5495,15 +5500,16 @@ function triggerHeroAttack() {
   // MELEE STRIKES (RONIN, STROM, ALPHA)
   // -------------------------------------------------------------
   if (hero.attackType === 'KATANA_SMEAR' || hero.attackType === 'HYBRID_BLADE' || hero.attackType === 'VOID_SPEAR') {
-    player.attackCooldown = 17;
+    player.attackCooldown = 15;
     player.isSlashing = true;
+    player.slashTimer = 14;
     screenShake = 0;
     window.soundEngine.playKatanaSlash();
 
     const smearOriginX = player.x + player.w / 2;
     const smearOriginY = player.y + player.h / 2;
     const smearFacing = player.facing;
-    const smearRadius = hero.attackType === 'VOID_SPEAR' ? 95 : 74;
+    const smearRadius = hero.attackType === 'VOID_SPEAR' ? 95 : 76;
 
     // Fluid attack lunge impulse
     player.recoilX = player.facing * 3.5;
@@ -5853,6 +5859,11 @@ function updatePlayer() {
   // Update Slash Smear Timer
   if (player.isSlashing) {
     player.slashTimer--;
+    if (player.activeSlashSmear) {
+      player.activeSlashSmear.life = player.slashTimer;
+      player.activeSlashSmear.x = player.x + player.w / 2;
+      player.activeSlashSmear.y = player.y + player.h / 2;
+    }
     if (player.slashTimer <= 0) {
       player.isSlashing = false;
       player.activeSlashSmear = null;
@@ -10995,69 +11006,73 @@ function drawHeroRonin() {
   });
 }
 
-// Draw Active Projectiles & The Giant Crescent Slash Arc Smear
+// Draw the Sleek, Thin Razor-Sharp Katana Slash Arc (Hollow Knight / Penusbmic Style)
+function drawSlashSmear(ctx) {
+  if (!player.activeSlashSmear) return;
+  const s = player.activeSlashSmear;
+  const alpha = Math.max(0, s.life / s.maxLife);
+  if (alpha <= 0) return;
+
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  if (s.aim === 'up') {
+    ctx.rotate(-Math.PI / 2);
+  } else if (s.aim === 'down') {
+    ctx.rotate(Math.PI / 2);
+  } else {
+    ctx.scale(s.facing, 1);
+  }
+  ctx.globalAlpha = alpha;
+
+  // Sleek, thin, and razor-sharp crescent blade arc ("tipis aja")
+  const rOuter = s.radius;
+  const rInner = s.radius * 0.82; // Sleek thin blade width
+  const sweepAngle = Math.PI * 0.46; // Wide 165-degree majestic katana sweep
+
+  // 1. Silver-white gradient blade body with tapered needle tips
+  const grad = ctx.createRadialGradient(0, 0, rInner, 0, 0, rOuter);
+  grad.addColorStop(0, 'rgba(255, 255, 255, 0.0)');
+  grad.addColorStop(0.35, 'rgba(241, 245, 249, 0.65)');
+  grad.addColorStop(0.85, 'rgba(255, 255, 255, 0.95)');
+  grad.addColorStop(1.0, '#ffffff');
+
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
+  ctx.arc(0, 0, rInner, sweepAngle, -sweepAngle, true);
+  ctx.closePath();
+  ctx.fill();
+
+  // 2. Razor-sharp cutting edge stroke with crisp glow
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2.4;
+  ctx.shadowColor = '#ffffff';
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // 3. Crisp inner blade contour
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+  ctx.lineWidth = 1.0;
+  ctx.beginPath();
+  ctx.arc(0, 0, rInner, -sweepAngle, sweepAngle);
+  ctx.stroke();
+
+  // 4. Subtle razor motion streak arc
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.arc(0, 0, rOuter + 4, -sweepAngle * 0.85, sweepAngle * 0.85);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+// Draw Active Projectiles & Flying Beams
 function drawProjectiles() {
   playerProjectiles.forEach(p => p.draw(ctx));
-
-  // DRAW THE GIANT WHITE CRESCENT SLASH SMEAR (HOLLOW KNIGHT / PENUSBMIC STYLE)
-  if (player.activeSlashSmear) {
-    const s = player.activeSlashSmear;
-    const progress = 1 - (s.life / s.maxLife);
-    const alpha = Math.max(0, s.life / s.maxLife);
-
-    ctx.save();
-    ctx.translate(s.x, s.y);
-    if (s.aim === 'up') {
-      ctx.rotate(-Math.PI / 2);
-    } else if (s.aim === 'down') {
-      ctx.rotate(Math.PI / 2);
-    } else {
-      ctx.scale(s.facing, 1);
-    }
-    ctx.globalAlpha = alpha;
-
-    // Sleek, thin, and razor-sharp crescent blade arc
-    const rOuter = s.radius;
-    const rInner = s.radius * 0.76; // Sleek thin blade width
-    const sweepAngle = Math.PI * 0.44; // Wide 160-degree majestic katana sweep
-
-    // 1. Silver-white gradient blade body with tapered needle tips
-    const grad = ctx.createRadialGradient(0, 0, rInner, 0, 0, rOuter);
-    grad.addColorStop(0, 'rgba(255, 255, 255, 0.05)');
-    grad.addColorStop(0.35, 'rgba(241, 245, 249, 0.65)');
-    grad.addColorStop(0.8, 'rgba(255, 255, 255, 0.95)');
-    grad.addColorStop(1, '#ffffff');
-
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
-    ctx.arc(0, 0, rInner, sweepAngle, -sweepAngle, true);
-    ctx.closePath();
-    ctx.fill();
-
-    // 2. Razor-sharp cutting edge stroke
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2.4;
-    ctx.beginPath();
-    ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
-    ctx.stroke();
-
-    // 3. Crisp inner blade contour
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.arc(0, 0, rInner, -sweepAngle, sweepAngle);
-    ctx.stroke();
-
-    // 4. Subtle razor motion streak arc
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 1.0;
-    ctx.beginPath();
-    ctx.arc(0, 0, rOuter + 4, -sweepAngle * 0.85, sweepAngle * 0.85);
-    ctx.stroke();
-
-    ctx.restore();
-  }
 
   // Granger Golden Mega Laser Beam
   activeLaserBeams.forEach(b => {
@@ -13390,6 +13405,7 @@ function gameLoop() {
   if (player.activeBoomerangDagger) player.activeBoomerangDagger.draw(ctx);
 
   drawPlayer();
+  drawSlashSmear(ctx);
 
   for (let p = particles.length - 1; p >= 0; p--) {
     const pt = particles[p];
