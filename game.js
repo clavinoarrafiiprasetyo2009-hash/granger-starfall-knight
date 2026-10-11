@@ -6555,46 +6555,47 @@ function drawLevelNPCs(ctx, cam) {
 // ============================================================================
 const level1VillageProps = [
   // Sektor 1: Gerbang Kuil & Permukiman Asal (0 .. 1800)
-  { type: 'torii_gate',          x: 80,   y: 440, w: 140, h: 90 },
-  { type: 'stone_lantern',       x: 260,  y: 440 },
-  { type: 'bamboo_fence',        x: 300,  y: 440, w: 80 },
-  { type: 'house_tiled',         x: 360,  y: 440, w: 240, h: 110 },
-  { type: 'wooden_cart',         x: 640,  y: 440 },
-  { type: 'stone_well',          x: 680,  y: 440 },
-  { type: 'house_thatched',      x: 1200, y: 440, w: 180, h: 100 },
-  { type: 'stone_lantern',       x: 1440, y: 440 },
-  { type: 'wooden_lantern_post', x: 1680, y: 440 },
-  { type: 'yamamon_gate',        x: 1720, y: 440, w: 120, h: 90 },
+  { type: 'torii_gate',          x: 80,   y: 440, w: 100, h: 96 },
+  { type: 'stone_lantern',       x: 230,  y: 440 },
+  { type: 'bamboo_fence',        x: 270,  y: 440, w: 80 },
+  { type: 'house_tiled',         x: 370,  y: 440, w: 180, h: 135 },
+  { type: 'wooden_cart',         x: 580,  y: 440 },
+  { type: 'stone_well',          x: 650,  y: 440 },
+  { type: 'bamboo_fence',        x: 710,  y: 440, w: 100 },
+  { type: 'house_thatched',      x: 1060, y: 440, w: 150, h: 108 },
+  { type: 'stone_lantern',       x: 1240, y: 440 },
+  { type: 'wooden_lantern_post', x: 1380, y: 440 },
+  { type: 'yamamon_gate',        x: 1720, y: 440, w: 92, h: 96 },
 
   // Sektor 2: Pasar Tradisional & Jembatan Sungai Sakura (1800 .. 3800)
   { type: 'crows_fence',         x: 1860, y: 440 },
-  { type: 'house_shop',          x: 1940, y: 440, w: 240, h: 110 },
-  { type: 'shiba_inu',           x: 2160, y: 440 },
-  { type: 'market_stall',        x: 2220, y: 440, w: 160, h: 90 },
-  { type: 'wooden_cart',         x: 2360, y: 440 },
-  { type: 'river_waterfall',     x: 2460, y: 440, w: 280, h: 70 },
-  { type: 'wooden_lantern_post', x: 2780, y: 440 },
+  { type: 'house_shop',          x: 1940, y: 440, w: 180, h: 129 },
+  { type: 'shiba_inu',           x: 2140, y: 440 },
+  { type: 'market_stall',        x: 2200, y: 440, w: 80, h: 98 },
+  { type: 'wooden_cart',         x: 2310, y: 440 },
+  { type: 'river_waterfall',     x: 2460, y: 440, w: 240, h: 70 },
+  { type: 'wooden_lantern_post', x: 2740, y: 440 },
   { type: 'stone_lantern',       x: 3420, y: 440 },
-  { type: 'bamboo_fence',        x: 3600, y: 440, w: 180 },
+  { type: 'bamboo_fence',        x: 3580, y: 440, w: 140 },
 
   // Sektor 3: Hutan Bambu & Kuil Zen Berlumut (3800 .. 5600)
   { type: 'jizo_statue',         x: 4120, y: 440 },
   { type: 'stone_lantern',       x: 4400, y: 440 },
-  { type: 'shrine_hokora',       x: 5460, y: 440, w: 140, h: 100 },
-  { type: 'crows_fence',         x: 5620, y: 440 },
+  { type: 'shrine_hokora',       x: 5460, y: 440, w: 110, h: 110 },
+  { type: 'crows_fence',         x: 5600, y: 440 },
 
   // Sektor 4: Menara Purba & Terowongan Rahasia (5600 .. 7500)
   { type: 'stone_lantern',       x: 6760, y: 440 },
   { type: 'jizo_statue',         x: 7460, y: 440 },
 
   // Sektor 5: Sanctum Pohon Beringin Suci (7500 .. 9200)
-  { type: 'shrine_altar',        x: 8740, y: 440, w: 180, h: 100 },
+  { type: 'shrine_altar',        x: 8740, y: 440, w: 110, h: 110 },
   { type: 'wooden_lantern_post', x: 8940, y: 440 },
-  { type: 'torii_gate',          x: 8980, y: 440, w: 160, h: 90 },
+  { type: 'torii_gate',          x: 8980, y: 440, w: 100, h: 96 },
 
   // Sektor 6: Tahta Kuil & Arena Akhir (9200 .. 10800)
   { type: 'stone_lantern',       x: 9320,  y: 440 },
-  { type: 'temple_ruins_pagoda', x: 9780,  y: 440, w: 260, h: 180 },
+  { type: 'temple_ruins_pagoda', x: 9780,  y: 440, w: 200, h: 150 },
   { type: 'stone_lantern',       x: 10420, y: 440 }
 ];
 
@@ -6613,7 +6614,7 @@ function drawOriginVillageFurniture(ctx, cam) {
     switch (prop.type) {
       case 'torii_gate':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 220, 85, 60, 65, prop.x, prop.y - ph, pw, ph);
+          ctx.drawImage(furnImg, 238, 134, 49, 47, prop.x, prop.y - ph, pw, ph);
         } else {
           const gx = prop.x;
           const gy = prop.y;
@@ -6640,7 +6641,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'yamamon_gate':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 280, 85, 65, 65, prop.x, prop.y - ph, pw, ph);
+          ctx.drawImage(furnImg, 292, 138, 42, 44, prop.x, prop.y - ph, pw, ph);
         } else {
           ctx.fillStyle = '#451a03';
           ctx.fillRect(prop.x + 8, prop.y - ph, pw - 16, ph);
@@ -6657,12 +6658,12 @@ function drawOriginVillageFurniture(ctx, cam) {
       case 'temple_ruins_pagoda':
         if (hasFurnImg) {
           const slices = {
-            house_tiled: { sx: 6, sy: 5, sw: 154, sh: 144 },
-            house_thatched: { sx: 150, sy: 32, sw: 154, sh: 118 },
-            house_shop: { sx: 300, sy: 12, sw: 159, sh: 137 },
-            shrine_hokora: { sx: 455, sy: 12, sw: 151, sh: 137 },
-            shrine_altar: { sx: 455, sy: 12, sw: 151, sh: 137 },
-            temple_ruins_pagoda: { sx: 6, sy: 5, sw: 154, sh: 144 }
+            house_tiled: { sx: 8, sy: 25, sw: 115, sh: 86 },
+            house_thatched: { sx: 125, sy: 43, sw: 95, sh: 68 },
+            house_shop: { sx: 220, sy: 25, sw: 120, sh: 86 },
+            shrine_hokora: { sx: 351, sy: 39, sw: 70, sh: 71 },
+            shrine_altar: { sx: 351, sy: 39, sw: 70, sh: 71 },
+            temple_ruins_pagoda: { sx: 8, sy: 25, sw: 115, sh: 86 }
           };
           const sl = slices[prop.type] || slices.house_tiled;
           ctx.drawImage(furnImg, sl.sx, sl.sy, sl.sw, sl.sh, prop.x, prop.y - ph, pw, ph);
@@ -6693,9 +6694,9 @@ function drawOriginVillageFurniture(ctx, cam) {
       case 'wooden_lantern_post':
         if (hasFurnImg) {
           if (prop.type === 'stone_lantern') {
-            ctx.drawImage(furnImg, 85, 205, 35, 56, prop.x - 14, prop.y - 56, 32, 56);
+            ctx.drawImage(furnImg, 97, 205, 16, 55, prop.x - 10, prop.y - 65, 20, 65);
           } else {
-            ctx.drawImage(furnImg, 8, 195, 36, 85, prop.x - 16, prop.y - 75, 34, 75);
+            ctx.drawImage(furnImg, 12, 207, 19, 55, prop.x - 12, prop.y - 70, 24, 70);
           }
         } else {
           const lx = prop.x;
@@ -6732,7 +6733,7 @@ function drawOriginVillageFurniture(ctx, cam) {
         ctx.fillStyle = waterGrad;
         ctx.fillRect(rx, ry, rw, rh);
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 95, 296, 70, 40, rx + 10, ry, Math.min(80, rw - 20), rh);
+          ctx.drawImage(furnImg, 100, 298, 58, 36, rx + 10, ry - 10, Math.min(75, rw - 20), rh + 10);
         }
         for (let rip = rx + 6; rip < rx + rw - 6; rip += 28) {
           const ripOffset = Math.sin(now / 220 + rip * 0.08) * 3;
@@ -6753,7 +6754,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'wooden_cart':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 188, 195, 92, 85, prop.x, prop.y - 65, 75, 65);
+          ctx.drawImage(furnImg, 194, 219, 51, 41, prop.x, prop.y - 52, 65, 52);
         } else {
           ctx.fillStyle = '#78350f';
           ctx.fillRect(prop.x, prop.y - 24, 44, 14);
@@ -6768,7 +6769,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'market_stall':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 275, 204, 51, 61, prop.x, prop.y - ph, pw, ph);
+          ctx.drawImage(furnImg, 280, 205, 46, 56, prop.x, prop.y - ph, pw, ph);
         } else {
           ctx.fillStyle = '#78350f';
           ctx.fillRect(prop.x + 8, prop.y - ph + 20, pw - 16, ph - 20);
@@ -6779,7 +6780,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'stone_well':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 325, 205, 70, 75, prop.x, prop.y - 65, 60, 65);
+          ctx.drawImage(furnImg, 330, 211, 40, 51, prop.x, prop.y - 65, 52, 65);
         } else {
           ctx.fillStyle = '#475569';
           ctx.fillRect(prop.x, prop.y - 24, 38, 24);
@@ -6790,7 +6791,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'jizo_statue':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 445, 306, 24, 34, prop.x - 12, prop.y - 36, 24, 36);
+          ctx.drawImage(furnImg, 452, 306, 14, 28, prop.x - 10, prop.y - 42, 20, 42);
         } else {
           ctx.fillStyle = '#64748b';
           ctx.beginPath();
@@ -6804,7 +6805,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'shiba_inu':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 410, 315, 25, 25, prop.x, prop.y - 25, 25, 25);
+          ctx.drawImage(furnImg, 418, 321, 11, 13, prop.x, prop.y - 24, 20, 24);
         } else {
           ctx.fillStyle = '#d97706';
           ctx.fillRect(prop.x, prop.y - 16, 20, 12);
@@ -6814,7 +6815,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'crows_fence':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 359, 279, 56, 61, prop.x, prop.y - 52, 54, 52);
+          ctx.drawImage(furnImg, 362, 295, 38, 40, prop.x, prop.y - 48, 46, 48);
         } else {
           ctx.fillStyle = '#78350f';
           ctx.fillRect(prop.x, prop.y - 26, 48, 4);
@@ -6830,9 +6831,9 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'bamboo_fence':
         if (hasFurnImg) {
-          for (let bfx = prop.x; bfx < prop.x + pw; bfx += 60) {
-            const segW = Math.min(65, prop.x + pw - bfx);
-            ctx.drawImage(furnImg, 8, 130, 90, 69, bfx, prop.y - 48, segW, 48);
+          for (let bfx = prop.x; bfx < prop.x + pw; bfx += 50) {
+            const segW = Math.min(50, prop.x + pw - bfx);
+            ctx.drawImage(furnImg, 170, 142, 56, 31, bfx, prop.y - 36, segW, 36);
           }
         } else {
           ctx.fillStyle = '#65a30d';
@@ -7384,6 +7385,22 @@ function drawPlatforms() {
     // 0. LEVEL 1: ANCIENT MOSS-COVERED COBBLESTONE BRICKS (EXACT PIXEL ART REFERENCE STYLE)
     if (p.type === 'forest_stone') {
       ctx.save();
+      const platImg = l1BgAssets.originPlatforms;
+      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+        const tileW = 576;
+        const tileH = 96;
+        for (let gx = p.x; gx < p.x + p.w; gx += tileW) {
+          const segW = Math.min(tileW, p.x + p.w - gx);
+          ctx.drawImage(platImg, 12, 230, segW, tileH, gx, p.y - 12, segW, Math.min(p.h + 12, tileH));
+          if (p.h + 12 > tileH) {
+            ctx.fillStyle = '#171522';
+            ctx.fillRect(gx, p.y - 12 + tileH, segW, p.h + 12 - tileH);
+          }
+        }
+        ctx.restore();
+        return;
+      }
+
       // Foundation fill
       ctx.fillStyle = '#171522';
       ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -11491,10 +11508,10 @@ function gameLoop() {
   ctx.save();
   ctx.translate(-Math.round(camera.x), -Math.round(camera.y));
 
+  drawOriginVillageFurniture(ctx, camera);
   drawPlatforms();
   drawBreakableWalls();
   drawArenaGates();
-  drawOriginVillageFurniture(ctx, camera);
   traps.forEach(t => t.draw(ctx));
   crates.forEach(c => c.draw(ctx));
   enemyCorpses.forEach(ec => ec.draw(ctx));
