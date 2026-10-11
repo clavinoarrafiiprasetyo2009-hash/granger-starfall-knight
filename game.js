@@ -97,30 +97,30 @@ function toggleMute() {
 const HEROES = {
   ronin: {
     id: 'ronin',
-    name: 'RONIN',
+    name: 'THE RONIN',
     heroName: 'Ronin',
-    title: 'DARK SAMURAI',
-    tier: 'PENUSBMIC DARK SERIES',
+    title: 'THE VENGEFUL BLADE',
+    tier: 'HOLLOW SHADOW MASTER',
     tierClass: 'skin-badge-legend',
-    role: 'KATANA MASTER',
+    role: 'MASTER SWORDSMAN',
     roleClass: 'role-assassin',
     avatar: 'assets/pin_preview.jpg',
-    themeColor: '#00f5ff',
-    secondaryColor: '#ffffff',
-    stats: { damage: 100, speed: 100, range: 80 },
+    themeColor: '#f8fafc',
+    secondaryColor: '#dc2626',
+    stats: { damage: 100, speed: 100, range: 85 },
     baseSpeed: 5.6,
     maxHp: 110,
     maxEnergy: 100,
-    weapon: 'Shadow Katana & Deflect Crescent',
+    weapon: 'Folded Steel Soul Katana',
     attackType: 'KATANA_SMEAR',
     hasActiveSkill: false,
-    skillName: 'PASSIVE FOCUS',
-    skillDesc: 'Tidak ada active skill. Memiliki 3 pasif legendaris: Bullet Deflect, i-Frame Shadow Dodge, dan Soul Lifesteal (+3 HP per hit).',
-    passiveDesc: 'Deflect Peluru + i-Frame Dash + Lifesteal (+3 HP)',
-    desc: 'Pendekar pedang bayangan legendaris karya Penusbmic bertopi jerami (Kasa). Menebas peluru musuh untuk memantulkannya (Parry), melompat pogo di udara ala Hollow Knight, dan menyerap darah musuh.',
+    skillName: 'JURUS PEDANG BAYANGAN',
+    skillDesc: 'Pendekar tunggal penyintas kehancuran desa. Memiliki 3 ilmu bela diri legendaris: Bullet Deflect (Parry pedang memantulkan peluru), Shadow Dash (melesat tak tersentuh bayangan), dan Soul Vengeance (+3 HP lifesteal per tebasan).',
+    passiveDesc: 'Deflect Peluru + i-Frame Shadow Dash + Soul Lifesteal (+3 HP)',
+    desc: 'Pendekar pedang bertopi jerami (Kasa) penyintas kehancuran desa leluhur. Mengembara menuntut balas dendam dengan katana baja tempa pusakanya. Menangkis proyektil musuh, melompat pogo di udara layaknya Hollow Knight, dan menyerap jiwa musuh.',
     skins: [
-      { id: 'default', name: 'Original Shadow (Cyan)', tag: 'ORIGINAL DARK', tierClass: 'skin-badge-legend', themeColor: '#00f5ff', secondaryColor: '#ffffff' },
-      { id: 'crimson', name: 'Blood Ronin (Crimson)', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#ef4444', secondaryColor: '#facc15' }
+      { id: 'default', name: 'Sumi-e Wanderer (Ink & Silver)', tag: 'ORIGINAL RONIN', tierClass: 'skin-badge-legend', themeColor: '#f8fafc', secondaryColor: '#dc2626' },
+      { id: 'crimson', name: 'Vengeful Blood (Crimson Haori)', tag: 'VENGEANCE PATH', tierClass: 'skin-badge-special', themeColor: '#ef4444', secondaryColor: '#facc15' }
     ]
   },
   fall: {
@@ -6359,233 +6359,145 @@ const L1_BUSHES = [
   { ox: 660, w: 55, h: 38 }
 ];
 
+// ============================================================================
+// LEVEL 1 (THE ORIGIN) USER BACKGROUND ASSETS & PARALLAX ENGINE
+// ============================================================================
+const l1BgAssets = {
+  mistyWoods: new Image(),
+  ancientTotem: new Image(),
+  ruinsShrine: new Image(),
+  tilesetRuins: new Image()
+};
+l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
+l1BgAssets.ancientTotem.src = 'assets/bg_ancient_totem.jpg';
+l1BgAssets.ruinsShrine.src = 'assets/bg_ruins_shrine.jpg';
+l1BgAssets.tilesetRuins.src = 'assets/tileset_verdant_ruins.jpg';
+
+function drawSeamlessParallaxImage(targetCtx, img, camX, speed, targetH, yOffset, alpha = 1.0) {
+  if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) return false;
+  const aspect = img.naturalWidth / img.naturalHeight;
+  const targetW = Math.round(targetH * aspect);
+  if (targetW <= 0) return false;
+
+  const shift = ((Math.round(camX * speed) % targetW) + targetW) % targetW;
+  const startX = -shift;
+
+  targetCtx.save();
+  if (alpha < 1.0) targetCtx.globalAlpha = alpha;
+  for (let x = startX - targetW; x < V_WIDTH + targetW; x += targetW) {
+    targetCtx.drawImage(img, x, yOffset, targetW, targetH);
+  }
+  targetCtx.restore();
+  return true;
+}
+
 function drawLevel1ForestParallax(cam) {
-  // 1. Crisp Misty Cyan-Teal Woodland Morning Sky (Constant, no glitch)
-  const skyGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
-  skyGrad.addColorStop(0, '#4b6e79');
-  skyGrad.addColorStop(0.30, '#668e98');
-  skyGrad.addColorStop(0.60, '#8cb5bf');
-  skyGrad.addColorStop(0.85, '#b8dfe3');
-  skyGrad.addColorStop(1, '#d5eff1');
-  ctx.fillStyle = skyGrad;
-  ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
-
-  // 2. Distant Soft Morning Sunlight Glow (Smooth wrapping)
-  const sunPeriod = V_WIDTH + 400;
-  const sunShift = ((Math.round(cam.x * 0.015) % sunPeriod) + sunPeriod) % sunPeriod;
-  const sunX = V_WIDTH * 0.75 - sunShift;
-  const sunY = 90;
-  ctx.save();
-  const sunGrad = ctx.createRadialGradient(sunX, sunY, 15, sunX, sunY, 160);
-  sunGrad.addColorStop(0, 'rgba(255, 255, 255, 0.40)');
-  sunGrad.addColorStop(0.3, 'rgba(230, 248, 250, 0.22)');
-  sunGrad.addColorStop(1, 'transparent');
-  ctx.fillStyle = sunGrad;
-  ctx.beginPath();
-  ctx.arc(sunX, sunY, 160, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-
-  // 3. Parallax Layer 1: Distant Slender Misty Tree Silhouettes (Speed: 0.03x, Period: 500px)
-  ctx.save();
-  const p1Period = 500;
-  const p1Shift = ((Math.round(cam.x * 0.03) % p1Period) + p1Period) % p1Period;
-  const p1Start = -p1Shift;
-  for (let copy = -1; p1Start + copy * p1Period < V_WIDTH + p1Period; copy++) {
-    const chunkX = p1Start + copy * p1Period;
-    L1_FAR_TREES.forEach(t => {
-      const tx = chunkX + t.x;
-      if (tx + t.w < -60 || tx > V_WIDTH + 60) return;
-      ctx.fillStyle = '#8ea8b4';
-      ctx.globalAlpha = 0.55;
-      ctx.fillRect(tx, V_HEIGHT - t.h, t.w, t.h);
-      ctx.beginPath();
-      ctx.moveTo(tx, V_HEIGHT - t.h + 80);
-      ctx.lineTo(tx - 16, V_HEIGHT - t.h + 60);
-      ctx.lineTo(tx - 12, V_HEIGHT - t.h + 55);
-      ctx.lineTo(tx, V_HEIGHT - t.h + 72);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(tx + t.w / 2, V_HEIGHT - t.h - 5, t.crownR, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
-  ctx.restore();
-
-  // 4. Parallax Layer 2: Midground Ancient Trees with Angular Limbs & Hanging Moss (Speed: 0.07x, Period: 700px)
-  ctx.save();
-  const p2Period = 700;
-  const p2Shift = ((Math.round(cam.x * 0.07) % p2Period) + p2Period) % p2Period;
-  const p2Start = -p2Shift;
   const nowTime = Date.now();
-  for (let copy = -1; p2Start + copy * p2Period < V_WIDTH + p2Period; copy++) {
-    const chunkX = p2Start + copy * p2Period;
-    L1_MID_TREES.forEach((t, tIdx) => {
-      const tx = chunkX + t.x;
-      if (tx + t.w < -100 || tx > V_WIDTH + 100) return;
 
-      // Darker teal-slate trunk
-      ctx.fillStyle = '#415e68';
-      ctx.globalAlpha = 0.82;
-      ctx.fillRect(tx, 40, t.w, V_HEIGHT);
+  // 1. Far Background: User Asset 'bg_misty_woods.jpg' (Morning misty woodland & pine silhouettes)
+  const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
+  if (!renderedMistyWoods) {
+    // Procedural Fallback Sky & Pines
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
+    skyGrad.addColorStop(0, '#4b6e79');
+    skyGrad.addColorStop(0.30, '#668e98');
+    skyGrad.addColorStop(0.60, '#8cb5bf');
+    skyGrad.addColorStop(0.85, '#b8dfe3');
+    skyGrad.addColorStop(1, '#d5eff1');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-      // Left angular branch
-      ctx.beginPath();
-      ctx.moveTo(tx, 180);
-      ctx.lineTo(tx + t.branchL.dx, 140);
-      ctx.lineTo(tx + t.branchL.dx, 115);
-      ctx.lineTo(tx + t.branchL.dx + 12, 115);
-      ctx.lineTo(tx + t.branchL.dx + 12, 130);
-      ctx.lineTo(tx, 160);
-      ctx.closePath();
-      ctx.fill();
+    // Distant Soft Morning Sunlight Glow
+    const sunPeriod = V_WIDTH + 400;
+    const sunShift = ((Math.round(cam.x * 0.015) % sunPeriod) + sunPeriod) % sunPeriod;
+    const sunX = V_WIDTH * 0.75 - sunShift;
+    const sunY = 90;
+    ctx.save();
+    const sunGrad = ctx.createRadialGradient(sunX, sunY, 15, sunX, sunY, 160);
+    sunGrad.addColorStop(0, 'rgba(255, 255, 255, 0.40)');
+    sunGrad.addColorStop(0.3, 'rgba(230, 248, 250, 0.22)');
+    sunGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = sunGrad;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 160, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
 
-      // Right angular branch
-      ctx.beginPath();
-      ctx.moveTo(tx + t.w, 200);
-      ctx.lineTo(tx + t.w + t.branchR.dx, 160);
-      ctx.lineTo(tx + t.w + t.branchR.dx, 135);
-      ctx.lineTo(tx + t.w + t.branchR.dx - 12, 135);
-      ctx.lineTo(tx + t.w + t.branchR.dx - 12, 150);
-      ctx.lineTo(tx + t.w, 180);
-      ctx.closePath();
-      ctx.fill();
-
-      // Canopy foliage clusters
-      ctx.fillStyle = '#1e3c38';
-      t.canopyR.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(tx + c.ox, 50 + c.oy, c.r, 0, Math.PI * 2);
-        ctx.fill();
+    // Distant Slender Misty Tree Silhouettes Fallback
+    ctx.save();
+    const p1Period = 500;
+    const p1Shift = ((Math.round(cam.x * 0.03) % p1Period) + p1Period) % p1Period;
+    const p1Start = -p1Shift;
+    for (let copy = -1; p1Start + copy * p1Period < V_WIDTH + p1Period; copy++) {
+      const chunkX = p1Start + copy * p1Period;
+      L1_FAR_TREES.forEach(t => {
+        const tx = chunkX + t.x;
+        if (tx + t.w < -60 || tx > V_WIDTH + 60) return;
+        ctx.fillStyle = '#8ea8b4';
+        ctx.globalAlpha = 0.55;
+        ctx.fillRect(tx, V_HEIGHT - t.h, t.w, t.h);
       });
-
-      // Hanging moss streamers (constant attachment, smooth wave)
-      ctx.strokeStyle = '#3e635b';
-      ctx.lineWidth = 2.5;
-      t.vines.forEach((vxRel, vIdx) => {
-        const vx = tx + vxRel;
-        const vLen = 50 + (vIdx * 12);
-        const sway = Math.sin(nowTime / 800 + tIdx + vIdx * 0.8) * 4;
-        ctx.beginPath();
-        ctx.moveTo(vx, 100);
-        ctx.quadraticCurveTo(vx + sway * 0.6, 100 + vLen * 0.5, vx + sway, 100 + vLen);
-        ctx.stroke();
-      });
-    });
+    }
+    ctx.restore();
   }
-  ctx.restore();
 
-  // 5. Parallax Layer 3: Closer Woodland Signature Trees & Pixel Foliage (Speed: 0.14x, Period: 1100px)
+  // 2. Mid-Far Layer: User Asset 'bg_ancient_totem.jpg' (Mossy stone totem in lush jungle canopy)
+  const renderedTotem = drawSeamlessParallaxImage(ctx, l1BgAssets.ancientTotem, cam.x, 0.11, 410, V_HEIGHT - 410 + 20, 0.72);
+  if (!renderedTotem) {
+    // Procedural Fallback Midground Trees
+    ctx.save();
+    const p2Period = 700;
+    const p2Shift = ((Math.round(cam.x * 0.07) % p2Period) + p2Period) % p2Period;
+    const p2Start = -p2Shift;
+    for (let copy = -1; p2Start + copy * p2Period < V_WIDTH + p2Period; copy++) {
+      const chunkX = p2Start + copy * p2Period;
+      L1_MID_TREES.forEach(t => {
+        const tx = chunkX + t.x;
+        if (tx + t.w < -100 || tx > V_WIDTH + 100) return;
+        ctx.fillStyle = '#415e68';
+        ctx.globalAlpha = 0.80;
+        ctx.fillRect(tx, 40, t.w, V_HEIGHT);
+      });
+    }
+    ctx.restore();
+  }
+
+  // 3. Midground Layer: User Asset 'bg_ruins_shrine.jpg' (Destroyed village shrine & banyan tree roots)
+  const renderedRuins = drawSeamlessParallaxImage(ctx, l1BgAssets.ruinsShrine, cam.x, 0.23, 450, V_HEIGHT - 450, 0.88);
+  if (!renderedRuins) {
+    // Procedural Fallback Near Trees & Undergrowth
+    ctx.save();
+    const p3Period = 1100;
+    const p3Shift = ((Math.round(cam.x * 0.14) % p3Period) + p3Period) % p3Period;
+    const p3Start = -p3Shift;
+    for (let copy = -1; p3Start + copy * p3Period < V_WIDTH + p3Period; copy++) {
+      const chunkX = p3Start + copy * p3Period;
+      const giantX = chunkX + 70;
+      if (giantX + 95 > -150 && giantX < V_WIDTH + 150) {
+        ctx.fillStyle = '#2f3b44';
+        ctx.fillRect(giantX, 0, 95, V_HEIGHT);
+      }
+    }
+    ctx.restore();
+  }
+
+  // 4. Volumetric Morning Sun God Rays (Filtering down through destroyed ruins canopy)
   ctx.save();
-  const p3Period = 1100;
-  const p3Shift = ((Math.round(cam.x * 0.14) % p3Period) + p3Period) % p3Period;
-  const p3Start = -p3Shift;
-  for (let copy = -1; p3Start + copy * p3Period < V_WIDTH + p3Period; copy++) {
-    const chunkX = p3Start + copy * p3Period;
-
-    // 5A. Signature Colossal Ancient Tree on Left (chunkX + 70, width 95)
-    const giantX = chunkX + 70;
-    const giantW = 95;
-    if (giantX + giantW > -150 && giantX < V_WIDTH + 150) {
-      ctx.fillStyle = '#2f3b44';
-      ctx.fillRect(giantX, 0, giantW, V_HEIGHT);
-      ctx.fillStyle = '#242e36';
-      ctx.fillRect(giantX + 18, 0, 8, V_HEIGHT);
-      ctx.fillRect(giantX + 54, 0, 10, V_HEIGHT);
-      // Root buttresses
-      ctx.beginPath();
-      ctx.moveTo(giantX, V_HEIGHT - 120);
-      ctx.lineTo(giantX - 45, V_HEIGHT);
-      ctx.lineTo(giantX, V_HEIGHT);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(giantX + giantW, V_HEIGHT - 100);
-      ctx.lineTo(giantX + giantW + 35, V_HEIGHT);
-      ctx.lineTo(giantX + giantW, V_HEIGHT);
-      ctx.closePath();
-      ctx.fill();
-      // Heavy left branch
-      ctx.fillStyle = '#2f3b44';
-      ctx.beginPath();
-      ctx.moveTo(giantX, 230);
-      ctx.lineTo(giantX - 65, 230);
-      ctx.lineTo(giantX - 65, 175);
-      ctx.lineTo(giantX - 50, 175);
-      ctx.lineTo(giantX - 50, 215);
-      ctx.lineTo(giantX, 215);
-      ctx.closePath();
-      ctx.fill();
-      // Colossal canopy masses
-      ctx.fillStyle = '#17342f';
-      ctx.beginPath();
-      ctx.arc(giantX + giantW / 2, 40, 110, 0, Math.PI * 2);
-      ctx.arc(giantX - 30, 60, 85, 0, Math.PI * 2);
-      ctx.arc(giantX + giantW + 30, 60, 85, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#234e45';
-      ctx.beginPath();
-      ctx.arc(giantX + 10, 50, 75, 0, Math.PI * 2);
-      ctx.arc(giantX + giantW - 10, 50, 70, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // 5B. Midground Undergrowth Bushes (Between trees)
-    L1_BUSHES.forEach(b => {
-      const bx = chunkX + b.ox;
-      if (bx + b.w < -50 || bx > V_WIDTH + 50) return;
-      ctx.fillStyle = '#22554d';
-      ctx.fillRect(bx, V_HEIGHT - b.h, b.w, b.h);
-      ctx.fillStyle = '#2e6b61';
-      ctx.beginPath();
-      ctx.arc(bx + b.w / 2, V_HEIGHT - b.h, b.w / 2, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    // 5C. Signature Right-Hand Tree with Rounded Pixel Clumps (chunkX + 820)
-    const rightTreeX = chunkX + 820;
-    if (rightTreeX > -150 && rightTreeX < V_WIDTH + 150) {
-      ctx.fillStyle = '#8f806d';
-      ctx.beginPath();
-      ctx.moveTo(rightTreeX + 18, V_HEIGHT);
-      ctx.quadraticCurveTo(rightTreeX + 32, V_HEIGHT - 120, rightTreeX + 22, V_HEIGHT - 220);
-      ctx.lineTo(rightTreeX + 44, V_HEIGHT - 220);
-      ctx.quadraticCurveTo(rightTreeX + 54, V_HEIGHT - 120, rightTreeX + 42, V_HEIGHT);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = '#aa9a86';
-      ctx.fillRect(rightTreeX + 28, V_HEIGHT - 210, 6, 190);
-
-      // 4-Tier Rounded Pixel Foliage Clusters
-      ctx.fillStyle = '#065f46';
-      L1_FOLIAGE_CLUSTERS.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(rightTreeX + c.ox, V_HEIGHT + c.oy, c.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      ctx.fillStyle = '#059669';
-      L1_FOLIAGE_CLUSTERS.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(rightTreeX + c.ox - 3, V_HEIGHT + c.oy - 3, c.r * 0.82, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      ctx.fillStyle = '#10b981';
-      L1_FOLIAGE_CLUSTERS.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(rightTreeX + c.ox - 7, V_HEIGHT + c.oy - 7, c.r * 0.58, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      ctx.fillStyle = '#34d399';
-      L1_FOLIAGE_CLUSTERS.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(rightTreeX + c.ox - 10, V_HEIGHT + c.oy - 10, c.r * 0.35, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    }
-  }
+  const rayAngle = -0.32;
+  ctx.translate(V_WIDTH * 0.72, -30);
+  ctx.rotate(rayAngle);
+  const rayPulse = 0.06 + Math.sin(nowTime / 1400) * 0.025;
+  const rayGrad = ctx.createLinearGradient(0, 0, 0, 520);
+  rayGrad.addColorStop(0, `rgba(255, 255, 220, ${rayPulse * 1.6})`);
+  rayGrad.addColorStop(0.5, `rgba(210, 240, 235, ${rayPulse})`);
+  rayGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = rayGrad;
+  ctx.fillRect(-150, 0, 85, 520);
+  ctx.fillRect(10, 0, 115, 520);
+  ctx.fillRect(170, 0, 75, 520);
   ctx.restore();
 
-  // 6. Ground Rolling Pale Cyan Forest Mist / Fog Banks (Static height, smooth)
+  // 5. Rolling Morning Valley Mist / Fog Banks (Static height over chasms)
   ctx.save();
   const mistGrad = ctx.createLinearGradient(0, V_HEIGHT - 130, 0, V_HEIGHT);
   mistGrad.addColorStop(0, 'transparent');
@@ -6595,10 +6507,10 @@ function drawLevel1ForestParallax(cam) {
   ctx.fillRect(0, V_HEIGHT - 130, V_WIDTH, 130);
   ctx.restore();
 
-  // 7. Ambient Drifting Forest Spores & Fireflies (Smooth integer positioning)
+  // 6. Ambient Drifting Forest Spores & Fireflies (Golden & Emerald)
   ctx.save();
   const animTime = nowTime / 40;
-  for (let s = 0; s < 30; s++) {
+  for (let s = 0; s < 28; s++) {
     const spX = Math.round(((s * 97 - cam.x * 0.18 + animTime) % V_WIDTH + V_WIDTH) % V_WIDTH);
     const spY = Math.round(((s * 53 + Math.sin(nowTime / 500 + s) * 18) % (V_HEIGHT - 90) + (V_HEIGHT - 90)) % (V_HEIGHT - 90));
     const alpha = 0.35 + Math.sin(nowTime / 350 + s) * 0.28;
@@ -6609,6 +6521,25 @@ function drawLevel1ForestParallax(cam) {
     ctx.beginPath();
     ctx.arc(spX, spY, (s % 3) + 1.2, 0, Math.PI * 2);
     ctx.fill();
+  }
+  ctx.restore();
+
+  // 7. Ambient Falling Forest Leaves (Swaying gently in the wind)
+  ctx.save();
+  for (let l = 0; l < 16; l++) {
+    const lfTime = nowTime / 24 + l * 143;
+    const lfX = Math.round(((l * 127 - cam.x * 0.32 + lfTime * 0.75) % (V_WIDTH + 80) + (V_WIDTH + 80)) % (V_WIDTH + 80) - 40);
+    const lfY = Math.round(((l * 69 + lfTime * 0.55 + Math.sin(nowTime / 420 + l) * 22) % (V_HEIGHT + 40) + (V_HEIGHT + 40)) % (V_HEIGHT + 40) - 20);
+    const lRot = Math.sin(nowTime / 580 + l) * 1.3;
+    ctx.save();
+    ctx.translate(lfX, lfY);
+    ctx.rotate(lRot);
+    ctx.fillStyle = l % 3 === 0 ? '#4ade80' : (l % 3 === 1 ? '#86efac' : '#f59e0b');
+    ctx.globalAlpha = 0.65;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 4.5, 2.0, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
   ctx.restore();
 }
@@ -8522,78 +8453,97 @@ function drawHumanoidLimb(ctx, startX, startY, angle1, len1, angle2, len2, upper
 }
 
 // ============================================================================
-// HERO 0: THE CYBER RONIN (HOLLOW KNIGHT CHIBI WANDERER)
+// HERO 0: THE VENGEFUL RONIN (HOLLOW KNIGHT SAMURAI WANDERER)
 // ============================================================================
 function drawHeroRonin() {
   const k = getHumanoidKinematics();
   const isSlash = player.isSlashing || player.attackCooldown > 0;
+  const isCrimsonSkin = currentSkinId === 'crimson';
 
-  // 1. Back Layer: Flowing Hollow Knight Samurai Cape / Haori (Back)
+  // 1. Back Layer: Flowing Sumi-e Haori / Cloak with Tattered Hem
   ctx.save();
   ctx.fillStyle = '#090d16';
   ctx.beginPath();
   ctx.moveTo(-5, -1);
   // Elegant billowing cape curves
-  ctx.quadraticCurveTo(-14 + k.clothWave * 0.4, 8, -20 + k.clothWave, 21);
-  ctx.quadraticCurveTo(-12 + k.clothWave * 0.6, 23, -4, 18);
+  ctx.quadraticCurveTo(-14 + k.clothWave * 0.4, 8, -21 + k.clothWave, 21);
+  // Tattered serrated hem (Hollow Knight style)
+  ctx.lineTo(-17 + k.clothWave * 0.8, 19);
+  ctx.lineTo(-12 + k.clothWave * 0.6, 23);
+  ctx.lineTo(-8 + k.clothWave * 0.4, 18);
+  ctx.lineTo(-4, 18);
   ctx.quadraticCurveTo(-2, 10, -3, 2);
   ctx.closePath();
   ctx.fill();
 
-  // Cyan glowing inner lining edge
-  ctx.strokeStyle = player.activeThemeColor;
-  ctx.shadowColor = player.activeThemeColor;
-  ctx.shadowBlur = 8;
+  // Subtle inner lining hem accent (Crimson for vengeance, or charcoal ink)
+  ctx.strokeStyle = isCrimsonSkin ? '#dc2626' : (player.activeSecondaryColor || '#991b1b');
   ctx.lineWidth = 1.2;
   ctx.beginPath();
   ctx.moveTo(-5, -1);
-  ctx.quadraticCurveTo(-14 + k.clothWave * 0.4, 8, -20 + k.clothWave, 21);
+  ctx.quadraticCurveTo(-14 + k.clothWave * 0.4, 8, -21 + k.clothWave, 21);
   ctx.stroke();
-  ctx.shadowBlur = 0;
   ctx.restore();
 
   // 2. Back Leg (Chibi Tabi)
-  drawHumanoidLimb(ctx, k.legBack.x, k.legBack.y, k.legBack.thighAngle, 6, k.legBack.calfAngle, 8, 5, 4.5, '#0d131f', '#111827', '#1f2937', null, (c) => {
-    c.fillStyle = '#090d16';
+  drawHumanoidLimb(ctx, k.legBack.x, k.legBack.y, k.legBack.thighAngle, 6, k.legBack.calfAngle, 8, 5, 4.5, '#0b0f19', '#111827', '#1f2937', null, (c) => {
+    c.fillStyle = '#080c14';
     c.beginPath();
     c.roundRect(-3, 0, 8, 4, [2, 2, 2, 2]);
     c.fill();
+    // Tabi toe division
+    c.fillStyle = '#1e293b';
+    c.fillRect(3, 0, 1, 3);
   });
 
-  // 3. Front Leg (Chibi Tabi)
-  drawHumanoidLimb(ctx, k.legFront.x, k.legFront.y, k.legFront.thighAngle, 6, k.legFront.calfAngle, 8, 5.5, 5, '#111827', '#1e293b', player.activeThemeColor, null, (c) => {
+  // 3. Front Leg (Chibi Tabi with Cloth Wraps)
+  drawHumanoidLimb(ctx, k.legFront.x, k.legFront.y, k.legFront.thighAngle, 6, k.legFront.calfAngle, 8, 5.5, 5, '#111827', '#1e293b', null, null, (c) => {
     c.fillStyle = '#090d16';
     c.beginPath();
     c.roundRect(-3, 0, 9, 4.5, [2, 2, 2, 2]);
     c.fill();
-    c.fillStyle = player.activeThemeColor;
-    c.fillRect(-1, 0, 2, 2);
+    // Tabi division & cloth wraps
+    c.fillStyle = '#334155';
+    c.fillRect(-1, 0, 1.5, 2);
+    c.fillRect(4, 0, 1, 3);
   });
 
-  // 4. Back Arm with Saya (Katana Scabbard)
-  drawHumanoidLimb(ctx, k.shoulderBack.x, k.shoulderBack.y, 0.4, 5, 0.5, 6, 4.5, 4, '#0d131f', '#111827', '#1f2937', null, (c) => {
-    c.fillStyle = '#090d16';
+  // 4. Back Arm with Saya (Lacquered Katana Scabbard)
+  drawHumanoidLimb(ctx, k.shoulderBack.x, k.shoulderBack.y, 0.4, 5, 0.5, 6, 4.5, 4, '#0b0f19', '#111827', '#1f2937', null, (c) => {
+    c.fillStyle = '#080c14';
     c.beginPath();
     c.arc(0, 0, 3, 0, Math.PI * 2);
     c.fill();
-    c.strokeStyle = '#334155';
-    c.lineWidth = 2.5;
+
+    // Dark lacquered wood Saya (scabbard)
+    c.strokeStyle = '#18181b';
+    c.lineWidth = 3.2;
     c.beginPath();
     c.moveTo(-3, -4);
-    c.lineTo(14, 18);
+    c.lineTo(15, 19);
     c.stroke();
-    c.fillStyle = '#eab308';
-    c.fillRect(-2, -3, 3.5, 2.5);
+
+    // Antique Brass Kojiri (scabbard chape)
+    c.strokeStyle = '#d97706';
+    c.lineWidth = 3.2;
+    c.beginPath();
+    c.moveTo(12, 15);
+    c.lineTo(15, 19);
+    c.stroke();
+
+    // Crimson Sageo cord wrap
+    c.fillStyle = '#dc2626';
+    c.fillRect(0, 0, 4, 3);
   });
 
-  // 5. Chibi Kimono Torso & Cyan Obi Sash
+  // 5. Chibi Kimono Torso & Traditional Crimson Obi Sash
   ctx.save();
-  ctx.fillStyle = '#0f172a';
+  ctx.fillStyle = '#0d131f';
   ctx.beginPath();
   ctx.roundRect(-7, -2 + k.breathe * 0.3, 14, 12, [5, 5, 4, 4]);
   ctx.fill();
 
-  // Kimono fold (lapel)
+  // Kimono fold (lapels crossing right-over-left)
   ctx.fillStyle = '#1e293b';
   ctx.beginPath();
   ctx.moveTo(0, -2 + k.breathe * 0.3);
@@ -8603,33 +8553,38 @@ function drawHeroRonin() {
   ctx.closePath();
   ctx.fill();
 
-  // Cyan Obi Sash
-  ctx.fillStyle = player.activeThemeColor;
-  ctx.shadowColor = player.activeThemeColor;
-  ctx.shadowBlur = 8;
+  // Traditional Crimson / Blood Obi Sash (Waistband)
+  ctx.fillStyle = '#b91c1c';
   ctx.beginPath();
-  ctx.roundRect(-6, 5 + k.breathe * 0.3, 12, 3, 1.5);
+  ctx.roundRect(-6.5, 5 + k.breathe * 0.3, 13, 3.2, 1.5);
   ctx.fill();
-  ctx.shadowBlur = 0;
-  // Obi knot ribbons
-  ctx.fillStyle = player.activeThemeColor;
-  ctx.fillRect(-2, 7 + k.breathe * 0.3, 2, 4);
-  ctx.fillRect(1, 7 + k.breathe * 0.3, 2, 3);
+
+  // Antique Gold Obi Knot Clasp
+  ctx.fillStyle = '#d97706';
+  ctx.beginPath();
+  ctx.arc(0, 6.5 + k.breathe * 0.3, 1.8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Hanging Obi ribbon tails (swaying naturally)
+  ctx.fillStyle = '#dc2626';
+  ctx.fillRect(-2, 7 + k.breathe * 0.3, 2, 4.5);
+  ctx.fillRect(1, 7 + k.breathe * 0.3, 1.8, 3.5);
   ctx.restore();
 
-  // 6. Chibi Head & Iconic Kasa (Conical Hat) with Glowing Eye
+  // 6. Chibi Head & Iconic Woven Bamboo Kasa (Straw Hat) with Soul Glint
   ctx.save();
   ctx.translate(0, -9 + k.breathe * 0.5);
   ctx.rotate(k.headAngle);
 
-  // Dark Head Base (Smooth sphere)
+  // Dark Head Base (Smooth Hollow Knight Silhouette Sphere)
   ctx.fillStyle = '#090d16';
   ctx.beginPath();
   ctx.arc(0, 0, 10.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // THE ICONIC CONICAL STRAW HAT (KASA) - Smooth curves, not a flat polygon!
-  ctx.fillStyle = '#1e2638';
+  // THE ICONIC CONICAL WOVEN BAMBOO STRAW HAT (KASA)
+  // Rich natural woven bamboo wood tones
+  ctx.fillStyle = '#3e2714';
   ctx.beginPath();
   ctx.moveTo(0, -18); // Hat apex
   ctx.quadraticCurveTo(-11, -14, -22, -4); // Left sweeping brim
@@ -8638,57 +8593,103 @@ function drawHeroRonin() {
   ctx.closePath();
   ctx.fill();
 
-  // Bamboo hat upper dome highlight
-  ctx.fillStyle = '#28334a';
+  // Bamboo hat upper dome warm straw highlight
+  ctx.fillStyle = '#5c3d20';
   ctx.beginPath();
   ctx.moveTo(0, -18);
-  ctx.quadraticCurveTo(-6, -15, -12, -7);
-  ctx.quadraticCurveTo(0, -5, 12, -7);
-  ctx.quadraticCurveTo(6, -15, 0, -18);
+  ctx.quadraticCurveTo(-7, -15, -13, -7);
+  ctx.quadraticCurveTo(0, -4.5, 13, -7);
+  ctx.quadraticCurveTo(7, -15, 0, -18);
   ctx.closePath();
   ctx.fill();
 
-  // Bamboo ridge line & glowing cyan underside rim
-  ctx.strokeStyle = player.activeThemeColor;
-  ctx.shadowColor = player.activeThemeColor;
-  ctx.shadowBlur = 10;
-  ctx.lineWidth = 1.6;
+  // Natural golden straw weave layer
+  ctx.fillStyle = '#7a512a';
+  ctx.beginPath();
+  ctx.moveTo(0, -17);
+  ctx.quadraticCurveTo(-4, -14, -8, -8);
+  ctx.quadraticCurveTo(0, -5.5, 8, -8);
+  ctx.quadraticCurveTo(4, -14, 0, -17);
+  ctx.closePath();
+  ctx.fill();
+
+  // Bamboo weave concentric ribs & straw texture lines
+  ctx.strokeStyle = '#2d1c0e';
+  ctx.lineWidth = 1.0;
+  // Arc 1 (near top)
+  ctx.beginPath();
+  ctx.moveTo(-6, -12);
+  ctx.quadraticCurveTo(0, -10, 6, -12);
+  ctx.stroke();
+  // Arc 2 (middle)
+  ctx.beginPath();
+  ctx.moveTo(-13, -7);
+  ctx.quadraticCurveTo(0, -4.5, 13, -7);
+  ctx.stroke();
+  // Radial bamboo spokes
+  ctx.beginPath();
+  ctx.moveTo(0, -18);
+  ctx.lineTo(-17, -4.5);
+  ctx.moveTo(0, -18);
+  ctx.lineTo(0, -2);
+  ctx.moveTo(0, -18);
+  ctx.lineTo(17, -4.5);
+  ctx.stroke();
+
+  // Dark natural bamboo brim rim with stitch accents
+  ctx.strokeStyle = '#231408';
+  ctx.lineWidth = 1.8;
   ctx.beginPath();
   ctx.moveTo(-22, -4);
   ctx.quadraticCurveTo(0, -1, 22, -4);
   ctx.stroke();
-  ctx.shadowBlur = 0;
 
-  // Hat top woven cord knot
-  ctx.fillStyle = '#475569';
+  // Straw stitch accents along rim
+  ctx.fillStyle = '#946433';
+  for (let sx = -16; sx <= 16; sx += 5) {
+    ctx.fillRect(sx, -3, 1.8, 1.2);
+  }
+
+  // Hat apex woven twine knot & crimson cord tie
+  ctx.fillStyle = '#1c1006';
   ctx.beginPath();
-  ctx.arc(0, -18, 2, 0, Math.PI * 2);
+  ctx.arc(0, -18, 2.2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#dc2626';
+  ctx.fillRect(-1.5, -17, 3, 2);
+
+  // DEEP SHADOW UNDER BRIM + HOLLOW KNIGHT PIERCING SOUL EYE
+  ctx.save();
+  // Shadow veil across upper face under hat
+  ctx.fillStyle = 'rgba(7, 10, 16, 0.75)';
+  ctx.beginPath();
+  ctx.ellipse(0, -2, 9, 4, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // THE ICONIC GLOWING CYAN EYE (HOLLOW KNIGHT / CYCLOPS VIBE)
-  ctx.save();
-  ctx.fillStyle = player.activeThemeColor;
-  ctx.shadowColor = player.activeThemeColor;
-  ctx.shadowBlur = 16;
+  // THE PIERCING SOUL VENGEANCE EYE (Luminous White Glint with Fierce Focus)
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = isCrimsonSkin ? '#ef4444' : '#f8fafc';
+  ctx.shadowBlur = 10;
   // Eye oval
   ctx.beginPath();
-  ctx.ellipse(3, -2, 4.5, 2.5, 0.1, 0, Math.PI * 2);
+  ctx.ellipse(3.5, -2, 4.2, 2.2, 0.1, 0, Math.PI * 2);
   ctx.fill();
-  // White-hot pupil core
+
+  // White-hot pupil glint
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.ellipse(3.5, -2, 2.2, 1.2, 0.1, 0, Math.PI * 2);
+  ctx.ellipse(4.2, -2, 2.0, 1.1, 0.1, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
   ctx.restore(); // Restore head
 
-  // 7. Front Arm & Katana
+  // 7. Front Arm & Folded Steel Tamahagane Katana
   const armAngle1 = isSlash ? (0.2 - k.attackCurve * 1.3) : 0.25;
   const armAngle2 = isSlash ? (0.6 - k.attackCurve * 1.8) : 0.6;
 
-  drawHumanoidLimb(ctx, k.shoulderFront.x, k.shoulderFront.y, armAngle1, 5, armAngle2, 6, 5, 4.5, '#111827', '#1e293b', player.activeThemeColor, null, (c) => {
-    c.fillStyle = '#090d16';
+  drawHumanoidLimb(ctx, k.shoulderFront.x, k.shoulderFront.y, armAngle1, 5, armAngle2, 6, 5, 4.5, '#111827', '#1e293b', null, null, (c) => {
+    c.fillStyle = '#080c14';
     c.beginPath();
     c.arc(0, 0, 3, 0, Math.PI * 2);
     c.fill();
@@ -8696,45 +8697,70 @@ function drawHeroRonin() {
     if (isSlash) {
       c.save();
       c.rotate(-0.4 - k.attackCurve * 0.9);
-      // Katana Blade (Gleaming white with cyan shadow)
-      c.strokeStyle = '#ffffff';
-      c.shadowColor = player.activeThemeColor;
-      c.shadowBlur = 22;
+
+      // FOLDED STEEL BLADE (TAMAHAGANE) - Razor sharp steel with hamon line
+      // Dark Tempered Steel Spine
+      c.strokeStyle = '#475569';
       c.lineWidth = 3.2;
       c.beginPath();
       c.moveTo(0, 0);
-      c.lineTo(30, -8);
+      c.lineTo(31, -8);
       c.stroke();
 
-      // Cyan blade spine
-      c.strokeStyle = player.activeThemeColor;
-      c.lineWidth = 1.4;
+      // Gleaming Polished Silver Cutting Edge
+      c.strokeStyle = '#ffffff';
+      c.shadowColor = '#ffffff';
+      c.shadowBlur = 14;
+      c.lineWidth = 2.0;
       c.beginPath();
-      c.moveTo(0, 0);
-      c.lineTo(28, -7);
+      c.moveTo(1, 0.5);
+      c.lineTo(32, -8);
+      c.stroke();
+      c.shadowBlur = 0;
+
+      // Authentic Wavy Hamon Temper Line
+      c.strokeStyle = '#cbd5e1';
+      c.lineWidth = 0.8;
+      c.beginPath();
+      c.moveTo(2, 0);
+      c.quadraticCurveTo(10, -3.5, 16, -3.8);
+      c.quadraticCurveTo(24, -6.5, 30, -7.5);
       c.stroke();
 
-      // Gold Tsuba
-      c.fillStyle = '#eab308';
+      // Antique Brass Tsuba (Handguard)
+      c.fillStyle = '#d97706';
       c.beginPath();
-      c.roundRect(-2, -2, 4, 4, 1);
+      c.roundRect(-2, -2, 4.5, 4.5, 1.2);
       c.fill();
+      c.strokeStyle = '#78350f';
+      c.lineWidth = 0.8;
+      c.stroke();
+
+      // Wrapped Tsuka (Hilt)
+      c.fillStyle = '#18181b';
+      c.fillRect(-6, -1, 5, 2.5);
+      c.fillStyle = '#b91c1c';
+      c.fillRect(-4, -1, 1.5, 2.5);
+
       c.restore();
     } else {
-      // Resting ready posture
-      c.strokeStyle = '#e2e8f0';
-      c.shadowColor = player.activeThemeColor;
-      c.shadowBlur = 8;
-      c.lineWidth = 2.4;
+      // Resting Ready Posture (Hand resting on sheath or hilt)
+      c.strokeStyle = '#cbd5e1';
+      c.lineWidth = 2.2;
       c.beginPath();
       c.moveTo(-2, 0);
-      c.lineTo(12, 5);
+      c.lineTo(13, 5);
       c.stroke();
-      // Gold Tsuba
-      c.fillStyle = '#eab308';
+
+      // Antique Brass Tsuba
+      c.fillStyle = '#d97706';
       c.beginPath();
-      c.roundRect(-3, -2, 4, 3.5, 1);
+      c.roundRect(-3, -2, 4.2, 3.8, 1);
       c.fill();
+
+      // Tsuka hilt
+      c.fillStyle = '#18181b';
+      c.fillRect(-7, -1, 4.5, 2.2);
     }
   });
 }
@@ -11010,12 +11036,23 @@ function gameLoop() {
     ctx.lineTo(-28 - streakDist, 18);
     ctx.stroke();
 
-    // Holographic Speed Phantom Silhouette
+    // Speed Phantom Silhouette
     ctx.fillStyle = ai.color;
-    // Head silhouette
-    ctx.beginPath();
-    ctx.arc(0, -20, 8, 0, Math.PI * 2);
-    ctx.fill();
+    if (currentHeroId === 'ronin') {
+      // Ronin Kasa Conical Straw Hat Silhouette
+      ctx.beginPath();
+      ctx.moveTo(0, -28);
+      ctx.quadraticCurveTo(-10, -24, -20, -16);
+      ctx.quadraticCurveTo(0, -13, 20, -16);
+      ctx.quadraticCurveTo(10, -24, 0, -28);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      // Standard Head silhouette
+      ctx.beginPath();
+      ctx.arc(0, -20, 8, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // Torso silhouette
     ctx.beginPath();
