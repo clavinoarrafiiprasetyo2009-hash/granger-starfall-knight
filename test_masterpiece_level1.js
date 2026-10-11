@@ -61,13 +61,14 @@ assert(gameJs.includes("telegraph_vault"), "Spearman telegraph_vault state missi
 assert(gameJs.includes("aiState === 'stalking'"), "Spearman stalking state missing");
 console.log('[PASS] Spearman Boss duelist AI with wind-up telegraphs (aba-aba) verified.');
 
-// 6. Check sleek, thin katana blade slash arc
-assert(gameJs.includes("const rInner = s.radius * 0.82;"), "Thin katana blade inner radius missing");
-assert(gameJs.includes("ctx.lineWidth = 2.4;"), "Razor-sharp cutting edge stroke missing");
+// 6. Check authentic anime katana slash spritesheet & proper thickness from user reference
+assert(gameJs.includes("slash_effects_clean.png"), "assets/slash_effects_clean.png reference missing");
+assert(gameJs.includes("SLASH_SPRITE_FRAMES"), "SLASH_SPRITE_FRAMES sprite definitions missing");
+assert(gameJs.includes("const rInner = s.radius * 0.74;"), "Authentic crescent thickness (0.74) missing");
 assert(gameJs.includes("player.slashTimer = 14;"), "player.slashTimer initialization missing");
 assert(gameJs.includes("function drawSlashSmear(ctx)"), "drawSlashSmear function missing");
 assert(gameJs.includes("drawSlashSmear(ctx);"), "drawSlashSmear foreground call missing");
-console.log('[PASS] Sleek, razor-sharp thin katana slash arc & foreground rendering verified.');
+console.log('[PASS] Authentic anime katana slash spritesheet & user reference thickness verified.');
 
 // 7. Check that Ronin hero is active with Hiraishin no Jutsu
 assert(gameJs.includes("id: 'ronin'"), "Ronin hero missing");

@@ -5537,7 +5537,8 @@ function triggerHeroAttack() {
       life: 14,
       maxLife: 14,
       color: player.activeSecondaryColor,
-      edgeColor: player.activeThemeColor
+      edgeColor: player.activeThemeColor,
+      inAir: !player.isGrounded
     };
 
     // 1. DOWNWARD NAIL POGO IN AIR (HOLLOW KNIGHT STYLE)
@@ -11006,13 +11007,113 @@ function drawHeroRonin() {
   });
 }
 
-// Draw the Sleek, Thin Razor-Sharp Katana Slash Arc (Hollow Knight / Penusbmic Style)
+// ============================================================================
+// KATANA SLASH EFFECTS SPRITESHEET & CUTTING ARCS (USER REFERENCE SPECIFICATION)
+// ============================================================================
+const slashSheetImg = new Image();
+slashSheetImg.src = 'assets/slash_effects_clean.png';
+
+const SLASH_SPRITE_FRAMES = {
+  horizontal: [
+    { x: 32, y: 54, w: 70, h: 5 },
+    { x: 136, y: 45, w: 88, h: 15 },
+    { x: 256, y: 43, w: 84, h: 25 },
+    { x: 380, y: 45, w: 100, h: 19 },
+    { x: 520, y: 48, w: 96, h: 13 },
+    { x: 653, y: 50, w: 89, h: 10 },
+    { x: 782, y: 53, w: 42, h: 5 }
+  ],
+  vertical_up: [
+    { x: 51, y: 131, w: 26, h: 37 },
+    { x: 127, y: 107, w: 32, h: 56 },
+    { x: 194, y: 106, w: 36, h: 59 },
+    { x: 268, y: 109, w: 38, h: 59 },
+    { x: 356, y: 106, w: 37, h: 64 },
+    { x: 438, y: 110, w: 26, h: 55 },
+    { x: 510, y: 120, w: 23, h: 46 }
+  ],
+  vertical_down: [
+    { x: 59, y: 208, w: 5, h: 59 },
+    { x: 132, y: 209, w: 7, h: 61 },
+    { x: 200, y: 211, w: 22, h: 64 },
+    { x: 281, y: 212, w: 15, h: 68 },
+    { x: 356, y: 211, w: 15, h: 69 },
+    { x: 429, y: 213, w: 13, h: 67 },
+    { x: 503, y: 231, w: 12, h: 48 }
+  ],
+  air_slash: [
+    { x: 36, y: 310, w: 57, h: 30 },
+    { x: 132, y: 310, w: 61, h: 23 },
+    { x: 222, y: 311, w: 80, h: 31 },
+    { x: 330, y: 312, w: 75, h: 28 },
+    { x: 440, y: 317, w: 79, h: 19 },
+    { x: 548, y: 320, w: 68, h: 11 },
+    { x: 644, y: 318, w: 53, h: 9 }
+  ]
+};
+
+// Draw the Sleek, Crisp Katana Slash Arc (Sprite Sheet Animation with Procedural Fallback)
 function drawSlashSmear(ctx) {
   if (!player.activeSlashSmear) return;
   const s = player.activeSlashSmear;
   const alpha = Math.max(0, s.life / s.maxLife);
   if (alpha <= 0) return;
 
+  const progress = Math.max(0, Math.min(1, 1 - (s.life / s.maxLife)));
+
+  // 1. Spritesheet Rendering from User Reference
+  if (slashSheetImg.complete && slashSheetImg.naturalWidth > 0) {
+    let animKey = 'horizontal';
+    if (s.aim === 'up') {
+      animKey = 'vertical_up';
+    } else if (s.aim === 'down') {
+      animKey = 'vertical_down';
+    } else if (s.inAir) {
+      animKey = 'air_slash';
+    }
+
+    const frames = SLASH_SPRITE_FRAMES[animKey];
+    const frameIdx = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+    const f = frames[frameIdx];
+
+    ctx.save();
+    ctx.globalAlpha = Math.min(1.0, alpha * 1.2);
+
+    if (animKey === 'horizontal') {
+      const scale = (s.radius / 76) * 1.25;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashSheetImg, f.x, f.y, f.w, f.h, 8 * scale, -dh * 0.5, dw, dh);
+    } else if (animKey === 'air_slash') {
+      const scale = (s.radius / 76) * 1.35;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashSheetImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.45, dw, dh);
+    } else if (animKey === 'vertical_up') {
+      const scale = (s.radius / 76) * 1.3;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y - 10);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashSheetImg, f.x, f.y, f.w, f.h, -dw * 0.35, -dh * 0.9, dw, dh);
+    } else if (animKey === 'vertical_down') {
+      const scale = (s.radius / 76) * 1.3;
+      const dw = f.w * scale;
+      const dh = f.h * scale;
+      ctx.translate(s.x, s.y + 10);
+      ctx.scale(s.facing, 1);
+      ctx.drawImage(slashSheetImg, f.x, f.y, f.w, f.h, -dw * 0.5, 0, dw, dh);
+    }
+
+    ctx.restore();
+    return;
+  }
+
+  // 2. High-Quality Procedural Fallback Matching User Reference (Proper Thickness & Dual Speed Streaks)
   ctx.save();
   ctx.translate(s.x, s.y);
   if (s.aim === 'up') {
@@ -11024,16 +11125,15 @@ function drawSlashSmear(ctx) {
   }
   ctx.globalAlpha = alpha;
 
-  // Sleek, thin, and razor-sharp crescent blade arc ("tipis aja")
   const rOuter = s.radius;
-  const rInner = s.radius * 0.82; // Sleek thin blade width
-  const sweepAngle = Math.PI * 0.46; // Wide 165-degree majestic katana sweep
+  const rInner = s.radius * 0.74; // Solid crescent thickness (~18px at belly, not paper-thin)
+  const sweepAngle = Math.PI * 0.46;
 
-  // 1. Silver-white gradient blade body with tapered needle tips
+  // Main solid bright white crescent blade body
   const grad = ctx.createRadialGradient(0, 0, rInner, 0, 0, rOuter);
   grad.addColorStop(0, 'rgba(255, 255, 255, 0.0)');
-  grad.addColorStop(0.35, 'rgba(241, 245, 249, 0.65)');
-  grad.addColorStop(0.85, 'rgba(255, 255, 255, 0.95)');
+  grad.addColorStop(0.2, 'rgba(224, 242, 254, 0.85)');
+  grad.addColorStop(0.65, '#ffffff');
   grad.addColorStop(1.0, '#ffffff');
 
   ctx.fillStyle = grad;
@@ -11043,28 +11143,28 @@ function drawSlashSmear(ctx) {
   ctx.closePath();
   ctx.fill();
 
-  // 2. Razor-sharp cutting edge stroke with crisp glow
+  // Crisp razor-sharp cutting edge stroke with soft cyan glow
   ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 2.4;
-  ctx.shadowColor = '#ffffff';
-  ctx.shadowBlur = 10;
+  ctx.lineWidth = 2.8;
+  ctx.shadowColor = '#00f5ff';
+  ctx.shadowBlur = 8;
   ctx.beginPath();
   ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
   ctx.stroke();
   ctx.shadowBlur = 0;
 
-  // 3. Crisp inner blade contour
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-  ctx.lineWidth = 1.0;
+  // Inner trailing speed line arc (distinct parallel stroke from reference)
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.lineWidth = 1.6;
   ctx.beginPath();
-  ctx.arc(0, 0, rInner, -sweepAngle, sweepAngle);
+  ctx.arc(0, 0, s.radius * 0.62, -sweepAngle * 0.82, sweepAngle * 0.78);
   ctx.stroke();
 
-  // 4. Subtle razor motion streak arc
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-  ctx.lineWidth = 0.8;
+  // Subtle outer motion wisp
+  ctx.strokeStyle = 'rgba(186, 230, 253, 0.5)';
+  ctx.lineWidth = 1.0;
   ctx.beginPath();
-  ctx.arc(0, 0, rOuter + 4, -sweepAngle * 0.85, sweepAngle * 0.85);
+  ctx.arc(0, 0, rOuter + 4, -sweepAngle * 0.65, sweepAngle * 0.65);
   ctx.stroke();
 
   ctx.restore();

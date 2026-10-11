@@ -14,7 +14,8 @@ const assets = [
   'tileset_origin_platforms.png',
   'tileset_origin_furniture.png',
   'tileset_origin_master.png',
-  'bg_origin_wall_panorama.png'
+  'bg_origin_wall_panorama.png',
+  'slash_effects_clean.png'
 ];
 
 assets.forEach(asset => {
