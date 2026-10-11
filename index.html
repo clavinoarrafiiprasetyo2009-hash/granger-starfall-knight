@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Ronin: Shadow Blade // Fast-Paced Katana Action Platformer ⚔️🔥</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Subtle CRT Scanlines -->
+  <div class="crt-overlay"></div>
+
+  <!-- Game Shell Container -->
+  <div id="game-wrapper">
+
+    <!-- Primary Canvas (854x480 internal pixel resolution) -->
+    <canvas id="game-canvas" width="854" height="480"></canvas>
+
+    <!-- TOP IN-GAME HUD (Only visible during PLAYING / PAUSED) -->
+    <div id="hud-layer" class="hud-layer hidden">
+      <!-- Player Status Box (HP & Energy) -->
+      <div class="player-status-box">
+        <div class="avatar-frame">
+          <canvas id="avatar-canvas" width="38" height="38" class="avatar-icon-img"></canvas>
+        </div>
+        <div class="bars-stack">
+          <!-- Hero Name & Class Tag -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+            <span id="hud-hero-name" style="font-size: 13px; font-weight: 800; color: #00f5ff; letter-spacing: 1px;">CYBER RONIN</span>
+            <span id="hud-hero-role" style="font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;">KATANA MASTER</span>
+          </div>
+          <!-- HP Bar -->
+          <div class="bar-track">
+            <div id="hp-bar" class="hp-fill"></div>
+            <div class="bar-label">
+              <span>HP</span>
+              <span id="hp-text">110 / 110</span>
+            </div>
+          </div>
+          <!-- Energy / Cannon Heat Bar -->
+          <div class="bar-track">
+            <div id="energy-bar" class="energy-fill"></div>
+            <div class="bar-label">
+              <span id="energy-title">STAMINA</span>
+              <span id="energy-text">100%</span>
+            </div>
+          </div>
+          <!-- Skill [E] & Stacks Area -->
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+            <div id="hud-skill-slot" class="hud-skill-slot">
+              <div class="hud-skill-icon-box">
+                <span id="hud-skill-icon">⚡</span>
+                <div id="hud-skill-cd-overlay" class="hud-skill-cd-overlay hidden">0s</div>
+              </div>
+              <div class="hud-skill-info">
+                <span class="hud-skill-key">SKILL [E]</span>
+                <span id="hud-skill-name" class="hud-skill-name">PASSIVE FOCUS</span>
+              </div>
+            </div>
+            <div id="hud-soul-box" class="soul-stacks-badge hidden">
+              <span>👻</span>
+              <span>SOULS: <strong id="hud-soul-count">0</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Map Progress Bar -->
+      <div class="map-progress-wrap">
+        <div id="hud-sector-name" class="hud-sector-name">SEKTOR 1 // HIGHWAY</div>
+        <div class="map-progress-row">
+          <span id="sector-pct" style="font-size: 9px; color: #94a3b8; font-family: 'Press Start 2P';">0%</span>
+          <div class="map-progress-track">
+            <div id="map-progress-fill" class="map-progress-fill"></div>
+            <div id="map-progress-icon" class="map-progress-icon">🗡️</div>
+          </div>
+          <span style="font-size: 9px; color: #00f5ff; font-family: 'Press Start 2P';">GATE</span>
+        </div>
+      </div>
+
+      <!-- Right Score & In-game Menu Controls -->
+      <div style="display: flex; gap: 8px; pointer-events: auto; align-items: center;">
+        <button id="pause-btn" onclick="openPauseMenu()" class="score-badge btn-clickable" title="Pause / Menu">
+          <i data-lucide="pause" style="width: 14px; height: 14px;"></i>
+          <span>MENU</span>
+        </button>
+        <button id="sound-btn" onclick="toggleMute()" class="score-badge btn-clickable" title="Mute / Unmute Audio">
+          <i id="sound-icon" data-lucide="volume-2" style="width: 16px; height: 16px;"></i>
+        </button>
+        <div class="score-badge">
+          <span>KILLS: <span id="kills-display" style="color: #fff;">0</span></span>
+          <span style="color: #64748b;">|</span>
+          <span>SCORE: <span id="score-display">0000</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTOR DISCOVERY CINEMATIC BANNER -->
+    <div id="sector-banner" class="sector-banner hidden">
+      <div class="sector-banner-badge">DISCOVERY</div>
+      <h2 id="sector-banner-title" class="sector-banner-title">SEKTOR 1: HIGHWAY SIBERNETIK</h2>
+      <p id="sector-banner-sub" class="sector-banner-sub">ATAP METROPOLIS NEO-TOKYO & JALUR EVAKUASI</p>
+      <div class="sector-banner-line"></div>
+    </div>
+
+    <!-- TOP MINI BOSS HEALTH BAR (Appears during Colosseum encounter) -->
+    <div id="boss-hud-bar" class="boss-hud-bar hidden">
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
+      <div class="boss-hud-header">
+        <span class="boss-skull-badge" id="boss-skull-badge">☠️ MINI BOSS</span>
+        <span id="boss-name-text" class="boss-name-text">VORTEX GOLIATH</span>
+        <span id="boss-phase-badge" class="boss-phase-badge">FASE 1: SHIELDED</span>
+      </div>
+      <div class="boss-bar-track">
+        <div id="boss-hp-ghost" class="boss-hp-ghost"></div>
+        <div id="boss-hp-fill" class="boss-hp-fill"></div>
+        <div class="boss-bar-label">
+          <span id="boss-title-sub">PELINDUNG RERUNTUHAN PURBA</span>
+          <span id="boss-hp-text">1500 / 1500 HP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lore Interaction Floating Prompt (In-game) -->
+    <div id="lore-prompt" class="lore-prompt hidden">
+      <span class="lore-prompt-icon">💠</span>
+      <span class="key-badge lore-key-pulse">F</span>
+      <span>BACA ARSIP LORE</span>
+    </div>
+
+    <!-- Controls Helper Banner (Desktop) -->
+    <div id="controls-hint" class="controls-hint hidden">
+      <span><span class="key-badge">A</span> <span class="key-badge">D</span> Gerak</span>
+      <span><span class="key-badge">W</span> Aim Atas</span>
+      <span><span class="key-badge">S</span> Jongkok / Air Pogo</span>
+      <span><span class="key-badge">Spasi</span> Jump</span>
+      <span><span class="key-badge">J</span> / <span class="key-badge">LMB</span> Serang</span>
+      <span><span class="key-badge">K</span> / <span class="key-badge">Shift</span> Dash</span>
+      <span><span class="key-badge">E</span> <strong id="hint-skill-name" style="color: #c084fc;">SKILL</strong></span>
+      <span><span class="key-badge">F</span> Baca Lore</span>
+      <span><span class="key-badge">ESC</span> Menu</span>
+    </div>
+
+    <!-- Mobile Virtual Controls (Auto displays on touch devices) -->
+    <div id="mobile-controls" class="mobile-controls hidden">
+      <div style="display: flex; gap: 8px;">
+        <button id="btn-left" class="touch-btn" style="background: rgba(30, 41, 59, 0.7);">◀</button>
+        <button id="btn-right" class="touch-btn" style="background: rgba(30, 41, 59, 0.7);">▶</button>
+        <button id="btn-aim-up" class="touch-btn" style="background: rgba(51, 65, 85, 0.7); font-size: 11px;">▲ AIM</button>
+        <button id="btn-crouch" class="touch-btn" style="background: rgba(51, 65, 85, 0.7); font-size: 11px;">▼ DUCK</button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="btn-skill" class="touch-btn" style="background: rgba(147, 51, 234, 0.7); border-color: #c084fc; font-size: 11px;">SKILL [E]</button>
+        <button id="btn-dash" class="touch-btn" style="background: rgba(14, 165, 233, 0.6); font-size: 11px;">DASH</button>
+        <button id="btn-jump" class="touch-btn" style="background: rgba(34, 197, 94, 0.6); font-size: 11px;">JUMP</button>
+        <button id="btn-fire" class="touch-btn" style="background: rgba(0, 245, 255, 0.7); width: 62px; height: 62px; border-color: #00f5ff;">SLASH</button>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 1: LOBBY / ARCADE MAIN MENU             -->
+    <!-- ============================================== -->
+    <div id="lobby-screen" class="game-modal lobby-backdrop">
+      <div class="lobby-content">
+        <!-- Arcade Header Branding -->
+        <div class="lobby-header">
+          <div class="arcade-subtag">
+            <span class="badge-pulse">● FAST-PACED KATANA ACTION</span>
+            <span style="color: #64748b;">|</span>
+            <span style="color: #00f5ff;">PENUSBMIC DARK SERIES</span>
+          </div>
+          <h1 class="lobby-title">
+            CYBER RONIN
+          </h1>
+          <p class="lobby-subtitle">
+            Kuasai pedang katana bayangan, tebas dan pantulkan peluru musuh (Bullet Deflect/Parry), meluncur di dinding (Wall Slide), dan rasakan aksi super smooth ala Katana Zero & Dead Cells!
+          </p>
+        </div>
+
+        <!-- Lobby Hero Showcase & Action Panels -->
+        <div class="lobby-main-grid">
+          <!-- Active Hero Preview Box -->
+          <div class="active-hero-card">
+            <div class="active-hero-badge">HERO AKTIF</div>
+            <div class="active-hero-image-wrap">
+              <img id="lobby-hero-img" src="granger_reference.png" alt="Hero Avatar" class="active-hero-avatar">
+              <div class="active-hero-overlay"></div>
+            </div>
+            <div class="active-hero-info">
+              <h2 id="lobby-hero-name" class="active-hero-title">GRANGER</h2>
+              <div id="lobby-hero-role" class="active-hero-subtitle">STARFALL KNIGHT // MARKSMAN</div>
+              <p id="lobby-hero-desc" class="active-hero-text">
+                Heavy Laser Beam Cannon & Dual Pulse Blasters. Serangan laser raksasa menembus semua musuh segaris lurus!
+              </p>
+              <button onclick="goToCharSelect()" class="btn-secondary" style="margin-top: 10px; width: 100%;">
+                <i data-lucide="users" style="width: 14px; height: 14px;"></i> GANTI HERO (5 HERO)
+              </button>
+            </div>
+          </div>
+
+          <!-- Lobby Menu Buttons -->
+          <div class="lobby-nav-stack">
+            <button onclick="startMission()" class="btn-primary-big">
+              <span class="btn-glow-bar"></span>
+              <i data-lucide="play" style="width: 22px; height: 22px;"></i>
+              <span>START MISSION</span>
+            </button>
+
+            <button onclick="openLevelSelectModal()" class="btn-menu-option">
+              <i data-lucide="map" style="width: 18px; height: 18px; color: #22c55e;"></i>
+              <div style="text-align: left;">
+                <div style="font-weight: 800; font-size: 15px;">PILIH LEVEL / STAGE</div>
+                <div id="lobby-level-sub" style="font-size: 11px; color: #94a3b8;">Level 1: The Origin (Desa Reruntuhan Asal)</div>
+              </div>
+            </button>
+
+            <button onclick="goToCharSelect()" class="btn-menu-option">
+              <i data-lucide="shield" style="width: 18px; height: 18px; color: #38bdf8;"></i>
+              <div style="text-align: left;">
+                <div style="font-weight: 800; font-size: 15px;">PILIH HERO ROSTER</div>
+                <div style="font-size: 11px; color: #94a3b8;">5 Hero dengan senjata & gaya bertarung unik</div>
+              </div>
+            </button>
+
+            <button onclick="openControlsGuide()" class="btn-menu-option">
+              <i data-lucide="gamepad-2" style="width: 18px; height: 18px; color: #fbbf24;"></i>
+              <div style="text-align: left;">
+                <div style="font-weight: 800; font-size: 15px;">PANDUAN KONTROL</div>
+                <div style="font-size: 11px; color: #94a3b8;">Tombol gerak, double jump, dash, & attack</div>
+              </div>
+            </button>
+
+            <button onclick="toggleMute()" class="btn-menu-option">
+              <i id="lobby-audio-icon" data-lucide="volume-2" style="width: 18px; height: 18px; color: #a855f7;"></i>
+              <div style="text-align: left;">
+                <div style="font-weight: 800; font-size: 15px;">PENGATURAN SUARA</div>
+                <div id="lobby-audio-text" style="font-size: 11px; color: #94a3b8;">Synthesizer Audio Aktif (BGM & SFX)</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lobby Footer Status -->
+        <div class="lobby-footer">
+          <span>⚙️ ENGINE: HTML5 CANVAS 60FPS</span>
+          <span>⚡ SMOOTH KINEMATICS & ORGANIC SPRITES</span>
+          <span>🎮 METAL SLUG RUN 'N GUN</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 2: CHARACTER SELECTION SCREEN           -->
+    <!-- ============================================== -->
+    <div id="char-select-screen" class="game-modal char-select-backdrop hidden">
+      <div class="char-select-content">
+        <!-- Top Bar -->
+        <div class="char-select-header">
+          <div>
+            <span class="arcade-subtag">TACTICAL OPERATIVES</span>
+            <h2 class="char-select-title">PILIH HERO ANDALANMU</h2>
+          </div>
+          <button onclick="goToLobby()" class="btn-secondary">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> KEMBALI KE LOBBY
+          </button>
+        </div>
+
+        <!-- 5 Hero Roster Grid -->
+        <div id="hero-roster-grid" class="hero-roster-grid">
+          <!-- Dynamically populated or rendered via JS/HTML -->
+        </div>
+
+        <!-- Selected Hero Details Showcase -->
+        <div id="selected-hero-inspector" class="selected-hero-inspector">
+          <div class="inspector-portrait-box">
+            <img id="inspector-img" src="granger_reference.png" alt="Selected Hero" class="inspector-img">
+          </div>
+          <div class="inspector-details">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <h3 id="inspector-name" class="inspector-hero-name">GRANGER</h3>
+                <span id="inspector-title" class="inspector-hero-title">STARFALL KNIGHT</span>
+                <span id="inspector-skin-tier" class="skin-badge skin-badge-legend">SKIN LEGEND</span>
+              </div>
+              <span id="inspector-role-badge" class="hero-role-badge role-marksman">MARKSMAN</span>
+            </div>
+
+            <!-- Skin Variant Selector -->
+            <div class="skin-selector-bar" style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 11px; font-weight: bold; color: #94a3b8; font-family: 'JetBrains Mono', monospace;">VARIAN SKIN:</span>
+              <div id="skin-options-container" style="display: flex; gap: 6px;"></div>
+            </div>
+
+            <p id="inspector-desc" class="inspector-desc">
+              Menembakkan Meriam Laser Emas raksasa yang melintasi medan tempur secara instan. Sangat mematikan untuk membasmi barisan musuh sekaligus.
+            </p>
+
+            <!-- Stat Bars -->
+            <div class="inspector-stats-grid">
+              <div class="stat-row">
+                <span class="stat-name">DAMAGE</span>
+                <div class="stat-meter"><div id="stat-damage" class="stat-fill" style="width: 95%;"></div></div>
+                <span id="stat-damage-val" class="stat-number">95</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-name">SPEED</span>
+                <div class="stat-meter"><div id="stat-speed" class="stat-fill" style="width: 78%; background: #38bdf8;"></div></div>
+                <span id="stat-speed-val" class="stat-number">78</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-name">RANGE</span>
+                <div class="stat-meter"><div id="stat-range" class="stat-fill" style="width: 100%; background: #fbbf24;"></div></div>
+                <span id="stat-range-val" class="stat-number">100</span>
+              </div>
+            </div>
+
+            <!-- Weapon Lore & Deployment CTA -->
+            <div class="inspector-action-row">
+              <div class="weapon-tag">
+                <span style="color: #64748b; font-size: 11px;">SENJATA UTAMA:</span>
+                <strong id="inspector-weapon" style="color: #f8fafc; font-size: 13px;">Supernova Beam Cannon</strong>
+              </div>
+              <button onclick="confirmHeroAndDeploy()" class="btn-primary-big" style="padding: 12px 28px;">
+                <i data-lucide="crosshair" style="width: 18px; height: 18px;"></i> DEPLOY SEKARANG
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: LEVEL / STAGE SELECT                    -->
+    <!-- ============================================== -->
+    <div id="level-select-modal" class="game-modal hidden">
+      <div class="modal-dialog-box" style="max-width: 680px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div>
+            <span class="arcade-subtag" style="color: #22c55e;">MISSION DEPLOYMENT</span>
+            <h2 style="font-size: 22px; font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="map" style="color: #22c55e;"></i> PILIH LEVEL / STAGE
+            </h2>
+          </div>
+          <button onclick="closeLevelSelectModal()" class="btn-icon"><i data-lucide="x"></i></button>
+        </div>
+        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 6px;">
+          Pilih misi petualanganmu. Kembangkan dan taklukkan setiap dunia selangkah demi selangkah!
+        </p>
+
+        <div class="level-select-grid">
+          <!-- Level 1 Card -->
+          <div id="card-lvl-1" class="level-card active" onclick="selectLevel(1)">
+            <div>
+              <span class="level-badge level-badge-green">★ TAHAP 1 // THE ORIGIN</span>
+              <h3 class="level-card-title">RUINS OF VERDANT GLADE</h3>
+              <div class="level-card-sub">DESA LEMBAH SUCI YANG HANCUR</div>
+              <p class="level-card-desc">
+                Desa damai yang hancur lebur akibat serangan mahluk aneh tak dikenal. Telusuri reruntuhan desa, gua lembah berlumut, jembatan kayu, hingga tahta The Blight Chimera!
+              </p>
+            </div>
+            <div>
+              <div class="level-card-stats">
+                <span>🌲 Tema: Alam & Desa</span>
+                <span>⚔️ Mini-Boss: Blight Fang</span>
+                <span>👑 Boss: The Blight Chimera</span>
+                <span>📏 5,500px</span>
+              </div>
+              <button onclick="deployLevel(1)" class="btn-primary" style="width: 100%; margin-top: 12px; padding: 10px; background: linear-gradient(135deg, #15803d, #22c55e);">
+                ▶ MAINKAN LEVEL 1
+              </button>
+            </div>
+          </div>
+
+          <!-- Level 2 Card -->
+          <div id="card-lvl-2" class="level-card" onclick="selectLevel(2)">
+            <div>
+              <span class="level-badge level-badge-blue">TAHAP 2 // MEGAPOLIS</span>
+              <h3 class="level-card-title">CYBER CITY & ASTRAL CITADEL</h3>
+              <div class="level-card-sub">EKSPEDISI 5 SEKTOR MASIF</div>
+              <p class="level-card-desc">
+                Petualangan 15,000px menembus Cyber Highway, Kuil Elysium, Gua Lahar Panas, Koloseum Titan, hingga benteng luar angkasa Kaisar Xenos.
+              </p>
+            </div>
+            <div>
+              <div class="level-card-stats">
+                <span>🏙️ Tema: Cyber & Sci-Fi</span>
+                <span>⚔️ 5 Boss Epik</span>
+                <span>📏 15,000px</span>
+              </div>
+              <button onclick="deployLevel(2)" class="btn-secondary" style="width: 100%; margin-top: 12px; padding: 10px;">
+                ▶ MAINKAN LEVEL 2
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: CONTROLS & HOW TO PLAY                  -->
+    <!-- ============================================== -->
+    <div id="controls-modal" class="game-modal hidden">
+      <div class="modal-dialog-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="font-size: 22px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="gamepad-2"></i> PANDUAN KONTROL & MEKANIK
+          </h2>
+          <button onclick="closeControlsGuide()" class="btn-icon"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="guide-list">
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">A</span> <span class="key-badge">D</span> / <span class="key-badge">◀</span> <span class="key-badge">▶</span></div>
+            <div>
+              <strong>Gerak Kiri / Kanan</strong>
+              <p>Fisika gerak halus dengan akselerasi, kemiringan badan (tilt), dan deselerasi lerp alami.</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">Spasi</span></div>
+            <div>
+              <strong>Jump, Double Jump & Wall Jump</strong>
+              <p>Tombol <strong>SPASI</strong> khusus untuk melompat dan melompat ganda. Menempel pada dinding vertikal saat jatuh memicu <em>Wall Slide</em>, tekan Spasi untuk <em>Wall Jump</em> memantul ke atas!</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">W</span> <span class="key-badge">S</span></div>
+            <div>
+              <strong>Aim Atas, Jongkok & Downward Nail Pogo (Hollow Knight Style)</strong>
+              <p>Tahan <strong>W</strong> untuk mengarahkan tebasan/tembakan lurus ke ATAS. Tahan <strong>S</strong> di tanah untuk <em>Jongkok</em> (mengecilkan hitbox untuk hindari peluru). Tahan <strong>S</strong> di UDARA + Serang untuk <em>Downward Nail Pogo</em> (memantul ke atas dan memulihkan lompatan saat menebas musuh atau peluru)!</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">E</span></div>
+            <div>
+              <strong>Skill Unik Hero [E]</strong>
+              <p>Setiap Operative dibekali skill tempur unik pada tombol <strong>E</strong>: Deadlest (AoE ledakan), Dragon Breath (Semburan naga), Slayer of Goliath (Dash kilat + shuriken kill reset), Soul Revanation (Panggil 2 hantu), dan Star Dagger (Bumerang dagger + dash teleport recast)!</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">J</span> / <span class="key-badge">Klik Kiri</span></div>
+            <div>
+              <strong>Attack, Bullet Parry & Deflect</strong>
+              <p>Menebas sabit putih raksasa atau menembak sesuai arah bidikanmu. Tebasan pedang Ronin dapat memantulkan peluru musuh (Parry Deflect) dan menyerap HP (Lifesteal)!</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">K</span> / <span class="key-badge">Shift</span></div>
+            <div>
+              <strong>Cyber Dash (i-Frames / Kebal)</strong>
+              <p>Melesat cepat menembus musuh tanpa terkena damage selama bayangan dash aktif.</p>
+            </div>
+          </div>
+
+          <div class="guide-item">
+            <div class="guide-keys"><span class="key-badge">P</span> / <span class="key-badge">ESC</span></div>
+            <div>
+              <strong>Jeda & Menu</strong>
+              <p>Buka menu jeda untuk mengganti hero kapan saja atau kembali ke Lobby.</p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="closeControlsGuide()" class="btn-primary" style="width: 100%; margin-top: 20px;">
+          MENGERTI & TUTUP
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: PAUSE MENU (IN-GAME)                    -->
+    <!-- ============================================== -->
+    <div id="pause-modal" class="game-modal hidden">
+      <div class="modal-dialog-box" style="text-align: center; max-width: 420px;">
+        <h2 style="font-size: 28px; font-weight: 800; color: #f8fafc; margin-bottom: 8px;">GAME DIJEDA</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">Pilih tindakan berikut untuk melanjutkan petualangan.</p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <button onclick="resumeGame()" class="btn-primary">
+            <i data-lucide="play" style="width: 16px; height: 16px;"></i> LANJUTKAN PERMAINAN
+          </button>
+          <button onclick="pauseToCharSelect()" class="btn-secondary">
+            <i data-lucide="users" style="width: 16px; height: 16px;"></i> GANTI HERO
+          </button>
+          <button onclick="restartMission()" class="btn-secondary">
+            <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> RESTART MISI
+          </button>
+          <button onclick="returnToLobby()" class="btn-secondary" style="border-color: #ef4444; color: #fca5a5;">
+            <i data-lucide="home" style="width: 16px; height: 16px;"></i> KEMBALI KE LOBBY
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: GAME OVER                               -->
+    <!-- ============================================== -->
+    <div id="game-over-modal" class="game-modal hidden">
+      <div class="modal-dialog-box" style="text-align: center; max-width: 440px;">
+        <div style="font-size: 40px; margin-bottom: 4px;">💥</div>
+        <h2 style="font-size: 36px; font-weight: 900; color: #ef4444; margin-bottom: 8px; letter-spacing: 1px;">MISSION FAILED</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 18px;">Armor hero Anda mengalami kerusakan kritis.</p>
+        
+        <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid #334155; padding: 14px 24px; border-radius: 12px; margin-bottom: 22px;">
+          <p style="font-family: 'Press Start 2P'; font-size: 13px; color: #fbbf24; margin-bottom: 6px;">SKOR AKHIR: <span id="final-score">0</span></p>
+          <p style="font-size: 12px; color: #94a3b8;">MUSUH DILUMPUHKAN: <span id="final-kills" style="color: #fff; font-weight: bold;">0</span></p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button onclick="respawnAtCheckpoint()" class="btn-primary" style="width: 100%; padding: 12px; font-weight: 800; background: linear-gradient(135deg, #0284c7, #06b6d4);">
+            ↺ RESPAWN DI CHECKPOINT (REVIVE MOBS)
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="restartMission()" class="btn-secondary" style="flex: 1; font-size: 13px;">
+              ↺ RESTART DARI AWAL
+            </button>
+            <button onclick="returnToLobby()" class="btn-secondary" style="flex: 1; font-size: 13px;">
+              🏠 KE LOBBY
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: MISSION ACCOMPLISHED (VICTORY)          -->
+    <!-- ============================================== -->
+    <div id="victory-modal" class="game-modal hidden">
+      <div class="modal-dialog-box" style="text-align: center; max-width: 480px; border-color: #00f5ff; box-shadow: 0 0 40px rgba(0, 245, 255, 0.4);">
+        <div style="font-size: 42px; margin-bottom: 6px;">🏆</div>
+        <span id="victory-stage-tag" style="font-family: 'Press Start 2P'; font-size: 11px; color: #22c55e; letter-spacing: 2px;">STAGE 1 CLEARED</span>
+        <h2 id="victory-title" style="font-size: 34px; font-weight: 900; color: #f8fafc; margin: 10px 0; background: linear-gradient(135deg, #22c55e, #38bdf8, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          MISSION ACCOMPLISHED!
+        </h2>
+        <p id="victory-desc" style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">
+          The Blight Chimera berhasil dimusnahkan. Ekosistem Desa Lembah Suci mulai pulih dari kutukan!
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid #334155; padding: 14px 24px; border-radius: 12px; margin-bottom: 22px;">
+          <p style="font-family: 'Press Start 2P'; font-size: 13px; color: #fbbf24; margin-bottom: 6px;">SKOR TOTAL: <span id="victory-score">0</span></p>
+          <p style="font-size: 12px; color: #94a3b8;">MUSUH DIKALAHKAN: <span id="victory-kills" style="color: #fff; font-weight: bold;">0</span></p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button id="btn-next-level" onclick="proceedNextLevel()" class="btn-primary" style="width: 100%; padding: 12px; font-weight: 800; background: linear-gradient(135deg, #0284c7, #22c55e);">
+            ▶ LANJUT KE LEVEL BERIKUTNYA
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button onclick="restartMission()" class="btn-secondary" style="flex: 1;">
+              ↺ MAIN LAGI
+            </button>
+            <button onclick="returnToLobby()" class="btn-secondary" style="flex: 1;">
+              🏠 KE LOBBY
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: LORE TABLET ARCHIVE DIALOG              -->
+    <!-- ============================================== -->
+    <div id="lore-modal" class="game-modal hidden">
+      <div class="modal-dialog-box lore-dialog-box">
+        <div class="hud-corner hud-corner-tl"></div>
+        <div class="hud-corner hud-corner-tr"></div>
+        <div class="hud-corner hud-corner-bl"></div>
+        <div class="hud-corner hud-corner-br"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; position: relative; z-index: 2;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">📜</span>
+            <span class="lore-sys-tag">ARSIP KUNO ELYSIUM // DATA DECRYPTED</span>
+          </div>
+          <button onclick="closeLoreModal()" class="btn-icon"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="lore-stone-header">
+          <div class="lore-monolith-icon">💠</div>
+          <div style="flex: 1;">
+            <h3 id="lore-modal-title" class="lore-modal-title">ARSIP 01: KEJATUHAN PLANET ELYSIUM</h3>
+            <span id="lore-modal-sector" class="lore-modal-sector">SEKTOR 2 // KAMAR RAHASIA RERUNTUHAN</span>
+          </div>
+          <div class="lore-security-chip">TOP SECRET</div>
+        </div>
+
+        <div id="lore-modal-content" class="lore-content-box">
+          <!-- Text inserted via JS -->
+        </div>
+
+        <div class="lore-footer-row">
+          <span class="lore-footer-hint"><i data-lucide="terminal" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Tekan [F] atau ESC untuk menutup</span>
+          <button onclick="closeLoreModal()" class="btn-primary" style="padding: 10px 24px;">
+            TUTUP ARSIP [F]
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Audio Synthesizer Script -->
+  <script src="audio.js"></script>
+
+  <!-- Core Game Engine -->
+  <script src="game.js"></script>
+
+</body>
+</html>
