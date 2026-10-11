@@ -19,14 +19,25 @@ let MAP_HEIGHT = 850;
 let currentLevelId = 1;
 const unlockedLevels = { 1: true, 2: false };
 
-// Smooth Lookahead Follow Camera
+// Smooth Lookahead Follow Camera with Hollow Knight Arena Lock
 const camera = {
   x: 0,
   y: 0,
   targetX: 0,
   targetY: 0,
   lookAhead: 75,
+  isLocked: false,
+  lockedX: 0,
+  lockedY: 0,
   update(target) {
+    if (this.isLocked) {
+      // Hollow Knight style: camera smoothly frames the boss arena chamber
+      this.targetX = this.lockedX;
+      this.targetY = this.lockedY;
+      this.x += (this.targetX - this.x) * 0.08;
+      this.y += (this.targetY - this.y) * 0.08;
+      return;
+    }
     const desiredX = target.x - (V_WIDTH * 0.4) + (target.facing * this.lookAhead);
     this.targetX = Math.max(0, Math.min(MAP_WIDTH - V_WIDTH, desiredX));
     this.x += (this.targetX - this.x) * 0.12;
@@ -35,11 +46,22 @@ const camera = {
     this.targetY = desiredY;
     this.y += (this.targetY - this.y) * 0.1;
   },
+  lock(x, y = 50) {
+    this.isLocked = true;
+    this.lockedX = x;
+    this.lockedY = y;
+  },
+  unlock() {
+    this.isLocked = false;
+  },
   reset() {
     this.x = 0;
     this.y = 0;
     this.targetX = 0;
     this.targetY = 0;
+    this.isLocked = false;
+    this.lockedX = 0;
+    this.lockedY = 0;
   }
 };
 
@@ -916,10 +938,10 @@ const arenaGates = {
 };
 
 const levelBarriers = {
-  miniBossLeft: { x: 4750, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
-  miniBossRight: { x: 5550, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
-  bossLeft: { x: 14500, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' },
-  bossRight: { x: 15700, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' }
+  miniBossLeft: { x: 6180, y: 160, w: 28, h: 320, active: false, type: 'bramble' },
+  miniBossRight: { x: 7034, y: 160, w: 28, h: 320, active: false, type: 'bramble' },
+  bossLeft: { x: 15600, y: 150, w: 28, h: 340, active: false, type: 'abyssal_spire' },
+  bossRight: { x: 16454, y: 150, w: 28, h: 340, active: false, type: 'abyssal_spire' }
 };
 
 let isArenaLocked = false;
@@ -937,22 +959,22 @@ let defeatedBosses = {
 };
 
 let sector2Seals = {
-  seal1: false, // Altar Bulan (10220)
-  seal2: false, // Altar Bintang (12420)
-  seal3: false  // Altar Matahari (14220)
+  seal1: false, // Altar Bulan (11800)
+  seal2: false, // Altar Bintang (13600)
+  seal3: false  // Altar Matahari (15200)
 };
 
 const sector2Altars = [
-  { id: 'seal1', name: 'Altar Segel Bulan', kanji: '月', x: 10220, y: 240, activated: false, runeColor: '#38bdf8' },
-  { id: 'seal2', name: 'Altar Segel Bintang', kanji: '星', x: 12420, y: 200, activated: false, runeColor: '#c084fc' },
-  { id: 'seal3', name: 'Altar Segel Matahari', kanji: '日', x: 14220, y: 280, activated: false, runeColor: '#f59e0b' }
+  { id: 'seal1', name: 'Altar Segel Bulan', kanji: '月', x: 11800, y: 240, activated: false, runeColor: '#38bdf8' },
+  { id: 'seal2', name: 'Altar Segel Bintang', kanji: '星', x: 13600, y: 200, activated: false, runeColor: '#c084fc' },
+  { id: 'seal3', name: 'Altar Segel Matahari', kanji: '日', x: 15200, y: 280, activated: false, runeColor: '#f59e0b' }
 ];
 
 let activeBossEnemy = null;
 let activeLoreTabletNear = null;
 
 const goalPortal = {
-  x: 15850,
+  x: 16850,
   y: 350,
   w: 64,
   h: 90,
@@ -968,128 +990,159 @@ const LEVELS = {
     name: 'LEVEL 1 // THE ORIGIN',
     title: 'RUINS OF VERDANT GLADE',
     subtitle: 'LEMBAH SUCI RERUNTUHAN ASAL // INVESTIGASI KEHANCURAN & BALAS DENDAM',
-    mapWidth: 16000,
+    mapWidth: 17000,
     mapHeight: 900,
     playerStart: { x: 120, y: 350 },
-    goalPortal: { x: 15850, y: 350, w: 64, h: 90, active: true },
+    goalPortal: { x: 16850, y: 350, w: 64, h: 90, active: true },
     platforms: [
       // ==========================================================
-      // CONTINUOUS SOLID VILLAGE GROUND FLOOR (NO DEADLY CHASMS!)
-      // Spanning from x = 0 to 16000, player will never fall to death!
+      // UNDULATING DYNAMIC VILLAGE & CANYON GROUND FLOOR
+      // Multi-elevation terrain with steps, mounds, sunken grottos, and obstacle hurdles!
       // ==========================================================
-      { x: 0,     y: 440, w: 3200, h: 180, type: 'forest_stone', label: 'SEKTOR 1: PERMUKIMAN ASAL & PARKOUR LELUHUR' },
-      { x: 3180,  y: 440, w: 2600, h: 180, type: 'forest_stone', label: 'SEKTOR 1: GOA RAHASIA & ARENA PENDEKAR TOMBAK' },
-      { x: 5760,  y: 440, w: 3200, h: 180, type: 'forest_stone', label: 'PERJALANAN PANJANG: NGARAI PURBA & JEMBATAN KABUT' },
-      { x: 8940,  y: 440, w: 3600, h: 180, type: 'forest_stone', label: 'SEKTOR 2: WILAYAH TIGA SEGEL SAKURA (BARAT)' },
-      { x: 12520, y: 440, w: 3500, h: 180, type: 'forest_stone', label: 'SEKTOR 2: SANCTUM AKHIR & TAHTA CHIMERA' },
+      { x: 0,     y: 440, w: 1200, h: 180, type: 'forest_stone', label: 'SEKTOR 1: PERMUKIMAN ASAL (DATARAN RENDAH)' },
+      { x: 1180,  y: 400, w: 640,  h: 220, type: 'stepped_terrace', label: 'SEKTOR 1: TERAS TETUA GENJI (DATARAN TINGGI)' },
+      { x: 1800,  y: 440, w: 720,  h: 180, type: 'forest_stone', label: 'SEKTOR 1: PADANG BUKIT PINGGIR DESA' },
+      { x: 2500,  y: 470, w: 720,  h: 180, type: 'forest_stone', label: 'SEKTOR 1: CEKUNGAN LEMBAH SUNGAI' },
+      { x: 3200,  y: 440, w: 120,  h: 210, type: 'stepped_terrace', label: 'SEKTOR 1: TANGGA MULUT GOA' },
+      { x: 3300,  y: 520, w: 980,  h: 180, type: 'forest_stone', label: 'SEKTOR 1: DASAR CEKUNGAN GOA RAHASIA' },
+      { x: 4260,  y: 440, w: 120,  h: 210, type: 'stepped_terrace', label: 'SEKTOR 1: TANGGA KELUAR GOA' },
+      { x: 4360,  y: 440, w: 900,  h: 180, type: 'forest_stone', label: 'SEKTOR 1: DASAR KAKI TEBING GLEMS' },
+      { x: 5240,  y: 420, w: 960,  h: 200, type: 'forest_stone', label: 'SEKTOR 1: TERAS POS PENJAGAAN AOI' },
+      { x: 6180,  y: 440, w: 854,  h: 180, type: 'forest_stone', label: 'SEKTOR 1: ARENA PENDEKAR TOMBAK MISTERIUS' },
+      { x: 7034,  y: 470, w: 720,  h: 180, type: 'forest_stone', label: 'PERJALANAN PANJANG: LERENG NGARAI PURBA' },
+      { x: 7734,  y: 510, w: 920,  h: 180, type: 'forest_stone', label: 'PERJALANAN PANJANG: CEKUNGAN LEMBAH ANGIN' },
+      { x: 8634,  y: 410, w: 920,  h: 220, type: 'forest_stone', label: 'PERJALANAN PANJANG: DATARAN TINGGI NGARAI' },
+      { x: 9534,  y: 450, w: 986,  h: 180, type: 'forest_stone', label: 'PERJALANAN PANJANG: LERENG SEKTOR 2' },
+      { x: 10500, y: 430, w: 920,  h: 190, type: 'forest_stone', label: 'SEKTOR 2: GERBANG SAKURA' },
+      { x: 11400, y: 470, w: 920,  h: 180, type: 'forest_stone', label: 'SEKTOR 2: CEKUNGAN LEMBAH KUIL BULAN' },
+      { x: 12300, y: 420, w: 1220, h: 210, type: 'forest_stone', label: 'SEKTOR 2: KANOPI HUTAN BINTANG' },
+      { x: 13500, y: 460, w: 1220, h: 180, type: 'forest_stone', label: 'SEKTOR 2: PELATARAN SANCTUM MATAHARI' },
+      { x: 14700, y: 430, w: 920,  h: 200, type: 'forest_stone', label: 'SEKTOR 2: PELATARAN PINTU SEGEL SAKURA' },
+      { x: 15600, y: 440, w: 854,  h: 180, type: 'forest_stone', label: 'SEKTOR 2: SANCTUM AKHIR & TAHTA CHIMERA' },
+      { x: 16454, y: 440, w: 546,  h: 180, type: 'forest_stone', label: 'SEKTOR 2: HALAMAN KEMENANGAN AKHIR' },
 
       // ==========================================================
       // MULTI-TIERED GROUNDED ARCHITECTURE & SACRED CELESTIAL ISLANDS
       // ==========================================================
       // --- SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL (0 .. 1800) ---
       { x: 80,   y: 330, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII DEPAN' },
-      { x: 320,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 1 // ATAP TILED' },
-      { x: 580,  y: 250, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 1' },
-      { x: 820,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 2 // ATAP THATCHED' },
-      { x: 1080, y: 220, w: 160, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG PENGINTAI' },
-      { x: 1360, y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH TETUA GENJI' },
-      { x: 1640, y: 330, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON DESA' },
+      { x: 340,  y: 320, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 1 // ATAP TILED' },
+      { x: 620,  y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 1' },
+      { x: 880,  y: 320, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 2 // ATAP THATCHED' },
+      { x: 1140, y: 220, w: 150, h: 26,  type: 'watchtower',          label: 'MENARA PENGAWAS DESA' },
+      { x: 1380, y: 280, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH TETUA GENJI' },
+      { x: 1680, y: 310, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON DESA' },
 
-      // --- SEKTOR 1: HIDDEN PLACE PARKOUR // PUNCAK MASTER GLEMS (1900 .. 2900) ---
-      { x: 1940, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TANGGA KAKI TEBING GLEMS' },
-      { x: 2120, y: 290, w: 130, h: 22,  type: 'hanging_wood_banner', label: 'BALOK TEBING TINGKAT 1' },
-      { x: 2300, y: 230, w: 140, h: 24,  type: 'floating_island',     label: 'PULAU TEBING TINGKAT 2' },
-      { x: 2160, y: 160, w: 130, h: 22,  type: 'hanging_wood_banner', label: 'BALOK TEBING TINGKAT 3' },
-      { x: 2360, y: 110, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN TALI MENUJU PUNCAK' },
-      { x: 2560, y: 80,  w: 180, h: 26,  type: 'shrine_pavilion',     label: 'PUNCAK PERTAPAAN MASTER GLEMS' },
+      // --- SEKTOR 1: OBSTACLE MOUNDS & SUNKEN STREAM (1800 .. 3300) ---
+      { x: 2160, y: 390, w: 120, h: 50,  type: 'forest_stone',        label: 'RINTANGAN BATU RUNTUH 1' },
+      { x: 2340, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK LOMPATAN BUKIT' },
+      { x: 2780, y: 420, w: 130, h: 50,  type: 'tree_root',           label: 'RINTANGAN BATANG POHON' },
+      { x: 2980, y: 330, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN TALI SUNGAI BATU' },
 
-      // --- SEKTOR 1: GOA RAHASIA // ALTAR GULUNGAN HIRAISHIN (3000 .. 4400) ---
-      { x: 3050, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'MULUT GOA RAHASIA' },
-      { x: 3260, y: 320, w: 150, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM GOA TINGKAT 1' },
-      { x: 3480, y: 250, w: 140, h: 26,  type: 'floating_island',     label: 'BATU KRISTAL GOA' },
-      { x: 3700, y: 320, w: 150, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM GOA TINGKAT 2' },
-      { x: 3900, y: 490, w: 200, h: 30,  type: 'stone_bridge',        label: 'ALTAR RUANG TERDALAM GOA' },
-      { x: 4180, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA KELUAR GOA' },
-      { x: 4400, y: 330, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG POS PENJAGA AOI' },
+      // --- SEKTOR 1: GOA RAHASIA // ALTAR GULUNGAN HIRAISHIN (3300 .. 4300) ---
+      { x: 3380, y: 160, w: 900, h: 40,  type: 'ruin_stone',          label: 'ATAP BATU GOA RAHASIA' },
+      { x: 3460, y: 420, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK GOA TINGKAT 1' },
+      { x: 3680, y: 340, w: 150, h: 26,  type: 'floating_island',     label: 'BATU KRISTAL GOA' },
+      { x: 3900, y: 260, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK GOA TINGKAT 2' },
+      { x: 4050, y: 470, w: 180, h: 50,  type: 'stone_bridge',        label: 'ALTAR GULUNGAN HIRAISHIN' },
 
-      // --- SEKTOR 1 BOSS ARENA: PENDEKAR TOMBAK MISTERIUS (4750 .. 5550) ---
-      { x: 4860, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KIRI' },
-      { x: 5240, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KANAN' },
-      { x: 5480, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS KELUAR ARENA TOMBAK' },
+      // --- SEKTOR 1: DINDING TEBING PARKOUR (WALL JUMP) & PUNCAK MASTER GLEMS (4360 .. 5200) ---
+      { x: 4420, y: 80,  w: 32,  h: 360, type: 'ruin_wall',           label: 'DINDING TEBING KIRI (WALL JUMP)' },
+      { x: 4560, y: 80,  w: 32,  h: 360, type: 'ruin_wall',           label: 'DINDING TEBING KANAN (WALL JUMP)' },
+      { x: 4390, y: 80,  w: 220, h: 22,  type: 'ruin_stone',          label: 'BIBIR TEBING ATAS' },
+      { x: 4660, y: 110, w: 150, h: 22,  type: 'rope_bridge',         label: 'JEMBATAN TALI PERTAPAAN' },
+      { x: 4840, y: 95,  w: 110, h: 24,  type: 'floating_island',     label: 'BATU APUNG SAKTI' },
+      { x: 4970, y: 80,  w: 180, h: 26,  type: 'shrine_pavilion',     label: 'PUNCAK PERTAPAAN MASTER GLEMS' },
+      { x: 5180, y: 150, w: 120, h: 22,  type: 'floating_island',     label: 'BATU TURUN 1' },
+      { x: 5330, y: 230, w: 120, h: 22,  type: 'floating_island',     label: 'BATU TURUN 2' },
+      { x: 5480, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK TURUN 3' },
 
-      // --- PERJALANAN PANJANG: NGARAI PURBA & JEMBATAN KABUT (5600 .. 8800) ---
-      { x: 5760, y: 330, w: 200, h: 110, type: 'grand_gatehouse',     label: 'GERBANG NGARAI PURBA' },
-      { x: 6060, y: 260, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS JURANG' },
-      { x: 6280, y: 210, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 1' },
-      { x: 6580, y: 160, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 1' },
-      { x: 6820, y: 230, w: 200, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN LEMBAH ANGIN' },
-      { x: 7100, y: 320, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL PENJAGA ANGIN' },
-      { x: 7380, y: 240, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGINTAI BARAT' },
-      { x: 7640, y: 190, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 2' },
-      { x: 7940, y: 150, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 2' },
-      { x: 8240, y: 320, w: 200, h: 120, type: 'grand_gatehouse',     label: 'GERBANG BATU PERBATASAN SEKTOR 2' },
-      { x: 8540, y: 340, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SEKTOR 2' },
+      // --- SEKTOR 1: POS PENJAGAAN AOI (5700 .. 6180) ---
+      { x: 5740, y: 260, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS PERBATASAN' },
+      { x: 5900, y: 310, w: 160, h: 24,  type: 'yamamon_gate',        label: 'POS PENJAGAAN AOI' },
 
-      // --- SEKTOR 2: MISI TIGA SEGEL SAKURA & BENTENG PURBA (8800 .. 14400) ---
-      // Wilayah Altar 1: Segel Bulan (10220)
-      { x: 8960,  y: 330, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL GERBANG SAKURA' },
-      { x: 9240,  y: 260, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG SEKTOR 2' },
-      { x: 9520,  y: 360, w: 200, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN TAIKO SEKTOR 2' },
-      { x: 9820,  y: 280, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS SEGEL 1' },
-      { x: 10120, y: 240, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BULAN' },
+      // --- SEKTOR 1 BOSS ARENA: PENDEKAR TOMBAK MISTERIUS (6180 .. 7034) ---
+      // Hollow Knight Room Camera: 854px wide, frames exactly onto screen!
+      { x: 6300, y: 320, w: 140, h: 22,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KIRI' },
+      { x: 6540, y: 240, w: 140, h: 22,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK TENGAH' },
+      { x: 6780, y: 320, w: 140, h: 22,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KANAN' },
 
-      // Wilayah Altar 2: Segel Bintang (12420)
-      { x: 10520, y: 340, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR BERINGIN SEKTOR 2' },
-      { x: 10820, y: 260, w: 200, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR RAKSASA' },
-      { x: 11140, y: 180, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU AWAN MISTIS' },
-      { x: 11440, y: 250, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS BINTANG' },
-      { x: 11720, y: 310, w: 200, h: 24,  type: 'stone_bridge',        label: 'JEMBATAN BATU BINTANG' },
-      { x: 12040, y: 350, w: 150, h: 80,  type: 'stepped_terrace',     label: 'TANGGA HUTAN SEGEL' },
-      { x: 12320, y: 200, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BINTANG' },
+      // --- PERJALANAN PANJANG: NGARAI PURBA & JEMBATAN KABUT (7034 .. 10500) ---
+      { x: 7120,  y: 350, w: 180, h: 120, type: 'grand_gatehouse',     label: 'GERBANG NGARAI BARAT' },
+      { x: 7420,  y: 270, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS JURANG 1' },
+      { x: 7660,  y: 210, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 1' },
+      { x: 7960,  y: 160, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 1' },
+      { x: 8240,  y: 320, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL PENJAGA ANGIN' },
+      { x: 8780,  y: 250, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGINTAI BARAT' },
+      { x: 9040,  y: 190, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 2' },
+      { x: 9340,  y: 150, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 2' },
+      { x: 10100, y: 320, w: 200, h: 130, type: 'grand_gatehouse',     label: 'GERBANG BATU PERBATASAN SEKTOR 2' },
+      { x: 10340, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SEKTOR 2' },
 
-      // Wilayah Altar 3: Segel Matahari (14220)
-      { x: 12720, y: 340, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT MENTARI' },
-      { x: 13000, y: 250, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG MENTARI' },
-      { x: 13280, y: 200, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SAKURA' },
-      { x: 13600, y: 270, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS MENTARI' },
-      { x: 13880, y: 340, w: 180, h: 80,  type: 'stepped_terrace',     label: 'TANGGA SANCTUM MENTARI' },
-      { x: 14120, y: 280, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR MATAHARI' },
+      // --- SEKTOR 2: MISI TIGA SEGEL SAKURA & BENTENG PURBA (10500 .. 15600) ---
+      // Wilayah Altar 1: Segel Bulan (11800)
+      { x: 10650, y: 330, w: 150, h: 24,  type: 'torii_gate',          label: 'GERBANG KUIL SAKURA' },
+      { x: 10920, y: 250, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG SEKTOR 2' },
+      { x: 11200, y: 350, w: 200, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN TAIKO SEKTOR 2' },
+      { x: 11500, y: 280, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS SEGEL 1' },
+      { x: 11720, y: 240, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BULAN' },
 
-      // --- SEKTOR 2 TAHTA SANCTUM: THE BLIGHT CHIMERA (14500 .. 16000) ---
-      { x: 14750, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
-      { x: 15050, y: 230, w: 200, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
-      { x: 15380, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
-      { x: 15650, y: 330, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS KEMENANGAN' },
-      { x: 15800, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
+      // Wilayah Altar 2: Segel Bintang (13600)
+      { x: 12550, y: 330, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR BERINGIN SEKTOR 2' },
+      { x: 12850, y: 250, w: 200, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR RAKSASA' },
+      { x: 13150, y: 170, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU AWAN MISTIS' },
+      { x: 13350, y: 250, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS BINTANG' },
+      { x: 13520, y: 200, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BINTANG' },
+
+      // Wilayah Altar 3: Segel Matahari (15200)
+      { x: 14000, y: 350, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT MENTARI' },
+      { x: 14300, y: 260, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG MENTARI' },
+      { x: 14600, y: 200, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SAKURA' },
+      { x: 14900, y: 270, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS MENTARI' },
+      { x: 15120, y: 280, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR MATAHARI' },
+
+      // Gerbang Segel Sanctum
+      { x: 15420, y: 320, w: 160, h: 110, type: 'grand_gatehouse',     label: 'PINTU GERBANG SEGEL SANCTUM' },
+
+      // --- SEKTOR 2 TAHTA SANCTUM: THE BLIGHT CHIMERA (15600 .. 16454) ---
+      // Hollow Knight Room Camera: 854px wide, frames exactly onto screen!
+      { x: 15680, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
+      { x: 15880, y: 230, w: 290, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
+      { x: 16220, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
+      { x: 16550, y: 330, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS KEMENANGAN' },
+      { x: 16800, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
     ],
     traps: [
-      { x: 2180, y: 490, w: 120, h: 18, type: 'crumble' },
-      { x: 3840, y: 475, w: 32,  h: 18, type: 'spore_pod' },
-      { x: 6640, y: 475, w: 32,  h: 18, type: 'spore_pod' },
-      { x: 10440, y: 475, w: 32, h: 18, type: 'spore_pod' },
-      { x: 13440, y: 475, w: 32, h: 18, type: 'spore_pod' }
+      { x: 2600,  y: 455, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 3680,  y: 320, w: 120, h: 18, type: 'crumble' },
+      { x: 4100,  y: 505, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 8000,  y: 495, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 9150,  y: 390, w: 120, h: 18, type: 'crumble' },
+      { x: 11600, y: 455, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 14200, y: 445, w: 32,  h: 18, type: 'spore_pod' }
     ],
     crates: [
-      { x: 390,   y: 285 },
-      { x: 890,   y: 285 },
-      { x: 1380,  y: 285 },
-      { x: 2680,  y: 55 },
-      { x: 3960,  y: 460 },
-      { x: 4920,  y: 285 },
-      { x: 6120,  y: 235 },
-      { x: 7420,  y: 215 },
-      { x: 8300,  y: 295 },
-      { x: 10180, y: 215 },
-      { x: 12380, y: 175 },
-      { x: 14180, y: 255 },
-      { x: 15120, y: 205 }
+      { x: 390,   y: 295 },
+      { x: 930,   y: 295 },
+      { x: 1420,  y: 255 },
+      { x: 2380,  y: 285 },
+      { x: 3500,  y: 395 },
+      { x: 4080,  y: 440 },
+      { x: 5000,  y: 55 },
+      { x: 6340,  y: 295 },
+      { x: 7460,  y: 245 },
+      { x: 8820,  y: 225 },
+      { x: 11760, y: 215 },
+      { x: 13560, y: 175 },
+      { x: 15160, y: 255 },
+      { x: 15920, y: 205 }
     ],
     checkpoints: [
       { id: 1, x: 180,   y: 420, name: 'GERBANG DESA ASAL',        reached: true,  lastHealTime: 0 },
-      { id: 2, x: 2000,  y: 420, name: 'KAKI TEBING PERTAPAAN',    reached: false, lastHealTime: 0 },
-      { id: 3, x: 5620,  y: 420, name: 'GERBANG NGARAI PURBA',     reached: false, lastHealTime: 0 },
-      { id: 4, x: 8520,  y: 420, name: 'PERBATASAN SEKTOR 2',      reached: false, lastHealTime: 0 },
-      { id: 5, x: 12040, y: 420, name: 'PUSAT HUTAN SEGEL SAKURA', reached: false, lastHealTime: 0 }
+      { id: 2, x: 4320,  y: 420, name: 'KAKI TEBING PERTAPAAN',    reached: false, lastHealTime: 0 },
+      { id: 3, x: 7080,  y: 450, name: 'PINTU MASUK NGARAI PURBA', reached: false, lastHealTime: 0 },
+      { id: 4, x: 10450, y: 410, name: 'PERBATASAN SEKTOR 2',      reached: false, lastHealTime: 0 },
+      { id: 5, x: 14650, y: 410, name: 'PELATARAN SANCTUM SEGEL',  reached: false, lastHealTime: 0 }
     ],
     loreTablets: [
       {
@@ -1104,8 +1157,8 @@ Hanya Ronin yang selamat. Katana pusaka baja tempa ini adalah satu-satunya saksi
       },
       {
         id: 2,
-        x: 3380,
-        y: 430,
+        x: 3450,
+        y: 500,
         title: 'ARSIP 02: PRASASTI GOA RAHASIA',
         sector: 'SEKTOR 1 // GOA BEBATUAN',
         content: `Di kedalaman goa ini tersimpan Gulungan Kuno Dewa Petir Terbang (Hiraishin).
@@ -1115,8 +1168,8 @@ Jelajahi dasar goa dan temukan altar kuno!`
       },
       {
         id: 3,
-        x: 5540,
-        y: 430,
+        x: 6050,
+        y: 410,
         title: 'ARSIP 03: PENDEKAR PENJAGA NGARAI',
         sector: 'SEKTOR 1 // GERBANG ARENA TOMBAK',
         content: `Pendekar tombak misterius ini bukanlah bawahan guild petaka, melainkan seorang pengembara yang menguji kelayakan siapa pun yang hendak melintasi ngarai panjang menuju Sektor 2.
@@ -1125,8 +1178,8 @@ Hanya mereka yang memiliki tekad baja yang diizinkan melangkah lebih jauh.`
       },
       {
         id: 4,
-        x: 8640,
-        y: 430,
+        x: 10550,
+        y: 420,
         title: 'ARSIP 04: LEGENDA TIGA SEGEL SAKURA',
         sector: 'SEKTOR 2 // PERBATASAN GERBANG',
         content: `Kuil Sanctum tempat bersemayamnya The Blight Chimera dilindungi oleh Tiga Segel Kuno:
@@ -1138,54 +1191,56 @@ Aktifkan ketiga altar untuk melenyapkan rintangan segel dan membuka tahta pertem
       }
     ],
     relics: [
-      { id: 1, x: 1080,  y: 190, type: 'hp_core',          name: 'Topeng Rubah Suci Kitsune (+50 HP)', collected: false },
-      { id: 2, x: 2650,  y: 60,  type: 'hp_core',          name: 'Pusaka Petapa Glems (+50 HP)', collected: false },
-      { id: 3, x: 3960,  y: 470, type: 'hiraishin_scroll', name: 'Gulungan Kuno Hiraishin (+40 HP)', collected: false },
-      { id: 4, x: 6580,  y: 130, type: 'hp_core',          name: 'Jimat Magatama Ngarai (+50 HP)', collected: false },
-      { id: 5, x: 11140, y: 150, type: 'solar_core',       name: 'Api Segel Sakura Purba (Overdrive)', collected: false }
+      { id: 1, x: 1080,  y: 210, type: 'hp_core',          name: 'Topeng Rubah Suci Kitsune (+50 HP)', collected: false },
+      { id: 2, x: 5040,  y: 60,  type: 'hp_core',          name: 'Pusaka Petapa Glems (+50 HP)', collected: false },
+      { id: 3, x: 4050,  y: 460, type: 'hiraishin_scroll', name: 'Gulungan Kuno Hiraishin (+40 HP)', collected: false },
+      { id: 4, x: 7960,  y: 130, type: 'hp_core',          name: 'Jimat Magatama Ngarai (+50 HP)', collected: false },
+      { id: 5, x: 13150, y: 140, type: 'solar_core',       name: 'Api Segel Sakura Purba (Overdrive)', collected: false }
     ],
     breakableWalls: [
-      { x: 5700, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
+      { x: 7000, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
     ],
     stationedEnemies: [
-      // Sektor 1: Jalur setelah desa (1700 .. 3000) -- Area awal 0..1600 DAMAI tanpa musuh!
-      { x: 1760, y: 408, type: 'blight_hound' },
-      { x: 1980, y: 256, type: 'wood_stalker' },
-      { x: 2360, y: 408, type: 'blight_hound' },
-      { x: 2780, y: 408, type: 'blight_hound' },
+      // Sektor 1: Jalur setelah desa (1800 .. 3300) -- Area awal 0..1800 DAMAI tanpa musuh!
+      { x: 1880, y: 408, type: 'blight_hound' },
+      { x: 2120, y: 280, type: 'wood_stalker' },
+      { x: 2680, y: 438, type: 'blight_hound' },
+      { x: 3040, y: 300, type: 'bramble_drone' },
 
-      // Sektor 1: Area Goa Rahasia (3000 .. 4400)
-      { x: 3180, y: 408, type: 'blight_hound' },
-      { x: 3450, y: 318, type: 'spore_spitter' },
-      { x: 3720, y: 220, type: 'bramble_drone' },
-      { x: 4080, y: 408, type: 'blight_hound' },
-      { x: 4260, y: 280, type: 'spore_spitter' },
+      // Sektor 1: Area Goa Rahasia (3300 .. 4300)
+      { x: 3520, y: 488, type: 'blight_hound' },
+      { x: 3740, y: 310, type: 'spore_spitter' },
+      { x: 3960, y: 230, type: 'bramble_drone' },
+      { x: 4180, y: 488, type: 'blight_hound' },
 
-      // Perjalanan Panjang: Ngarai Purba & Jembatan Kabut (5600 .. 8800)
-      { x: 5880, y: 280, type: 'bramble_drone' },
-      { x: 6140, y: 408, type: 'blight_hound' },
-      { x: 6420, y: 130, type: 'wood_stalker' },
-      { x: 6720, y: 408, type: 'blight_hound' },
-      { x: 7180, y: 240, type: 'spore_spitter' },
-      { x: 7520, y: 408, type: 'blight_hound' },
-      { x: 7860, y: 160, type: 'bramble_drone' },
-      { x: 8180, y: 408, type: 'blight_hound' },
-      { x: 8460, y: 280, type: 'wood_stalker' },
+      // Sektor 1: Kaki Tebing & Pos Aoi (4400 .. 6100)
+      { x: 4700, y: 408, type: 'blight_hound' },
+      { x: 5380, y: 388, type: 'blight_hound' },
+      { x: 5620, y: 280, type: 'spore_spitter' },
 
-      // Sektor 2: Area Tiga Segel Sakura (8800 .. 14400)
-      { x: 9140,  y: 408, type: 'blight_hound' },
-      { x: 9460,  y: 220, type: 'bramble_drone' },
-      { x: 9780,  y: 318, type: 'spore_spitter' },
-      { x: 10420, y: 408, type: 'blight_hound' },
-      { x: 10860, y: 220, type: 'wood_stalker' },
-      { x: 11340, y: 408, type: 'blight_hound' },
-      { x: 11680, y: 260, type: 'spore_spitter' },
-      { x: 12240, y: 408, type: 'blight_hound' },
-      { x: 12640, y: 220, type: 'bramble_drone' },
-      { x: 13180, y: 408, type: 'blight_hound' },
-      { x: 13560, y: 220, type: 'wood_stalker' },
-      { x: 14040, y: 408, type: 'blight_hound' },
-      { x: 14380, y: 240, type: 'spore_spitter' }
+      // Perjalanan Panjang: Ngarai Purba & Jembatan Kabut (7100 .. 10400)
+      { x: 7280, y: 438, type: 'blight_hound' },
+      { x: 7540, y: 240, type: 'wood_stalker' },
+      { x: 7850, y: 478, type: 'blight_hound' },
+      { x: 8120, y: 130, type: 'bramble_drone' },
+      { x: 8400, y: 290, type: 'spore_spitter' },
+      { x: 8850, y: 378, type: 'blight_hound' },
+      { x: 9200, y: 160, type: 'wood_stalker' },
+      { x: 9680, y: 418, type: 'blight_hound' },
+      { x: 10020, y: 290, type: 'spore_spitter' },
+
+      // Sektor 2: Area Tiga Segel Sakura (10500 .. 15500)
+      { x: 10780, y: 398, type: 'blight_hound' },
+      { x: 11100, y: 220, type: 'bramble_drone' },
+      { x: 11450, y: 438, type: 'blight_hound' },
+      { x: 11650, y: 250, type: 'spore_spitter' },
+      { x: 12450, y: 388, type: 'blight_hound' },
+      { x: 12980, y: 220, type: 'wood_stalker' },
+      { x: 13420, y: 220, type: 'bramble_drone' },
+      { x: 13800, y: 428, type: 'blight_hound' },
+      { x: 14250, y: 230, type: 'spore_spitter' },
+      { x: 14850, y: 398, type: 'blight_hound' },
+      { x: 15300, y: 250, type: 'wood_stalker' }
     ]
   },
   2: {
@@ -1457,6 +1512,7 @@ function loadLevel(levelId) {
   isArenaLocked = false;
   isCitadelLocked = false;
   isBossDefeated = false;
+  camera.unlock();
 
   // Reset Sector 2 Altars & Bosses
   sector2Altars.forEach(a => { a.activated = false; });
@@ -2619,14 +2675,17 @@ class Enemy {
     } else if (type === 'boss_spearman') {
       this.w = 54;
       this.h = 68;
-      this.vx = -2.2;
+      this.vx = 0;
       this.hp = 1200;
       this.maxHp = 1200;
       this.phase = 1;
       this.name = 'PENDEKAR TOMBAK MISTERIUS';
       this.isMiniBoss = true;
-      this.thrustCooldown = 80;
-      this.vaultTimer = 0;
+      this.aiState = 'stalking';
+      this.actionTimer = 0;
+      this.telegraphTimer = 0;
+      this.attackType = 'thrust';
+      this.facing = -1;
     } else if (type === 'boss_treant') {
       this.w = 86;
       this.h = 105;
@@ -3105,12 +3164,12 @@ class Enemy {
       return;
     }
 
-    // Level 1 Mini Boss: Blight Fang Behemoth (Ruins Arena: 2600 .. 3200)
-    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Arena: 4750 .. 5550)
+    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Spearman Arena: 6180 .. 7034)
     if (this.type === 'boss_spearman') {
       this.vy += GRAVITY;
       this.x += this.vx;
       this.y += this.vy;
+
       platforms.forEach(p => {
         if (p.type === 'hazard_spikes' || p.type === 'hazard_brambles' || p.type === 'hazard_lava' || p.type === 'hanging_rope') return;
         if (this.x + this.w > p.x && this.x < p.x + p.w &&
@@ -3120,60 +3179,170 @@ class Enemy {
           this.isGrounded = true;
         }
       });
-      if (this.x < 4800) {
-        this.x = 4800;
-        this.vx = Math.abs(this.vx);
-        this.facing = 1;
-      } else if (this.x > 5480) {
-        this.x = 5480;
-        this.vx = -Math.abs(this.vx);
-        this.facing = -1;
+
+      // Keep inside boss chamber (Hollow Knight arena room bounds)
+      if (this.x < 6210) {
+        this.x = 6210;
+        this.vx = 0;
+      } else if (this.x > 7000 - this.w) {
+        this.x = 7000 - this.w;
+        this.vx = 0;
       }
 
+      // Phase 2 transition at 50% HP
       if (this.hp <= 600 && this.phase === 1) {
         this.phase = 2;
         window.soundEngine.playExplosion();
         floatingTexts.push(new FloatingText(this.x, this.y - 35, '⚡ JURUS TOMBAK BADAI PURBA! ⚡', '#f59e0b'));
-      }
-      this.updateBossHud();
-      this.stateTimer++;
-      this.facing = player.x < this.x ? -1 : 1;
-
-      // Pattern 1: Rapid Wind-Piercer Spear Wave
-      if (this.stateTimer % 110 === 50) {
-        window.soundEngine.playKatanaSlash();
-        const dir = this.facing;
-        enemyProjectiles.push(new EnemyProjectile(this.x + (dir === 1 ? this.w + 10 : -20), this.y + 24, dir * 6.5, 0, 'bramble_thorn'));
-        if (this.phase === 2) {
-          enemyProjectiles.push(new EnemyProjectile(this.x + (dir === 1 ? this.w + 10 : -20), this.y + 14, dir * 5.8, -1.8, 'bramble_thorn'));
+        for (let p = 0; p < 25; p++) {
+          particles.push(new Particle(this.x + this.w / 2, this.y + this.h / 2, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, '#facc15', 4, 30));
         }
       }
 
-      // Pattern 2: High Vaulting Spear Plunge
-      if (this.stateTimer % 180 === 130 && this.isGrounded) {
-        this.vy = -12.5;
-        this.vx = this.facing * 5.5;
-        this.isGrounded = false;
-        window.soundEngine.playJump();
-        floatingTexts.push(new FloatingText(this.x, this.y - 25, 'VAULTING PLUNGE!', '#fbbf24'));
+      this.updateBossHud();
+      this.stateTimer++;
+
+      const dx = player.x - this.x;
+      const dist = Math.abs(dx);
+      const targetFacing = dx < 0 ? -1 : 1;
+
+      if (!this.aiState) {
+        this.aiState = 'stalking';
+        this.actionTimer = 0;
+        this.telegraphTimer = 0;
       }
 
-      // When landing from vault: shockwave!
-      if (!this.isGrounded && this.vy > 6) {
-        this.isLunging = true;
-      } else if (this.isLunging && this.isGrounded) {
-        this.isLunging = false;
-        window.soundEngine.playExplosion();
-        enemyProjectiles.push(new EnemyProjectile(this.x - 10, this.y + this.h - 12, -5.0, 0, 'shockwave'));
-        enemyProjectiles.push(new EnemyProjectile(this.x + this.w + 10, this.y + this.h - 12, 5.0, 0, 'shockwave'));
+      // STATE MACHINE: Disciplined Duelist with Wind-up Telegraphs
+      if (this.aiState === 'stalking') {
+        this.facing = targetFacing;
+        this.actionTimer++;
+
+        // Stalks towards player; takes ready guard stance when within 140px (does NOT wander aimlessly)
+        if (dist > 140) {
+          this.vx = this.facing * (this.phase === 2 ? 3.0 : 2.2);
+        } else {
+          this.vx = 0;
+        }
+
+        const attackInterval = this.phase === 2 ? 42 : 58;
+        if (this.actionTimer >= attackInterval) {
+          this.actionTimer = 0;
+          this.telegraphTimer = 0;
+
+          if (dist < 150) {
+            // Close range: choose between thrust stab (60%) and sweeping cleave (40%)
+            this.aiState = Math.random() < 0.6 ? 'telegraph_thrust' : 'telegraph_sweep';
+          } else {
+            // Far range: vaulting plunge (50%) or lunging thrust (50%)
+            this.aiState = (Math.random() < 0.5 && this.isGrounded) ? 'telegraph_vault' : 'telegraph_thrust';
+          }
+        }
+      } else if (this.aiState === 'telegraph_thrust') {
+        // ABA-ABA 1: Pulls spear back, flashes '!' warning and gleaming star tip
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        const maxTelegraph = this.phase === 2 ? 22 : 30; // ~0.5s reaction window!
+        if (this.telegraphTimer >= maxTelegraph) {
+          this.aiState = 'thrusting';
+          this.actionTimer = 0;
+          this.vx = this.facing * (this.phase === 2 ? 9.2 : 7.8);
+          window.soundEngine.playKatanaSlash();
+        }
+      } else if (this.aiState === 'thrusting') {
+        // Fast melee lunge forward with spear
+        this.actionTimer++;
+        const spearHitboxX = this.facing === 1 ? this.x + this.w : this.x - 50;
+        if (player.x + player.w > spearHitboxX && player.x < spearHitboxX + 50 &&
+            Math.abs(player.y - this.y) < 50) {
+          if (!player.isInvulnerable) {
+            player.hp = Math.max(0, player.hp - (this.phase === 2 ? 26 : 20));
+            player.isInvulnerable = true;
+            player.invulnTimer = 40;
+            player.vx = this.facing * 7;
+            player.vy = -3;
+            window.soundEngine.playHit();
+            floatingTexts.push(new FloatingText(player.x, player.y - 15, `-${this.phase === 2 ? 26 : 20} HP (SPEAR THRUST)`, '#ef4444'));
+          }
+        }
+        if (this.actionTimer >= 14) {
+          this.vx = 0;
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'telegraph_sweep') {
+        // ABA-ABA 2: Raises spear overhead with warning circle
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        const maxTelegraph = this.phase === 2 ? 24 : 32;
+        if (this.telegraphTimer >= maxTelegraph) {
+          this.aiState = 'sweeping';
+          this.actionTimer = 0;
+          window.soundEngine.playKatanaSlash();
+          if (this.phase === 2) {
+            // Phase 2 wind razor projectile
+            enemyProjectiles.push(new EnemyProjectile(this.x + (this.facing === 1 ? this.w + 10 : -20), this.y + 24, this.facing * 6.5, 0, 'bramble_thorn'));
+          }
+        }
+      } else if (this.aiState === 'sweeping') {
+        this.actionTimer++;
+        this.vx = this.facing * 2.2;
+        const sweepX = this.facing === 1 ? this.x + this.w - 10 : this.x - 60;
+        if (player.x + player.w > sweepX && player.x < sweepX + 70 &&
+            Math.abs(player.y - this.y) < 55) {
+          if (!player.isInvulnerable) {
+            player.hp = Math.max(0, player.hp - (this.phase === 2 ? 28 : 22));
+            player.isInvulnerable = true;
+            player.invulnTimer = 40;
+            player.vx = this.facing * 6;
+            player.vy = -3;
+            window.soundEngine.playHit();
+            floatingTexts.push(new FloatingText(player.x, player.y - 15, `-${this.phase === 2 ? 28 : 22} HP (SPEAR SWEEP)`, '#ef4444'));
+          }
+        }
+        if (this.actionTimer >= 16) {
+          this.vx = 0;
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'telegraph_vault') {
+        // ABA-ABA 3: Plants spear tip into ground and crouches down to leap
+        this.vx = 0;
+        this.facing = targetFacing;
+        this.telegraphTimer++;
+        if (this.telegraphTimer >= 26) {
+          this.aiState = 'vaulting';
+          this.vy = -13.5;
+          this.vx = this.facing * Math.min(Math.max(dist / 24, 3.5), 6.5);
+          this.isGrounded = false;
+          window.soundEngine.playJump();
+          floatingTexts.push(new FloatingText(this.x, this.y - 25, 'VAULTING PLUNGE!', '#fbbf24'));
+        }
+      } else if (this.aiState === 'vaulting') {
+        if (!this.isGrounded && this.vy > 5) {
+          this.isPlunging = true;
+        }
+        if (this.isPlunging && this.isGrounded) {
+          this.isPlunging = false;
+          this.vx = 0;
+          window.soundEngine.playExplosion();
+          enemyProjectiles.push(new EnemyProjectile(this.x - 10, this.y + this.h - 12, -5.2, 0, 'shockwave'));
+          enemyProjectiles.push(new EnemyProjectile(this.x + this.w + 10, this.y + this.h - 12, 5.2, 0, 'shockwave'));
+          this.aiState = 'recovery';
+          this.actionTimer = 0;
+        }
+      } else if (this.aiState === 'recovery') {
+        // Punish window! Boss resets footing, giving player time to attack
+        this.vx = 0;
+        this.actionTimer++;
+        const recoverTime = this.phase === 2 ? 18 : 28;
+        if (this.actionTimer >= recoverTime) {
+          this.aiState = 'stalking';
+          this.actionTimer = 0;
+        }
       }
 
-      // Pattern 3: Phase 2 Piercing Spear Thrust Dash
-      if (this.phase === 2 && this.stateTimer % 160 === 90) {
-        this.vx = this.facing * 7.5;
-        window.soundEngine.playDash();
-        floatingTexts.push(new FloatingText(this.x, this.y - 20, 'SPEAR THRUST LUNGE!', '#ef4444'));
-      }
       return;
     }
 
@@ -4411,21 +4580,78 @@ class Enemy {
       ctx.fillRect(eyeX, by + 14 + breathe, 8, 3.5);
       ctx.shadowBlur = 0;
 
-      // 6. 75px Jumonji Cross-Spear (Yari)
-      const spearX = dir === 1 ? bx + bw - 4 : bx + 4;
-      const spearTipX = spearX + dir * 42;
-      const spearTipY = by + 8;
+      // 6. Visual Telegraph Warning '!' Badge
+      if (this.aiState && this.aiState.startsWith('telegraph_')) {
+        const pulse = Math.sin(Date.now() / 90) * 2;
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowColor = '#f59e0b';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(bx + bw / 2, by - 22 + pulse, 11, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('!', bx + bw / 2, by - 21 + pulse);
+      }
 
+      // 7. Dynamic 75px Jumonji Cross-Spear (Yari) with Attack Postures
+      const spearX = dir === 1 ? bx + bw - 4 : bx + 4;
+      let spearBaseX = spearX - dir * 26;
+      let spearBaseY = by + bh;
+      let spearTipX = spearX + dir * 42;
+      let spearTipY = by + 8;
+
+      if (this.aiState === 'telegraph_thrust') {
+        // Pulled back behind hip in preparation for lunge
+        spearBaseX = spearX + dir * 16;
+        spearBaseY = by + bh - 10;
+        spearTipX = spearX - dir * 28;
+        spearTipY = by + 26;
+      } else if (this.aiState === 'thrusting') {
+        // Fully extended forward piercing strike
+        spearBaseX = spearX - dir * 18;
+        spearBaseY = by + 28;
+        spearTipX = spearX + dir * 54;
+        spearTipY = by + 24;
+      } else if (this.aiState === 'telegraph_sweep') {
+        // Raised high overhead
+        spearBaseX = bx + bw / 2 - dir * 14;
+        spearBaseY = by + 32;
+        spearTipX = bx + bw / 2 + dir * 18;
+        spearTipY = by - 26;
+      } else if (this.aiState === 'sweeping') {
+        // Swept in downward cleave
+        spearBaseX = spearX - dir * 15;
+        spearBaseY = by + bh - 10;
+        spearTipX = spearX + dir * 46;
+        spearTipY = by + 34;
+      } else if (this.aiState === 'telegraph_vault') {
+        // Planted vertically into the ground
+        spearBaseX = bx + bw / 2;
+        spearBaseY = by - 12;
+        spearTipX = bx + bw / 2;
+        spearTipY = by + bh + 4;
+      }
+
+      // Spear Shaft
       ctx.strokeStyle = '#92400e';
       ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.moveTo(spearX - dir * 26, by + bh);
+      ctx.moveTo(spearBaseX, spearBaseY);
       ctx.lineTo(spearTipX, spearTipY);
       ctx.stroke();
 
+      // Red Tassel (Fusahimo)
       ctx.fillStyle = '#dc2626';
       ctx.fillRect(spearTipX - dir * 8 - 3, spearTipY + 4, 6, 8);
 
+      // Steel Cross-Blade (Jumonji Yari Blade)
       ctx.strokeStyle = '#e2e8f0';
       ctx.fillStyle = '#ffffff';
       ctx.lineWidth = 2.5;
@@ -4439,12 +4665,44 @@ class Enemy {
       ctx.fill();
       ctx.stroke();
 
+      // Cross guard wings
       ctx.beginPath();
       ctx.moveTo(spearTipX - 6, spearTipY - 10);
       ctx.lineTo(spearTipX + 6, spearTipY + 6);
       ctx.stroke();
       ctx.shadowBlur = 0;
 
+      // Telegraph Gleaming Spark ✦ at spearhead
+      if (this.aiState && this.aiState.startsWith('telegraph_')) {
+        ctx.fillStyle = '#facc15';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 14;
+        ctx.font = 'bold 16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('✦', spearTipX + dir * 12, spearTipY - 8);
+        ctx.shadowBlur = 0;
+      }
+
+      // Thrusting motion streak
+      if (this.aiState === 'thrusting') {
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(spearTipX - dir * 45, spearTipY);
+        ctx.lineTo(spearTipX + dir * 18, spearTipY);
+        ctx.stroke();
+      }
+
+      // Sweeping wind arc
+      if (this.aiState === 'sweeping') {
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.8)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(bx + bw / 2, by + bh / 2, 48, dir === 1 ? -0.8 : Math.PI - 0.8, dir === 1 ? 1.2 : Math.PI + 1.2);
+        ctx.stroke();
+      }
+
+      // Phase 2 Wind Aura
       if (this.phase === 2) {
         ctx.strokeStyle = '#facc15';
         ctx.lineWidth = 1.5;
@@ -6004,8 +6262,8 @@ function updatePlayer() {
 
     // Sector 2 Sakura Barrier pushback if not all 3 seals are unlocked
     const activeCount = sector2Altars.filter(a => a.activated).length;
-    if (activeCount < 3 && player.x > 14420 && player.x < 14540) {
-      player.x = 14420;
+    if (activeCount < 3 && player.x > 15420 && player.x < 15540) {
+      player.x = 15420;
       player.vx = -4.5;
       if (Math.random() < 0.04) {
         floatingTexts.push(new FloatingText(player.x, player.y - 25, '⚠ SEGEL SAKURA AKTIF (' + activeCount + '/3)! AKTIFKAN SEMUA 3 ALTAR! ⚠', '#f43f5e'));
@@ -6042,7 +6300,7 @@ function updatePlayer() {
     if (player.x + player.w > p.x &&
         player.x < p.x + p.w &&
         player.y + player.h >= p.y &&
-        player.y + player.h - player.vy <= p.y + 16) {
+        player.y + player.h - player.vy <= p.y + 24) {
       
       if (!player.isGrounded && player.vy > 1.8) {
         player.scaleY = 0.74;
@@ -6377,6 +6635,7 @@ function destroyEnemy(enemy, index) {
     defeatedBosses.spearman = true;
     levelBarriers.miniBossLeft.active = false;
     levelBarriers.miniBossRight.active = false;
+    camera.unlock();
     const bossHud = document.getElementById('boss-hud-bar');
     if (bossHud) bossHud.classList.add('hidden');
     score += 2500;
@@ -6398,6 +6657,7 @@ function destroyEnemy(enemy, index) {
     defeatedBosses.treant = true;
     levelBarriers.miniBossLeft.active = false;
     levelBarriers.miniBossRight.active = false;
+    camera.unlock();
     const bossHud = document.getElementById('boss-hud-bar');
     if (bossHud) bossHud.classList.add('hidden');
     score += 2500;
@@ -6421,6 +6681,7 @@ function destroyEnemy(enemy, index) {
     isBossDefeated = true;
     levelBarriers.bossLeft.active = false;
     levelBarriers.bossRight.active = false;
+    camera.unlock();
     const bossHud = document.getElementById('boss-hud-bar');
     if (bossHud) bossHud.classList.add('hidden');
     score += 5000;
@@ -6479,29 +6740,35 @@ function destroyEnemy(enemy, index) {
 
 function updateEnemies() {
   if (currentLevelId === 1) {
-    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Spearman: 4750 .. 5550)
-    if (player.x > 4750 && player.x < 5550 && !defeatedBosses.spearman) {
+    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Spearman Arena: 6180 .. 7034)
+    if (player.x > 6180 && player.x < 7034 && !defeatedBosses.spearman) {
       if (!enemies.some(e => e.type === 'boss_spearman')) {
-        enemies.push(new Enemy(5150, 360, 'boss_spearman'));
+        enemies.push(new Enemy(6650, 360, 'boss_spearman'));
       }
-      if (player.x > 4790 && player.x < 5510 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
+      if (!camera.isLocked) {
+        camera.lock(6180, 50);
+      }
+      if (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active) {
         levelBarriers.miniBossLeft.active = true;
         levelBarriers.miniBossRight.active = true;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(player.x, player.y - 35, '⚠ GERBANG TERKUNCI! PENDEKAR TOMBAK MISTERIUS MENGHADANG! ⚠', '#f59e0b'));
+        floatingTexts.push(new FloatingText(player.x, player.y - 35, '⚠ ARENA TERKUNCI! PENDEKAR TOMBAK MISTERIUS MENGHADANG! ⚠', '#f59e0b'));
       }
     }
 
-    // Level 1 Main Boss: The Blight Chimera (Sanctum: 14500 .. 15700)
-    if (player.x > 14600 && player.x < 15650 && !defeatedBosses.chimera && !isBossDefeated) {
+    // Level 1 Main Boss: The Blight Chimera (Sanctum Arena: 15600 .. 16454)
+    if (player.x > 15600 && player.x < 16454 && !defeatedBosses.chimera && !isBossDefeated) {
       if (!enemies.some(e => e.type === 'boss_chimera')) {
-        enemies.push(new Enemy(15100, 324, 'boss_chimera'));
+        enemies.push(new Enemy(16050, 324, 'boss_chimera'));
       }
-      if (player.x > 14630 && player.x < 15600 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
+      if (!camera.isLocked) {
+        camera.lock(15600, 50);
+      }
+      if (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active) {
         levelBarriers.bossLeft.active = true;
         levelBarriers.bossRight.active = true;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SPIRA ABYSS MENGURUNG SANCTUM! THE BLIGHT CHIMERA! 👑', '#a855f7'));
+        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SANCTUM TERKUNCI! THE BLIGHT CHIMERA! 👑', '#a855f7'));
       }
     }
   } else {
@@ -6830,7 +7097,7 @@ function drawLevel1ForestParallax(cam) {
 const level1NPCs = [
   {
     id: 'ren',
-    x: 540,
+    x: 750,
     y: 440,
     name: 'Ren (Penyintas Desa)',
     speech: 'Ronin! Semalam guild bayangan membakar desa kita... Pasukan misterius bergerak ke arah ngarai timur!',
@@ -6839,17 +7106,17 @@ const level1NPCs = [
   },
   {
     id: 'genji',
-    x: 1260,
-    y: 440,
+    x: 1450,
+    y: 400,
     name: 'Kakek Genji (Tetua Desa)',
-    speech: 'Ada Goa Rahasia di tebing timur! Dan di puncak tebing ada Master Glems sang pertapa dewa petir!',
+    speech: 'Ada Goa Rahasia di tebing timur! Dan di balik tebing ada Master Glems di puncak pertapaan petir!',
     hairColor: '#e2e8f0',
     tunicColor: '#78350f',
     isElder: true
   },
   {
     id: 'glems',
-    x: 2620,
+    x: 4980,
     y: 80,
     name: 'Master Glems (Pertapa Petir)',
     speech: 'Bawa Gulungan Kuno dari Goa Rahasia untuk mempelajari Jurus Hiraishin!',
@@ -6859,8 +7126,8 @@ const level1NPCs = [
   },
   {
     id: 'aoi',
-    x: 4420,
-    y: 440,
+    x: 5950,
+    y: 420,
     name: 'Aoi (Penjaga Gerbang Ngarai)',
     speech: 'Di balik gerbang ada pendekar tombak misterius yang menghadang jalan menuju Sektor 2!',
     hairColor: '#10b981',
@@ -10749,20 +11016,45 @@ function drawProjectiles() {
     }
     ctx.globalAlpha = alpha;
 
-    // Clean, simple, and elegant katana blade slash arc
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 3.5;
-    ctx.beginPath();
-    ctx.arc(0, 0, s.radius * 0.82, -Math.PI * 0.35, Math.PI * 0.35);
-    ctx.stroke();
+    // Sleek, thin, and razor-sharp crescent blade arc
+    const rOuter = s.radius;
+    const rInner = s.radius * 0.76; // Sleek thin blade width
+    const sweepAngle = Math.PI * 0.44; // Wide 160-degree majestic katana sweep
 
-    // Subtle silver-white blade sheen
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    // 1. Silver-white gradient blade body with tapered needle tips
+    const grad = ctx.createRadialGradient(0, 0, rInner, 0, 0, rOuter);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 0.05)');
+    grad.addColorStop(0.35, 'rgba(241, 245, 249, 0.65)');
+    grad.addColorStop(0.8, 'rgba(255, 255, 255, 0.95)');
+    grad.addColorStop(1, '#ffffff');
+
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(0, 0, s.radius * 0.85, -Math.PI * 0.35, Math.PI * 0.35);
-    ctx.arc(0, 0, s.radius * 0.72, Math.PI * 0.35, -Math.PI * 0.35, true);
+    ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
+    ctx.arc(0, 0, rInner, sweepAngle, -sweepAngle, true);
     ctx.closePath();
     ctx.fill();
+
+    // 2. Razor-sharp cutting edge stroke
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2.4;
+    ctx.beginPath();
+    ctx.arc(0, 0, rOuter, -sweepAngle, sweepAngle);
+    ctx.stroke();
+
+    // 3. Crisp inner blade contour
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(0, 0, rInner, -sweepAngle, sweepAngle);
+    ctx.stroke();
+
+    // 4. Subtle razor motion streak arc
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    ctx.arc(0, 0, rOuter + 4, -sweepAngle * 0.85, sweepAngle * 0.85);
+    ctx.stroke();
 
     ctx.restore();
   }
@@ -12848,6 +13140,14 @@ function respawnAtCheckpoint() {
 
   // Clear corpses and respawn regular stationed enemies (Hollow Knight style)
   respawnWorldEnemies();
+
+  camera.unlock();
+  levelBarriers.miniBossLeft.active = false;
+  levelBarriers.miniBossRight.active = false;
+  levelBarriers.bossLeft.active = false;
+  levelBarriers.bossRight.active = false;
+  const bossHud = document.getElementById('boss-hud-bar');
+  if (bossHud) bossHud.classList.add('hidden');
 
   camera.x = Math.max(0, Math.min(MAP_WIDTH - V_WIDTH, player.x - V_WIDTH * 0.4));
   camera.y = Math.max(0, Math.min(MAP_HEIGHT - V_HEIGHT, player.y - V_HEIGHT * 0.54));
