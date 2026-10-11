@@ -115,10 +115,11 @@ const HEROES = {
     maxEnergy: 100,
     weapon: 'Folded Steel Soul Katana',
     attackType: 'KATANA_SMEAR',
-    hasActiveSkill: false,
-    skillName: 'JURUS PEDANG BAYANGAN',
-    skillDesc: 'Pendekar tunggal penyintas kehancuran desa. Memiliki 3 ilmu bela diri legendaris: Bullet Deflect (Parry pedang memantulkan peluru), Shadow Dash (melesat tak tersentuh bayangan), dan Soul Vengeance (+3 HP lifesteal per tebasan).',
-    passiveDesc: 'Deflect Peluru + i-Frame Shadow Dash + Soul Lifesteal (+3 HP)',
+    hasActiveSkill: true,
+    skillName: 'HIRAISHIN NO JUTSU',
+    skillCooldownMax: 180,
+    skillDesc: 'Jurus Dewa Petir Terbang warisan Master Glems. Berteleportasi seketika menembus dimensi sejauh 260px dan menebas semua musuh di jalurnya dengan kilatan petir emas!',
+    passiveDesc: 'Deflect Peluru + i-Frame Dash Spam + Soul Lifesteal (+3 HP) + Hiraishin no Jutsu (Key E)',
     desc: 'Pendekar pedang bertopi jerami (Kasa) penyintas kehancuran desa leluhur. Mengembara menuntut balas dendam dengan katana baja tempa pusakanya. Menangkis proyektil musuh, melompat pogo di udara layaknya Hollow Knight, dan menyerap jiwa musuh.',
     skins: [
       { id: 'default', name: 'Sumi-e Wanderer (Ink & Silver)', tag: 'ORIGINAL RONIN', tierClass: 'skin-badge-legend', themeColor: '#f8fafc', secondaryColor: '#dc2626' },
@@ -915,16 +916,17 @@ const arenaGates = {
 };
 
 const levelBarriers = {
-  miniBossLeft: { x: 4560, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
-  miniBossRight: { x: 5240, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
-  bossLeft: { x: 9460, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' },
-  bossRight: { x: 10420, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' }
+  miniBossLeft: { x: 4750, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
+  miniBossRight: { x: 5550, y: 220, w: 26, h: 260, active: false, type: 'bramble' },
+  bossLeft: { x: 14500, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' },
+  bossRight: { x: 15700, y: 210, w: 28, h: 280, active: false, type: 'abyssal_spire' }
 };
 
 let isArenaLocked = false;
 let isCitadelLocked = false;
 let isBossDefeated = false;
 let defeatedBosses = {
+  spearman: false,
   treant: false,
   chimera: false,
   mech: false,
@@ -933,11 +935,24 @@ let defeatedBosses = {
   goliath: false,
   xenos: false
 };
+
+let sector2Seals = {
+  seal1: false, // Altar Bulan (10220)
+  seal2: false, // Altar Bintang (12420)
+  seal3: false  // Altar Matahari (14220)
+};
+
+const sector2Altars = [
+  { id: 'seal1', name: 'Altar Segel Bulan', kanji: '月', x: 10220, y: 240, activated: false, runeColor: '#38bdf8' },
+  { id: 'seal2', name: 'Altar Segel Bintang', kanji: '星', x: 12420, y: 200, activated: false, runeColor: '#c084fc' },
+  { id: 'seal3', name: 'Altar Segel Matahari', kanji: '日', x: 14220, y: 280, activated: false, runeColor: '#f59e0b' }
+];
+
 let activeBossEnemy = null;
 let activeLoreTabletNear = null;
 
 const goalPortal = {
-  x: 10650,
+  x: 15850,
   y: 350,
   w: 64,
   h: 90,
@@ -953,110 +968,128 @@ const LEVELS = {
     name: 'LEVEL 1 // THE ORIGIN',
     title: 'RUINS OF VERDANT GLADE',
     subtitle: 'LEMBAH SUCI RERUNTUHAN ASAL // INVESTIGASI KEHANCURAN & BALAS DENDAM',
-    mapWidth: 10800,
+    mapWidth: 16000,
     mapHeight: 900,
     playerStart: { x: 120, y: 350 },
-    goalPortal: { x: 10650, y: 350, w: 64, h: 90, active: true },
+    goalPortal: { x: 15850, y: 350, w: 64, h: 90, active: true },
     platforms: [
       // ==========================================================
       // CONTINUOUS SOLID VILLAGE GROUND FLOOR (NO DEADLY CHASMS!)
-      // Spanning from x = 0 to 10800, player will never fall to death!
+      // Spanning from x = 0 to 16000, player will never fall to death!
       // ==========================================================
-      { x: 0,    y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 1: JALAN UTAMA & PERMUKIMAN' },
-      { x: 2180, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 2: PASAR DESA & TEPI SUNGAI' },
-      { x: 4360, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 3: HUTAN BAMBU & KUIL ZEN' },
-      { x: 6540, y: 440, w: 2200, h: 180, type: 'forest_stone', label: 'SEKTOR 4: MENARA PURBA & TEROWONGAN' },
-      { x: 8720, y: 440, w: 2180, h: 180, type: 'forest_stone', label: 'SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA' },
+      { x: 0,     y: 440, w: 3200, h: 180, type: 'forest_stone', label: 'SEKTOR 1: PERMUKIMAN ASAL & PARKOUR LELUHUR' },
+      { x: 3180,  y: 440, w: 2600, h: 180, type: 'forest_stone', label: 'SEKTOR 1: GOA RAHASIA & ARENA PENDEKAR TOMBAK' },
+      { x: 5760,  y: 440, w: 3200, h: 180, type: 'forest_stone', label: 'PERJALANAN PANJANG: NGARAI PURBA & JEMBATAN KABUT' },
+      { x: 8940,  y: 440, w: 3600, h: 180, type: 'forest_stone', label: 'SEKTOR 2: WILAYAH TIGA SEGEL SAKURA (BARAT)' },
+      { x: 12520, y: 440, w: 3500, h: 180, type: 'forest_stone', label: 'SEKTOR 2: SANCTUM AKHIR & TAHTA CHIMERA' },
 
       // ==========================================================
       // MULTI-TIERED GROUNDED ARCHITECTURE & SACRED CELESTIAL ISLANDS
-      // Master-class parkour flow: every structure is grounded or celestial!
       // ==========================================================
       // --- SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL (0 .. 1800) ---
       { x: 80,   y: 330, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII DEPAN' },
       { x: 320,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 1 // ATAP TILED' },
       { x: 580,  y: 250, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 1' },
-      { x: 820,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 2 // ATAP THATCED' },
-      { x: 1100, y: 190, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU MELAYANG TERTINGGI 1' },
-      { x: 1340, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG 2' },
+      { x: 820,  y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH WARGA 2 // ATAP THATCHED' },
+      { x: 1080, y: 220, w: 160, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG PENGINTAI' },
+      { x: 1360, y: 310, w: 180, h: 22,  type: 'village_house',       label: 'RUMAH TETUA GENJI' },
       { x: 1640, y: 330, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON DESA' },
 
-      // --- SEKTOR 2: PASAR TRADISIONAL & JEMBATAN SUNGAI SAKURA (1800 .. 3800) ---
-      { x: 1920, y: 310, w: 180, h: 22,  type: 'village_house',       label: 'TOKO PASAR TRADISIONAL' },
-      { x: 2180, y: 240, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS PASAR' },
-      { x: 2420, y: 360, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS TEPI SUNGAI KIRI' },
-      { x: 2600, y: 370, w: 200, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
-      { x: 2860, y: 330, w: 160, h: 24,  type: 'hanging_wood_banner', label: 'DERMAGA NELAYAN SUNGAI' },
-      { x: 3100, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU SUNGAI SAKURA' },
-      { x: 3320, y: 170, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU SAKURA TERTINGGI' },
-      { x: 3560, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU PASAR' },
-      { x: 3760, y: 360, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK HUTAN BAMBU' },
+      // --- SEKTOR 1: HIDDEN PLACE PARKOUR // PUNCAK MASTER GLEMS (1900 .. 2900) ---
+      { x: 1940, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TANGGA KAKI TEBING GLEMS' },
+      { x: 2120, y: 290, w: 130, h: 22,  type: 'hanging_wood_banner', label: 'BALOK TEBING TINGKAT 1' },
+      { x: 2300, y: 230, w: 140, h: 24,  type: 'floating_island',     label: 'PULAU TEBING TINGKAT 2' },
+      { x: 2160, y: 160, w: 130, h: 22,  type: 'hanging_wood_banner', label: 'BALOK TEBING TINGKAT 3' },
+      { x: 2360, y: 110, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN TALI MENUJU PUNCAK' },
+      { x: 2560, y: 80,  w: 180, h: 26,  type: 'shrine_pavilion',     label: 'PUNCAK PERTAPAAN MASTER GLEMS' },
 
-      // --- SEKTOR 3: HUTAN BAMBU & KUIL ZEN BERLUMUT (3800 .. 5600) ---
-      // Mini Boss: Blight Fang Behemoth fights on ground at y=440!
-      { x: 3960, y: 340, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TERAS BATU TAMAN ZEN' },
-      { x: 4180, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU ZEN' },
-      { x: 4400, y: 180, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU ZEN TERTINGGI' },
-      { x: 4680, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KIRI' },
-      { x: 5020, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KANAN' },
-      { x: 5280, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS KELUAR ARENA' },
-      { x: 5460, y: 310, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL HOKORA PURBA' },
+      // --- SEKTOR 1: GOA RAHASIA // ALTAR GULUNGAN HIRAISHIN (3000 .. 4400) ---
+      { x: 3050, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'MULUT GOA RAHASIA' },
+      { x: 3260, y: 320, w: 150, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM GOA TINGKAT 1' },
+      { x: 3480, y: 250, w: 140, h: 26,  type: 'floating_island',     label: 'BATU KRISTAL GOA' },
+      { x: 3700, y: 320, w: 150, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM GOA TINGKAT 2' },
+      { x: 3900, y: 490, w: 200, h: 30,  type: 'stone_bridge',        label: 'ALTAR RUANG TERDALAM GOA' },
+      { x: 4180, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA KELUAR GOA' },
+      { x: 4400, y: 330, w: 160, h: 24,  type: 'yamamon_gate',        label: 'GERBANG POS PENJAGA AOI' },
 
-      // --- SEKTOR 4: BENTENG BATU PURBA & TEROWONGAN (5600 .. 7500) ---
-      { x: 5740, y: 330, w: 200, h: 110, type: 'grand_gatehouse',     label: 'PINTU GERBANG TEROWONGAN' },
-      { x: 6020, y: 260, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU STALAKTIT 1' },
-      { x: 6240, y: 190, w: 140, h: 26,  type: 'floating_island',     label: 'PULAU BATU STALAKTIT 2' },
-      { x: 6440, y: 140, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU RAHASIA EMAS LELUHUR' },
-      { x: 6660, y: 220, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG MENARA' },
-      { x: 6860, y: 320, w: 200, h: 120, type: 'grand_gatehouse',     label: 'GERBANG BENTENG PURBA' },
-      { x: 7120, y: 230, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS BATU' },
-      { x: 7340, y: 350, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT BERINGIN' },
+      // --- SEKTOR 1 BOSS ARENA: PENDEKAR TOMBAK MISTERIUS (4750 .. 5550) ---
+      { x: 4860, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KIRI' },
+      { x: 5240, y: 310, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA TOMBAK KANAN' },
+      { x: 5480, y: 350, w: 130, h: 80,  type: 'stepped_terrace',     label: 'TERAS KELUAR ARENA TOMBAK' },
 
-      // --- SEKTOR 5: SANCTUM POHON BERINGIN SUCI (7500 .. 9200) ---
-      { x: 7600, y: 340, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR BERINGIN SUCI 1' },
-      { x: 7860, y: 260, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM BANNER SUCI' },
-      { x: 8080, y: 190, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR KANOPI TERTINGGI' },
-      { x: 8340, y: 130, w: 160, h: 30,  type: 'floating_island',     label: 'PULAU KANOPI LELUHUR' },
-      { x: 8560, y: 220, w: 140, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR POHON' },
-      { x: 8760, y: 320, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'ALTAR RESTORASI SUCI' },
-      { x: 8980, y: 330, w: 140, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII SANCTUM' },
+      // --- PERJALANAN PANJANG: NGARAI PURBA & JEMBATAN KABUT (5600 .. 8800) ---
+      { x: 5760, y: 330, w: 200, h: 110, type: 'grand_gatehouse',     label: 'GERBANG NGARAI PURBA' },
+      { x: 6060, y: 260, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS JURANG' },
+      { x: 6280, y: 210, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 1' },
+      { x: 6580, y: 160, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 1' },
+      { x: 6820, y: 230, w: 200, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN LEMBAH ANGIN' },
+      { x: 7100, y: 320, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL PENJAGA ANGIN' },
+      { x: 7380, y: 240, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGINTAI BARAT' },
+      { x: 7640, y: 190, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG NGARAI 2' },
+      { x: 7940, y: 150, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU KARANG KABUT 2' },
+      { x: 8240, y: 320, w: 200, h: 120, type: 'grand_gatehouse',     label: 'GERBANG BATU PERBATASAN SEKTOR 2' },
+      { x: 8540, y: 340, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SEKTOR 2' },
 
-      // --- SEKTOR 6: TAHTA KUIL UTAMA & INTI PETAKA (9200 .. 10800) ---
-      // Main Boss: The Blight Chimera fights on ground at y=440!
-      { x: 9260, y: 360, w: 140, h: 80,  type: 'stepped_terrace',     label: 'TANGGA MASUK SANCTUM' },
-      { x: 9580, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
-      { x: 9860, y: 230, w: 180, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
-      { x: 10140, y: 320, w: 140, h: 24, type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
-      { x: 10380, y: 330, w: 140, h: 24, type: 'watchtower',          label: 'MENARA PENGAWAS KEMENANGAN' },
-      { x: 10560, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
+      // --- SEKTOR 2: MISI TIGA SEGEL SAKURA & BENTENG PURBA (8800 .. 14400) ---
+      // Wilayah Altar 1: Segel Bulan (10220)
+      { x: 8960,  y: 330, w: 160, h: 24,  type: 'shrine_pavilion',     label: 'KUIL GERBANG SAKURA' },
+      { x: 9240,  y: 260, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG SEKTOR 2' },
+      { x: 9520,  y: 360, w: 200, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN TAIKO SEKTOR 2' },
+      { x: 9820,  y: 280, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS SEGEL 1' },
+      { x: 10120, y: 240, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BULAN' },
+
+      // Wilayah Altar 2: Segel Bintang (12420)
+      { x: 10520, y: 340, w: 180, h: 80,  type: 'tree_root',           label: 'AKAR BERINGIN SEKTOR 2' },
+      { x: 10820, y: 260, w: 200, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR RAKSASA' },
+      { x: 11140, y: 180, w: 160, h: 28,  type: 'floating_island',     label: 'PULAU AWAN MISTIS' },
+      { x: 11440, y: 250, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS BINTANG' },
+      { x: 11720, y: 310, w: 200, h: 24,  type: 'stone_bridge',        label: 'JEMBATAN BATU BINTANG' },
+      { x: 12040, y: 350, w: 150, h: 80,  type: 'stepped_terrace',     label: 'TANGGA HUTAN SEGEL' },
+      { x: 12320, y: 200, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR BINTANG' },
+
+      // Wilayah Altar 3: Segel Matahari (14220)
+      { x: 12720, y: 340, w: 160, h: 80,  type: 'stepped_terrace',     label: 'TANGGA TINGKAT MENTARI' },
+      { x: 13000, y: 250, w: 150, h: 26,  type: 'floating_island',     label: 'PULAU MELAYANG MENTARI' },
+      { x: 13280, y: 200, w: 220, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SAKURA' },
+      { x: 13600, y: 270, w: 150, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS MENTARI' },
+      { x: 13880, y: 340, w: 180, h: 80,  type: 'stepped_terrace',     label: 'TANGGA SANCTUM MENTARI' },
+      { x: 14120, y: 280, w: 180, h: 24,  type: 'shrine_pavilion',     label: 'PAVILIUN ALTAR MATAHARI' },
+
+      // --- SEKTOR 2 TAHTA SANCTUM: THE BLIGHT CHIMERA (14500 .. 16000) ---
+      { x: 14750, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
+      { x: 15050, y: 230, w: 200, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
+      { x: 15380, y: 320, w: 140, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
+      { x: 15650, y: 330, w: 140, h: 24,  type: 'watchtower',          label: 'MENARA PENGAWAS KEMENANGAN' },
+      { x: 15800, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
     ],
     traps: [
-      { x: 2060, y: 490, w: 120, h: 18, type: 'crumble' },
+      { x: 2180, y: 490, w: 120, h: 18, type: 'crumble' },
       { x: 3840, y: 475, w: 32,  h: 18, type: 'spore_pod' },
-      { x: 6140, y: 475, w: 32,  h: 18, type: 'spore_pod' },
-      { x: 8320, y: 475, w: 32,  h: 18, type: 'spore_pod' }
+      { x: 6640, y: 475, w: 32,  h: 18, type: 'spore_pod' },
+      { x: 10440, y: 475, w: 32, h: 18, type: 'spore_pod' },
+      { x: 13440, y: 475, w: 32, h: 18, type: 'spore_pod' }
     ],
     crates: [
-      { x: 390,  y: 285 },
-      { x: 890,  y: 285 },
-      { x: 1180, y: 165 },
-      { x: 1990, y: 285 },
-      { x: 2250, y: 215 },
-      { x: 3400, y: 145 },
-      { x: 4480, y: 155 },
-      { x: 4740, y: 295 },
-      { x: 5080, y: 295 },
-      { x: 6520, y: 115 },
-      { x: 7190, y: 205 },
-      { x: 8420, y: 105 },
-      { x: 9940, y: 205 }
+      { x: 390,   y: 285 },
+      { x: 890,   y: 285 },
+      { x: 1380,  y: 285 },
+      { x: 2680,  y: 55 },
+      { x: 3960,  y: 460 },
+      { x: 4920,  y: 285 },
+      { x: 6120,  y: 235 },
+      { x: 7420,  y: 215 },
+      { x: 8300,  y: 295 },
+      { x: 10180, y: 215 },
+      { x: 12380, y: 175 },
+      { x: 14180, y: 255 },
+      { x: 15120, y: 205 }
     ],
     checkpoints: [
-      { id: 1, x: 180,  y: 420, name: 'GERBANG DESA ASAL',        reached: true,  lastHealTime: 0 },
-      { id: 2, x: 2520, y: 420, name: 'PASAR SUNGAI SAKURA',      reached: false, lastHealTime: 0 },
-      { id: 3, x: 5420, y: 420, name: 'TAMAN KUIL ZEN',           reached: false, lastHealTime: 0 },
-      { id: 4, x: 7460, y: 420, name: 'RERUNTUHAN MENARA PURBA',  reached: false, lastHealTime: 0 },
-      { id: 5, x: 8820, y: 420, name: 'POHON BERINGIN LELUHUR',   reached: false, lastHealTime: 0 }
+      { id: 1, x: 180,   y: 420, name: 'GERBANG DESA ASAL',        reached: true,  lastHealTime: 0 },
+      { id: 2, x: 2000,  y: 420, name: 'KAKI TEBING PERTAPAAN',    reached: false, lastHealTime: 0 },
+      { id: 3, x: 5620,  y: 420, name: 'GERBANG NGARAI PURBA',     reached: false, lastHealTime: 0 },
+      { id: 4, x: 8520,  y: 420, name: 'PERBATASAN SEKTOR 2',      reached: false, lastHealTime: 0 },
+      { id: 5, x: 12040, y: 420, name: 'PUSAT HUTAN SEGEL SAKURA', reached: false, lastHealTime: 0 }
     ],
     loreTablets: [
       {
@@ -1071,83 +1104,88 @@ Hanya Ronin yang selamat. Katana pusaka baja tempa ini adalah satu-satunya saksi
       },
       {
         id: 2,
-        x: 2700,
+        x: 3380,
         y: 430,
-        title: 'ARSIP 02: PRASASTI SUNGAI SAKURA',
-        sector: 'SEKTOR 2 // JEMBATAN TAIKO-BASHI',
-        content: `Air suci sungai ini mengalir dari mata air puncak gunung salju. Dikisahkan air ini mampu memurnikan racun spora dan mengasah ketajaman bilah pedang pendekar sejati.
+        title: 'ARSIP 02: PRASASTI GOA RAHASIA',
+        sector: 'SEKTOR 1 // GOA BEBATUAN',
+        content: `Di kedalaman goa ini tersimpan Gulungan Kuno Dewa Petir Terbang (Hiraishin).
+Dikisahkan Master Glems yang bertapa di puncak tebing berbatu mencari pendekar yang sanggup membawakan gulungan ini untuk mewarisi ilmunya.
 
-Tebas proyektil musuhmu di udara, pantulkan kembali serangannya ke arah mereka!`
+Jelajahi dasar goa dan temukan altar kuno!`
       },
       {
         id: 3,
-        x: 4800,
+        x: 5540,
         y: 430,
-        title: 'ARSIP 03: PENJAGA KUIL YANG TERKUTUK',
-        sector: 'SEKTOR 3 // KUIL ZEN BERLUMUT',
-        content: `Blight Fang Behemoth dulunya adalah binatang suci pelindung kuil Zen.
-Ketika spora meracuni tubuhnya, akarnya berubah menjadi duri pembunuh dan mengurung gerbang kuil.
+        title: 'ARSIP 03: PENDEKAR PENJAGA NGARAI',
+        sector: 'SEKTOR 1 // GERBANG ARENA TOMBAK',
+        content: `Pendekar tombak misterius ini bukanlah bawahan guild petaka, melainkan seorang pengembara yang menguji kelayakan siapa pun yang hendak melintasi ngarai panjang menuju Sektor 2.
 
-Kalahkan Behemoth untuk membuka jalan menuju menara purba dan terowongan rahasia leluhur.`
+Hanya mereka yang memiliki tekad baja yang diizinkan melangkah lebih jauh.`
       },
       {
         id: 4,
-        x: 6520,
-        y: 160,
-        title: 'ARSIP 04: GULUNGAN JURUS PEDANG BAYANGAN',
-        sector: 'SEKTOR 4 // PULAU BATU TINGGI',
-        content: `Ditemukan di pulau melayang tersembunyi:
-"Pendekar yang menyatukan jiwa dengan katananya takkan tersentuh oleh serbuan senjata musuh.
-Gunakan Shadow Dash untuk melesat tak berwujud menembus tubuh musuh, lalu tebas dari belakang tanpa belas kasihan!"`
-      },
-      {
-        id: 5,
-        x: 8780,
+        x: 8640,
         y: 430,
-        title: 'ARSIP 05: DOA TERAKHIR TETUA DESA',
-        sector: 'SEKTOR 5 // POHON BERINGIN SUCI',
-        content: `Pesan terakhir tetua desa sebelum gugur:
-"Entitas utama petaka ini bersemayam di kuil sanctum terdalam: The Blight Chimera.
-Ia memangsa jiwa warga kami untuk membangun kekuatannya. Ronin... bebaskan jiwa para leluhur dan tegakkan keadilan!"`
+        title: 'ARSIP 04: LEGENDA TIGA SEGEL SAKURA',
+        sector: 'SEKTOR 2 // PERBATASAN GERBANG',
+        content: `Kuil Sanctum tempat bersemayamnya The Blight Chimera dilindungi oleh Tiga Segel Kuno:
+1. Altar Segel Bulan (di kuil barat)
+2. Altar Segel Bintang (di kanopi beringin)
+3. Altar Segel Matahari (di teras sanctum)
+
+Aktifkan ketiga altar untuk melenyapkan rintangan segel dan membuka tahta pertempuran terakhir!`
       }
     ],
     relics: [
-      { id: 1, x: 1180, y: 150, type: 'hp_core',     name: 'Topeng Rubah Suci Kitsune (+50 HP)',     collected: false },
-      { id: 2, x: 3400, y: 130, type: 'energy_core', name: 'Bel Kencana Suzu (+60 Energy)',         collected: false },
-      { id: 3, x: 6520, y: 100, type: 'hp_core',     name: 'Jimat Magatama Purba (+50 HP)',          collected: false },
-      { id: 4, x: 8420, y: 90,  type: 'energy_core', name: 'Lambang Klan Bunga Sakura (+100 Energy)', collected: false }
+      { id: 1, x: 1080,  y: 190, type: 'hp_core',          name: 'Topeng Rubah Suci Kitsune (+50 HP)', collected: false },
+      { id: 2, x: 2650,  y: 60,  type: 'hp_core',          name: 'Pusaka Petapa Glems (+50 HP)', collected: false },
+      { id: 3, x: 3960,  y: 470, type: 'hiraishin_scroll', name: 'Gulungan Kuno Hiraishin (+40 HP)', collected: false },
+      { id: 4, x: 6580,  y: 130, type: 'hp_core',          name: 'Jimat Magatama Ngarai (+50 HP)', collected: false },
+      { id: 5, x: 11140, y: 150, type: 'solar_core',       name: 'Api Segel Sakura Purba (Overdrive)', collected: false }
     ],
     breakableWalls: [
       { x: 5700, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
     ],
     stationedEnemies: [
-      { x: 460,  y: 300, type: 'bramble_drone' },
-      { x: 520,  y: 408, type: 'blight_hound' },
-      { x: 860,  y: 268, type: 'spore_spitter' },
-      { x: 1220, y: 220, type: 'bramble_drone' },
-      { x: 1360, y: 408, type: 'blight_hound' },
-      { x: 1940, y: 256, type: 'wood_stalker' },
-      { x: 2360, y: 260, type: 'bramble_drone' },
-      { x: 2450, y: 318, type: 'spore_spitter' },
-      { x: 2940, y: 408, type: 'blight_hound' },
-      { x: 3340, y: 116, type: 'wood_stalker' },
-      { x: 3980, y: 298, type: 'spore_spitter' },
-      { x: 4060, y: 408, type: 'blight_hound' },
-      { x: 4280, y: 220, type: 'bramble_drone' },
-      { x: 4420, y: 126, type: 'wood_stalker' },
-      { x: 5360, y: 408, type: 'blight_hound' },
+      // Sektor 1: Jalur setelah desa (1700 .. 3000) -- Area awal 0..1600 DAMAI tanpa musuh!
+      { x: 1760, y: 408, type: 'blight_hound' },
+      { x: 1980, y: 256, type: 'wood_stalker' },
+      { x: 2360, y: 408, type: 'blight_hound' },
+      { x: 2780, y: 408, type: 'blight_hound' },
+
+      // Sektor 1: Area Goa Rahasia (3000 .. 4400)
+      { x: 3180, y: 408, type: 'blight_hound' },
+      { x: 3450, y: 318, type: 'spore_spitter' },
+      { x: 3720, y: 220, type: 'bramble_drone' },
+      { x: 4080, y: 408, type: 'blight_hound' },
+      { x: 4260, y: 280, type: 'spore_spitter' },
+
+      // Perjalanan Panjang: Ngarai Purba & Jembatan Kabut (5600 .. 8800)
       { x: 5880, y: 280, type: 'bramble_drone' },
-      { x: 6060, y: 218, type: 'spore_spitter' },
-      { x: 6240, y: 408, type: 'blight_hound' },
-      { x: 6460, y: 86,  type: 'wood_stalker' },
-      { x: 7200, y: 260, type: 'bramble_drone' },
-      { x: 7420, y: 408, type: 'blight_hound' },
-      { x: 7620, y: 298, type: 'spore_spitter' },
-      { x: 8360, y: 76,  type: 'wood_stalker' },
-      { x: 8480, y: 180, type: 'bramble_drone' },
-      { x: 8560, y: 408, type: 'blight_hound' },
-      { x: 9160, y: 300, type: 'bramble_drone' },
-      { x: 9600, y: 278, type: 'spore_spitter' }
+      { x: 6140, y: 408, type: 'blight_hound' },
+      { x: 6420, y: 130, type: 'wood_stalker' },
+      { x: 6720, y: 408, type: 'blight_hound' },
+      { x: 7180, y: 240, type: 'spore_spitter' },
+      { x: 7520, y: 408, type: 'blight_hound' },
+      { x: 7860, y: 160, type: 'bramble_drone' },
+      { x: 8180, y: 408, type: 'blight_hound' },
+      { x: 8460, y: 280, type: 'wood_stalker' },
+
+      // Sektor 2: Area Tiga Segel Sakura (8800 .. 14400)
+      { x: 9140,  y: 408, type: 'blight_hound' },
+      { x: 9460,  y: 220, type: 'bramble_drone' },
+      { x: 9780,  y: 318, type: 'spore_spitter' },
+      { x: 10420, y: 408, type: 'blight_hound' },
+      { x: 10860, y: 220, type: 'wood_stalker' },
+      { x: 11340, y: 408, type: 'blight_hound' },
+      { x: 11680, y: 260, type: 'spore_spitter' },
+      { x: 12240, y: 408, type: 'blight_hound' },
+      { x: 12640, y: 220, type: 'bramble_drone' },
+      { x: 13180, y: 408, type: 'blight_hound' },
+      { x: 13560, y: 220, type: 'wood_stalker' },
+      { x: 14040, y: 408, type: 'blight_hound' },
+      { x: 14380, y: 240, type: 'spore_spitter' }
     ]
   },
   2: {
@@ -1420,6 +1458,15 @@ function loadLevel(levelId) {
   isCitadelLocked = false;
   isBossDefeated = false;
 
+  // Reset Sector 2 Altars & Bosses
+  sector2Altars.forEach(a => { a.activated = false; });
+  sector2Seals.seal1 = false;
+  sector2Seals.seal2 = false;
+  sector2Seals.seal3 = false;
+  defeatedBosses.spearman = false;
+  defeatedBosses.treant = false;
+  defeatedBosses.chimera = false;
+
   // Update HUD
   const hudSec = document.getElementById('hud-sector-name');
   if (hudSec) hudSec.textContent = lvl.name;
@@ -1501,6 +1548,10 @@ const player = {
   // Attack State
   attackCooldown: 0,
 
+  // Hiraishin Jutsu Progression
+  hasHiraishinScroll: false,
+  hasHiraishin: false,
+
   applyHeroConfig(heroId, skinId = 'default') {
     const config = HEROES[heroId] || HEROES.ronin;
     const skinConfig = config.skins.find(s => s.id === skinId) || config.skins[0];
@@ -1547,6 +1598,8 @@ const player = {
     this.orbitingShurikens = [];
     this.shurikenTimer = 0;
     this.activeBoomerangDagger = null;
+    this.hasHiraishinScroll = false;
+    this.hasHiraishin = false;
     this.applyHeroConfig(currentHeroId, currentSkinId);
   }
 };
@@ -2563,6 +2616,17 @@ class Enemy {
       this.hp = 130;
       this.maxHp = 130;
       this.shootTimer = 60;
+    } else if (type === 'boss_spearman') {
+      this.w = 54;
+      this.h = 68;
+      this.vx = -2.2;
+      this.hp = 1200;
+      this.maxHp = 1200;
+      this.phase = 1;
+      this.name = 'PENDEKAR TOMBAK MISTERIUS';
+      this.isMiniBoss = true;
+      this.thrustCooldown = 80;
+      this.vaultTimer = 0;
     } else if (type === 'boss_treant') {
       this.w = 86;
       this.h = 105;
@@ -3042,6 +3106,78 @@ class Enemy {
     }
 
     // Level 1 Mini Boss: Blight Fang Behemoth (Ruins Arena: 2600 .. 3200)
+    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Arena: 4750 .. 5550)
+    if (this.type === 'boss_spearman') {
+      this.vy += GRAVITY;
+      this.x += this.vx;
+      this.y += this.vy;
+      platforms.forEach(p => {
+        if (p.type === 'hazard_spikes' || p.type === 'hazard_brambles' || p.type === 'hazard_lava' || p.type === 'hanging_rope') return;
+        if (this.x + this.w > p.x && this.x < p.x + p.w &&
+            this.y + this.h >= p.y && this.y + this.h - this.vy <= p.y + 36) {
+          this.y = p.y - this.h;
+          this.vy = 0;
+          this.isGrounded = true;
+        }
+      });
+      if (this.x < 4800) {
+        this.x = 4800;
+        this.vx = Math.abs(this.vx);
+        this.facing = 1;
+      } else if (this.x > 5480) {
+        this.x = 5480;
+        this.vx = -Math.abs(this.vx);
+        this.facing = -1;
+      }
+
+      if (this.hp <= 600 && this.phase === 1) {
+        this.phase = 2;
+        window.soundEngine.playExplosion();
+        floatingTexts.push(new FloatingText(this.x, this.y - 35, '⚡ JURUS TOMBAK BADAI PURBA! ⚡', '#f59e0b'));
+      }
+      this.updateBossHud();
+      this.stateTimer++;
+      this.facing = player.x < this.x ? -1 : 1;
+
+      // Pattern 1: Rapid Wind-Piercer Spear Wave
+      if (this.stateTimer % 110 === 50) {
+        window.soundEngine.playKatanaSlash();
+        const dir = this.facing;
+        enemyProjectiles.push(new EnemyProjectile(this.x + (dir === 1 ? this.w + 10 : -20), this.y + 24, dir * 6.5, 0, 'bramble_thorn'));
+        if (this.phase === 2) {
+          enemyProjectiles.push(new EnemyProjectile(this.x + (dir === 1 ? this.w + 10 : -20), this.y + 14, dir * 5.8, -1.8, 'bramble_thorn'));
+        }
+      }
+
+      // Pattern 2: High Vaulting Spear Plunge
+      if (this.stateTimer % 180 === 130 && this.isGrounded) {
+        this.vy = -12.5;
+        this.vx = this.facing * 5.5;
+        this.isGrounded = false;
+        window.soundEngine.playJump();
+        floatingTexts.push(new FloatingText(this.x, this.y - 25, 'VAULTING PLUNGE!', '#fbbf24'));
+      }
+
+      // When landing from vault: shockwave!
+      if (!this.isGrounded && this.vy > 6) {
+        this.isLunging = true;
+      } else if (this.isLunging && this.isGrounded) {
+        this.isLunging = false;
+        window.soundEngine.playExplosion();
+        enemyProjectiles.push(new EnemyProjectile(this.x - 10, this.y + this.h - 12, -5.0, 0, 'shockwave'));
+        enemyProjectiles.push(new EnemyProjectile(this.x + this.w + 10, this.y + this.h - 12, 5.0, 0, 'shockwave'));
+      }
+
+      // Pattern 3: Phase 2 Piercing Spear Thrust Dash
+      if (this.phase === 2 && this.stateTimer % 160 === 90) {
+        this.vx = this.facing * 7.5;
+        window.soundEngine.playDash();
+        floatingTexts.push(new FloatingText(this.x, this.y - 20, 'SPEAR THRUST LUNGE!', '#ef4444'));
+      }
+      return;
+    }
+
+    // Level 1 Legacy Mini Boss: Blight Fang Behemoth
     if (this.type === 'boss_treant') {
       this.vy += GRAVITY;
       this.x += this.vx;
@@ -3103,7 +3239,7 @@ class Enemy {
       return;
     }
 
-    // Level 1 Main Boss: The Blight Chimera (Sunken Hollow Arena: 4500 .. 5320)
+    // Level 1 Main Boss: The Blight Chimera (Sanctum Throne Arena: 14500 .. 15700)
     if (this.type === 'boss_chimera') {
       this.vy += GRAVITY;
       this.x += this.vx;
@@ -3117,12 +3253,12 @@ class Enemy {
           this.isGrounded = true;
         }
       });
-      if (this.x < 9400) {
-        this.x = 9400;
+      if (this.x < 14650) {
+        this.x = 14650;
         this.vx = Math.abs(this.vx);
         this.facing = 1;
-      } else if (this.x > 10400) {
-        this.x = 10400;
+      } else if (this.x > 15600) {
+        this.x = 15600;
         this.vx = -Math.abs(this.vx);
         this.facing = -1;
       }
@@ -4211,6 +4347,117 @@ class Enemy {
       }
 
     // ------------------------------------------------
+    // 20A. SECTOR 1 BOSS: PENDEKAR TOMBAK MISTERIUS (Spearman)
+    // ------------------------------------------------
+    } else if (this.type === 'boss_spearman') {
+      const bx = this.x;
+      const by = this.y;
+      const bw = this.w;
+      const bh = this.h;
+      const dir = this.facing;
+      const breathe = Math.sin(Date.now() / 240) * 1.5;
+
+      // 1. Dark Hakama Pants & Boots
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(bx + 10, by + bh - 24, 14, 24);
+      ctx.fillRect(bx + bw - 24, by + bh - 24, 14, 24);
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(bx + 8, by + bh - 8, 16, 8);
+      ctx.fillRect(bx + bw - 24, by + bh - 8, 16, 8);
+
+      // 2. Mino Straw Cape / Traveling Robes
+      ctx.fillStyle = '#a16207';
+      ctx.beginPath();
+      ctx.moveTo(bx + bw / 2, by + 18 + breathe);
+      ctx.lineTo(bx + bw - 4, by + bh - 16);
+      ctx.lineTo(bx + 4, by + bh - 16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ca8a04';
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      // Straw weave texture lines
+      for (let sl = by + 26; sl < by + bh - 20; sl += 8) {
+        ctx.beginPath();
+        ctx.moveTo(bx + 8, sl);
+        ctx.lineTo(bx + bw - 8, sl + 4);
+        ctx.stroke();
+      }
+
+      // 3. Dark Kimono Torso Underneath
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(bx + bw / 2 - 12, by + 18 + breathe, 24, 26);
+      ctx.fillStyle = '#b91c1c';
+      ctx.fillRect(bx + bw / 2 - 12, by + 34 + breathe, 24, 6);
+
+      // 4. Conical Kasa Straw Hat
+      ctx.fillStyle = '#78350f';
+      ctx.beginPath();
+      ctx.moveTo(bx + bw / 2, by - 6 + breathe);
+      ctx.lineTo(bx + bw + 12, by + 18 + breathe);
+      ctx.lineTo(bx - 12, by + 18 + breathe);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#d97706';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // 5. Glowing Amber Eyes under hat shadow
+      const eyeX = dir === 1 ? bx + bw / 2 + 2 : bx + bw / 2 - 10;
+      ctx.fillStyle = '#fbbf24';
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 12;
+      ctx.fillRect(eyeX, by + 14 + breathe, 8, 3.5);
+      ctx.shadowBlur = 0;
+
+      // 6. 75px Jumonji Cross-Spear (Yari)
+      const spearX = dir === 1 ? bx + bw - 4 : bx + 4;
+      const spearTipX = spearX + dir * 42;
+      const spearTipY = by + 8;
+
+      ctx.strokeStyle = '#92400e';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(spearX - dir * 26, by + bh);
+      ctx.lineTo(spearTipX, spearTipY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(spearTipX - dir * 8 - 3, spearTipY + 4, 6, 8);
+
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.fillStyle = '#ffffff';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = this.phase === 2 ? '#f59e0b' : '#ffffff';
+      ctx.shadowBlur = this.phase === 2 ? 14 : 6;
+      ctx.beginPath();
+      ctx.moveTo(spearTipX + dir * 18, spearTipY - 6);
+      ctx.lineTo(spearTipX - dir * 6, spearTipY + 14);
+      ctx.lineTo(spearTipX - dir * 10, spearTipY - 8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(spearTipX - 6, spearTipY - 10);
+      ctx.lineTo(spearTipX + 6, spearTipY + 6);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      if (this.phase === 2) {
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 1.5;
+        const windAng = Date.now() / 150;
+        for (let w = 0; w < 3; w++) {
+          const a = windAng + w * (Math.PI * 2 / 3);
+          ctx.beginPath();
+          ctx.arc(bx + bw / 2, by + bh / 2, 38, a, a + 0.8);
+          ctx.stroke();
+        }
+      }
+
+    // ------------------------------------------------
     // 20. MINI BOSS: BLIGHT FANG BEHEMOTH (Level 1)
     // ------------------------------------------------
     } else if (this.type === 'boss_treant') {
@@ -4738,8 +4985,8 @@ function triggerJump() {
 function triggerDash() {
   if (player.dashCooldown <= 0 && !player.isDashing) {
     player.isDashing = true;
-    player.dashTimer = 14;
-    player.dashCooldown = 28;
+    player.dashTimer = 11;
+    player.dashCooldown = 6; // Low cooldown allows fluid dash spamming!
     player.isInvulnerable = true;
     player.invulnTimer = 18; // i-frames
     player.vx = player.facing * 16.5;
@@ -4819,6 +5066,72 @@ function triggerHeroSkill() {
   if (player.skillCooldown > 0) return;
 
   window.soundEngine.playSkill();
+
+  if (currentHeroId === 'ronin') {
+    if (!player.hasHiraishin) {
+      if (window.soundEngine.playDeny) window.soundEngine.playDeny();
+      else window.soundEngine.playHit();
+      floatingTexts.push(new FloatingText(player.x, player.y - 28, 'BELUM MENGUASAI HIRAISHIN! TEMUI MASTER GLEMS!', '#f59e0b'));
+      return;
+    }
+    player.skillCooldown = hero.skillCooldownMax || 180;
+    window.soundEngine.playTeleport();
+    window.soundEngine.playKatanaSlash();
+
+    // Golden lightning trail particles at origin
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle(
+        player.x + player.w / 2 + (Math.random() - 0.5) * 20,
+        player.y + player.h / 2 + (Math.random() - 0.5) * 30,
+        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.5) * 8,
+        Math.random() > 0.4 ? '#facc15' : '#ffffff',
+        Math.random() * 3 + 2,
+        24
+      ));
+    }
+
+    const startX = player.x;
+    const destX = Math.max(0, Math.min(MAP_WIDTH - player.w - 20, player.x + player.facing * 260));
+    player.x = destX;
+    player.vx = player.facing * 8;
+    player.isInvulnerable = true;
+    player.invulnTimer = 25;
+
+    // Golden lightning arrival burst
+    for (let i = 0; i < 25; i++) {
+      particles.push(new Particle(
+        player.x + player.w / 2 + (Math.random() - 0.5) * 30,
+        player.y + player.h / 2 + (Math.random() - 0.5) * 40,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        Math.random() > 0.3 ? '#facc15' : '#f59e0b',
+        Math.random() * 3.5 + 2,
+        28
+      ));
+    }
+
+    // Slash all enemies between startX and destX
+    const minX = Math.min(startX, destX) - 40;
+    const maxX = Math.max(startX, destX) + player.w + 40;
+    enemies.forEach((enemy, eIdx) => {
+      if (enemy.x >= minX && enemy.x <= maxX && Math.abs(enemy.y - player.y) < 90) {
+        const hiraishinDmg = 180;
+        enemy.hp -= hiraishinDmg;
+        enemy.flashTimer = 14;
+        floatingTexts.push(new FloatingText(enemy.x, enemy.y, '-' + hiraishinDmg + ' ⚡HIRAISHIN!', '#facc15'));
+        for (let p = 0; p < 10; p++) {
+          particles.push(new Particle(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, '#facc15', 3, 20));
+        }
+        if (enemy.hp <= 0) {
+          destroyEnemy(enemy, eIdx);
+        }
+      }
+    });
+
+    floatingTexts.push(new FloatingText(player.x, player.y - 32, '⚡ HIRAISHIN NO JUTSU! ⚡', '#facc15'));
+    return;
+  }
 
   if (currentHeroId === 'fall') {
     // FALL: Deadlest (Explosive Heavy Round - 160 DMG, 110px AoE, self-detonates or on contact)
@@ -4926,8 +5239,7 @@ function triggerHeroAttack() {
   if (hero.attackType === 'KATANA_SMEAR' || hero.attackType === 'HYBRID_BLADE' || hero.attackType === 'VOID_SPEAR') {
     player.attackCooldown = 17;
     player.isSlashing = true;
-    player.slashTimer = 14;
-    screenShake = 6;
+    screenShake = 0;
     window.soundEngine.playKatanaSlash();
 
     const smearOriginX = player.x + player.w / 2;
@@ -4938,17 +5250,17 @@ function triggerHeroAttack() {
     // Fluid attack lunge impulse
     player.recoilX = player.facing * 3.5;
 
-    // Cutting sparks along the leading edge of the slash
-    for (let s = 0; s < 6; s++) {
-      const spAng = (Math.random() - 0.5) * Math.PI * 0.8;
+    // Subtle crisp cutting sparks along blade edge
+    for (let s = 0; s < 2; s++) {
+      const spAng = (Math.random() - 0.5) * Math.PI * 0.6;
       particles.push(new Particle(
         smearOriginX + Math.cos(spAng) * (smearRadius * 0.75),
         smearOriginY + Math.sin(spAng) * (smearRadius * 0.75),
-        smearFacing * (Math.random() * 4 + 2),
-        (Math.random() - 0.5) * 4,
-        Math.random() > 0.4 ? player.activeThemeColor : '#ffffff',
-        Math.random() * 2.5 + 1.5,
-        18
+        smearFacing * (Math.random() * 3 + 1),
+        (Math.random() - 0.5) * 2,
+        '#ffffff',
+        1.5,
+        12
       ));
     }
 
@@ -5656,12 +5968,50 @@ function updatePlayer() {
         player.energy = 100;
         player.damageBoostTimer = 300; // 5 seconds overdrive boost
         floatingTexts.push(new FloatingText(relic.x, relic.y - 20, '★ API NAGA: OVERDRIVE BOOST (+1000) ★', '#f97316'));
+      } else if (relic.type === 'hiraishin_scroll') {
+        player.hasHiraishinScroll = true;
+        player.maxHp += 40;
+        player.hp = player.maxHp;
+        score += 2000;
+        floatingTexts.push(new FloatingText(relic.x, relic.y - 25, '★ GULUNGAN KUNO HIRAISHIN DITEMUKAN! (+40 HP) ★', '#facc15'));
       }
       for (let i = 0; i < 28; i++) {
         particles.push(new Particle(relic.x, relic.y, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 6, relic.type === 'hp_core' ? '#00f5ff' : '#fbbf24', 3.5, 30));
       }
     }
   });
+
+  // Sector 2 Sakura Tri-Seal Altars Interaction
+  if (currentLevelId === 1) {
+    sector2Altars.forEach(altar => {
+      const dist = Math.hypot((player.x + player.w / 2) - altar.x, (player.y + player.h / 2) - altar.y);
+      if (dist < 60 && !altar.activated) {
+        altar.activated = true;
+        sector2Seals[altar.id] = true;
+        score += 1500;
+        window.soundEngine.playCharSelect();
+        const activeCount = sector2Altars.filter(a => a.activated).length;
+        floatingTexts.push(new FloatingText(altar.x, altar.y - 30, '★ ' + altar.name.toUpperCase() + ' TERAKTIVASI! (' + activeCount + '/3 SEGEL) ★', altar.runeColor));
+        for (let i = 0; i < 30; i++) {
+          particles.push(new Particle(altar.x, altar.y, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, altar.runeColor, 4, 30));
+        }
+        if (activeCount === 3) {
+          levelBarriers.bossLeft.active = false;
+          floatingTexts.push(new FloatingText(player.x, player.y - 45, '🌸 TIGA SEGEL SAKURA TERBUKA! GERBANG TAHTA CHIMERA TERBUKA! 🌸', '#22c55e'));
+        }
+      }
+    });
+
+    // Sector 2 Sakura Barrier pushback if not all 3 seals are unlocked
+    const activeCount = sector2Altars.filter(a => a.activated).length;
+    if (activeCount < 3 && player.x > 14420 && player.x < 14540) {
+      player.x = 14420;
+      player.vx = -4.5;
+      if (Math.random() < 0.04) {
+        floatingTexts.push(new FloatingText(player.x, player.y - 25, '⚠ SEGEL SAKURA AKTIF (' + activeCount + '/3)! AKTIFKAN SEMUA 3 ALTAR! ⚠', '#f43f5e'));
+      }
+    }
+  }
 
   // Check Proximity to Ancient Lore Tablets
   let foundTablet = null;
@@ -6023,6 +6373,27 @@ function destroyEnemy(enemy, index) {
         60
       ));
     }
+  } else if (enemy.type === 'boss_spearman') {
+    defeatedBosses.spearman = true;
+    levelBarriers.miniBossLeft.active = false;
+    levelBarriers.miniBossRight.active = false;
+    const bossHud = document.getElementById('boss-hud-bar');
+    if (bossHud) bossHud.classList.add('hidden');
+    score += 2500;
+    floatingTexts.push(new FloatingText(player.x, player.y - 40, '★ PENDEKAR TOMBAK MENGAKUI KETANGGUHANMU! ★ (+2500)', '#facc15'));
+    hitStopFrames = 15;
+    window.soundEngine.playExplosion();
+    for (let b = 0; b < 60; b++) {
+      particles.push(new Particle(
+        enemy.x + enemy.w / 2,
+        enemy.y + enemy.h / 2,
+        (Math.random() - 0.5) * 12,
+        (Math.random() - 0.5) * 12,
+        Math.random() > 0.4 ? '#f59e0b' : '#fbbf24',
+        Math.random() * 5 + 3,
+        50
+      ));
+    }
   } else if (enemy.type === 'boss_treant') {
     defeatedBosses.treant = true;
     levelBarriers.miniBossLeft.active = false;
@@ -6108,31 +6479,29 @@ function destroyEnemy(enemy, index) {
 
 function updateEnemies() {
   if (currentLevelId === 1) {
-    // Level 1 Mini Boss: Blight Fang Behemoth (Sector 3: 4600 .. 5200)
-    if (player.x > 4600 && player.x < 5200 && !defeatedBosses.treant) {
-      if (!enemies.some(e => e.type === 'boss_treant')) {
-        enemies.push(new Enemy(4850, 335, 'boss_treant'));
+    // Level 1 Sector 1 Mini-Boss: Pendekar Tombak Misterius (Spearman: 4750 .. 5550)
+    if (player.x > 4750 && player.x < 5550 && !defeatedBosses.spearman) {
+      if (!enemies.some(e => e.type === 'boss_spearman')) {
+        enemies.push(new Enemy(5150, 360, 'boss_spearman'));
       }
-      if (player.x > 4630 && player.x < 5140 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
+      if (player.x > 4790 && player.x < 5510 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
         levelBarriers.miniBossLeft.active = true;
         levelBarriers.miniBossRight.active = true;
-        screenShake = 16;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(player.x, player.y - 35, '⚠ AKAR BERDURI MENGURUNG ARENA! BEHEMOTH BANGKIT! ⚠', '#84cc16'));
+        floatingTexts.push(new FloatingText(player.x, player.y - 35, '⚠ GERBANG TERKUNCI! PENDEKAR TOMBAK MISTERIUS MENGHADANG! ⚠', '#f59e0b'));
       }
     }
 
-    // Level 1 Main Boss: The Blight Chimera (Sector 6: 9400 .. 10400)
-    if (player.x > 9400 && player.x < 10400 && !defeatedBosses.chimera && !isBossDefeated) {
+    // Level 1 Main Boss: The Blight Chimera (Sanctum: 14500 .. 15700)
+    if (player.x > 14600 && player.x < 15650 && !defeatedBosses.chimera && !isBossDefeated) {
       if (!enemies.some(e => e.type === 'boss_chimera')) {
-        enemies.push(new Enemy(9850, 324, 'boss_chimera'));
+        enemies.push(new Enemy(15100, 324, 'boss_chimera'));
       }
-      if (player.x > 9430 && player.x < 10350 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
+      if (player.x > 14630 && player.x < 15600 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
         levelBarriers.bossLeft.active = true;
         levelBarriers.bossRight.active = true;
-        screenShake = 20;
         window.soundEngine.playExplosion();
-        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SPIRA ABYSS MENUTUP JALAN KELUAR! THE BLIGHT CHIMERA! 👑', '#a855f7'));
+        floatingTexts.push(new FloatingText(player.x, player.y - 35, '👑 SPIRA ABYSS MENGURUNG SANCTUM! THE BLIGHT CHIMERA! 👑', '#a855f7'));
       }
     }
   } else {
@@ -6460,12 +6829,42 @@ function drawLevel1ForestParallax(cam) {
 // ============================================================================
 const level1NPCs = [
   {
-    x: 1540,
-    y: 360,
-    name: 'Ren',
-    speech: 'Ronin! Desa kita diserang guild bertopeng hitam... Kalahkan monster petaka di kuil utama!',
+    id: 'ren',
+    x: 540,
+    y: 440,
+    name: 'Ren (Penyintas Desa)',
+    speech: 'Ronin! Semalam guild bayangan membakar desa kita... Pasukan misterius bergerak ke arah ngarai timur!',
     hairColor: '#ef4444',
     tunicColor: '#2563eb'
+  },
+  {
+    id: 'genji',
+    x: 1260,
+    y: 440,
+    name: 'Kakek Genji (Tetua Desa)',
+    speech: 'Ada Goa Rahasia di tebing timur! Dan di puncak tebing ada Master Glems sang pertapa dewa petir!',
+    hairColor: '#e2e8f0',
+    tunicColor: '#78350f',
+    isElder: true
+  },
+  {
+    id: 'glems',
+    x: 2620,
+    y: 80,
+    name: 'Master Glems (Pertapa Petir)',
+    speech: 'Bawa Gulungan Kuno dari Goa Rahasia untuk mempelajari Jurus Hiraishin!',
+    hairColor: '#facc15',
+    tunicColor: '#4338ca',
+    isGlems: true
+  },
+  {
+    id: 'aoi',
+    x: 4420,
+    y: 440,
+    name: 'Aoi (Penjaga Gerbang Ngarai)',
+    speech: 'Di balik gerbang ada pendekar tombak misterius yang menghadang jalan menuju Sektor 2!',
+    hairColor: '#10b981',
+    tunicColor: '#0f766e'
   }
 ];
 
@@ -6491,16 +6890,16 @@ function drawLevelNPCs(ctx, cam) {
     ctx.fillRect(-6, -6, 5, 6);
     ctx.fillRect(1, -6, 5, 6);
 
-    // 3. Chibi Blue Tunic Body
+    // 3. Chibi Tunic Body
     ctx.fillStyle = npc.tunicColor;
     ctx.beginPath();
     ctx.roundRect(-7, -20 + breathe * 0.4, 14, 15, [4, 4, 3, 3]);
     ctx.fill();
 
-    // Brown leather belt & gold buckle
-    ctx.fillStyle = '#78350f';
+    // Belt & Buckle
+    ctx.fillStyle = npc.isGlems ? '#facc15' : '#78350f';
     ctx.fillRect(-7, -10 + breathe * 0.4, 14, 3);
-    ctx.fillStyle = '#f59e0b';
+    ctx.fillStyle = npc.isGlems ? '#ffffff' : '#f59e0b';
     ctx.fillRect(-2, -10 + breathe * 0.4, 4, 3);
 
     // 4. Chibi Head (Peach Skin)
@@ -6510,14 +6909,25 @@ function drawLevelNPCs(ctx, cam) {
     ctx.fill();
 
     // Expressive Eyes
-    ctx.fillStyle = '#1e293b';
+    ctx.fillStyle = npc.isGlems ? '#38bdf8' : '#1e293b';
     ctx.fillRect(-3, -26 + breathe * 0.6, 2, 3);
     ctx.fillRect(2, -26 + breathe * 0.6, 2, 3);
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(-3, -26 + breathe * 0.6, 1, 1);
     ctx.fillRect(2, -26 + breathe * 0.6, 1, 1);
 
-    // 5. ICONIC SPIKY CRIMSON-RED HAIR (Matching user reference mockup!)
+    // Elder Beard for Kakek Genji
+    if (npc.isElder) {
+      ctx.fillStyle = '#f1f5f9';
+      ctx.beginPath();
+      ctx.moveTo(-4, -20 + breathe * 0.6);
+      ctx.lineTo(0, -11 + breathe * 0.6);
+      ctx.lineTo(4, -20 + breathe * 0.6);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // 5. Hair Rendering
     ctx.fillStyle = npc.hairColor;
     ctx.beginPath();
     ctx.arc(0, -26 + breathe * 0.6, 9.5, Math.PI * 0.8, Math.PI * 2.2);
@@ -6540,31 +6950,123 @@ function drawLevelNPCs(ctx, cam) {
     ctx.closePath();
     ctx.fill();
 
-    // 6. Proximity Speech Bubble when Ronin is near!
+    // Glems Electric Spark Aura
+    if (npc.isGlems) {
+      const sparkAng = (Date.now() / 120);
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, -22, 14, sparkAng, sparkAng + 0.6);
+      ctx.stroke();
+    }
+
+    // 6. Proximity Speech Bubble & Glems Training Interaction
     const distToPlayer = Math.abs(player.x - npc.x);
-    if (distToPlayer < 90) {
+    if (npc.isGlems) {
+      if (!player.hasHiraishinScroll) {
+        npc.speech = 'Aku Glems sang pertapa petir. Ambil Gulungan Hiraishin di Goa Rahasia untuk belajar!';
+      } else if (!player.hasHiraishin) {
+        npc.speech = 'Kau membawa Gulungan Hiraishin! Pelajarilah: HIRAISHIN NO JUTSU! Tekan [E]!';
+        if (distToPlayer < 90 && Math.abs(player.y - npc.y) < 70) {
+          player.hasHiraishin = true;
+          window.soundEngine.playCharSelect();
+          floatingTexts.push(new FloatingText(player.x, player.y - 38, '⚡ JURUS HIRAISHIN NO JUTSU DIKUASAI! TEKAN [E]! ⚡', '#facc15'));
+          for (let p = 0; p < 35; p++) {
+            particles.push(new Particle(player.x + 20, player.y + 20, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, '#facc15', 3.5, 30));
+          }
+        }
+      } else {
+        npc.speech = 'Kuasai Hiraishin! Tekan [E] untuk teleport menembus dimensi & tebas musuh!';
+      }
+    }
+
+    if (distToPlayer < 100 && Math.abs(player.y - npc.y) < 80) {
       ctx.save();
       const bubbleBob = Math.sin(now / 250) * 2;
       const bY = -48 + bubbleBob;
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
-      ctx.strokeStyle = '#ef4444';
-      ctx.lineWidth = 1.2;
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+      ctx.strokeStyle = npc.isGlems ? '#facc15' : (npc.isElder ? '#f59e0b' : '#38bdf8');
+      ctx.lineWidth = 1.4;
       ctx.beginPath();
-      ctx.roundRect(-80, bY - 14, 160, 24, 6);
+      ctx.roundRect(-100, bY - 14, 200, 26, 6);
       ctx.fill();
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.moveTo(-4, bY + 10);
-      ctx.lineTo(0, bY + 16);
-      ctx.lineTo(4, bY + 10);
+      ctx.moveTo(-4, bY + 12);
+      ctx.lineTo(0, bY + 18);
+      ctx.lineTo(4, bY + 12);
       ctx.fill();
 
       ctx.fillStyle = '#f8fafc';
-      ctx.font = '10px "Rajdhani", sans-serif';
+      ctx.font = '9.5px "Rajdhani", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(npc.speech, 0, bY + 2);
+      ctx.fillText(npc.speech, 0, bY + 3);
       ctx.restore();
+    }
+
+    ctx.restore();
+  });
+}
+
+function drawSector2Altars(ctx, cam) {
+  if (currentLevelId !== 1) return;
+  const now = Date.now();
+
+  sector2Altars.forEach(altar => {
+    if (altar.x < cam.x - 120 || altar.x > cam.x + V_WIDTH + 120) return;
+
+    ctx.save();
+    ctx.translate(altar.x, altar.y);
+
+    // Stone Pedestal
+    ctx.fillStyle = '#1c1917';
+    ctx.fillRect(-18, 0, 36, 16);
+    ctx.strokeStyle = altar.activated ? altar.runeColor : '#44403c';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(-18, 0, 36, 16);
+
+    // Floating Sacred Orb
+    const orbBob = Math.sin(now / 200) * 4;
+    ctx.fillStyle = altar.activated ? altar.runeColor : '#78716c';
+    ctx.shadowColor = altar.activated ? altar.runeColor : 'transparent';
+    ctx.shadowBlur = altar.activated ? 18 : 0;
+    ctx.beginPath();
+    ctx.arc(0, -18 + orbBob, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Kanji Character
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(altar.kanji, 0, -18 + orbBob);
+
+    // Rotating Rune Ring when activated
+    if (altar.activated) {
+      ctx.strokeStyle = altar.runeColor;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(0, -18 + orbBob, 18, 7, (now / 300), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Name & Status Banner
+    const dist = Math.hypot((player.x + player.w / 2) - altar.x, (player.y + player.h / 2) - altar.y);
+    if (dist < 100) {
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.strokeStyle = altar.runeColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(-80, -52, 160, 22, 5);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = altar.activated ? '#4ade80' : altar.runeColor;
+      ctx.font = '8px "Press Start 2P", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(altar.activated ? '✔ ' + altar.name : '★ ' + altar.name, 0, -38);
     }
 
     ctx.restore();
@@ -6631,7 +7133,27 @@ const level1VillageProps = [
   { type: 'stone_lantern',       x: 9440,  y: 440 },
   { type: 'ruined_arch',         x: 9480,  y: 440 },
   { type: 'stone_monument',      x: 10320, y: 440 },
-  { type: 'stone_monument',      x: 10530, y: 440 }
+  { type: 'stone_monument',      x: 10530, y: 440 },
+
+  // Sektor 2: Jalur Segel Sakura & Sanctum (10800 .. 16000)
+  { type: 'bamboo_fence',        x: 10840, y: 440, w: 55 },
+  { type: 'hanging_lantern_post', x: 11100, y: 440 },
+  { type: 'flowering_shrub',     x: 11380, y: 440 },
+  { type: 'stone_lantern',       x: 11650, y: 440 },
+  { type: 'small_torii',         x: 11950, y: 440 },
+  { type: 'jizo_statue',         x: 12250, y: 440 },
+  { type: 'bamboo_fence',        x: 12580, y: 440, w: 55 },
+  { type: 'wooden_cart',         x: 12850, y: 440 },
+  { type: 'hanging_lantern_post', x: 13150, y: 440 },
+  { type: 'flowering_shrub',     x: 13450, y: 440 },
+  { type: 'stone_lantern',       x: 13750, y: 440 },
+  { type: 'notice_board',        x: 14050, y: 440 },
+  { type: 'small_torii',         x: 14380, y: 440 },
+  { type: 'ruined_arch',         x: 14650, y: 440 },
+  { type: 'stone_lantern',       x: 14950, y: 440 },
+  { type: 'hanging_lantern_post', x: 15300, y: 440 },
+  { type: 'stone_monument',      x: 15650, y: 440 },
+  { type: 'stone_monument',      x: 15820, y: 440 }
 ];
 
 function drawOriginVillageFurniture(ctx, cam) {
@@ -9345,9 +9867,48 @@ function drawRelics() {
       ctx.save();
       const floatBob = Math.sin(Date.now() / 180) * 5;
       const rot = Date.now() / 350;
-      const coreColor = relic.type === 'hp_core' ? '#00f5ff' : '#f59e0b';
 
       ctx.translate(relic.x, relic.y + floatBob);
+
+      if (relic.type === 'hiraishin_scroll') {
+        const coreColor = '#facc15';
+        // Sacred Golden Parchment Scroll
+        ctx.fillStyle = '#fef08a';
+        ctx.shadowColor = '#facc15';
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.roundRect(-14, -8, 28, 16, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#ca8a04';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Red ribbon tied around scroll
+        ctx.fillStyle = '#dc2626';
+        ctx.fillRect(-3, -8, 6, 16);
+
+        // Gold scroll rods
+        ctx.fillStyle = '#b45309';
+        ctx.fillRect(-17, -10, 4, 20);
+        ctx.fillRect(13, -10, 4, 20);
+
+        // Floating lightning aura
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 22, 9, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Text label
+        ctx.font = '7px "Press Start 2P", monospace';
+        ctx.fillStyle = coreColor;
+        ctx.shadowBlur = 8;
+        ctx.fillText('GULUNGAN HIRAISHIN', -64, -20);
+        ctx.restore();
+        return;
+      }
+
+      const coreColor = relic.type === 'hp_core' ? '#00f5ff' : '#f59e0b';
 
       // Rotating diamond crystal
       ctx.save();
@@ -10188,23 +10749,18 @@ function drawProjectiles() {
     }
     ctx.globalAlpha = alpha;
 
-    // Outer Neon Glow Arc
-    ctx.shadowColor = s.edgeColor;
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = s.edgeColor;
+    // Clean, simple, and elegant katana blade slash arc
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3.5;
     ctx.beginPath();
-    ctx.arc(0, 0, s.radius + 6, -Math.PI * 0.45, Math.PI * 0.45);
-    ctx.arc(0, 0, s.radius * 0.4, Math.PI * 0.45, -Math.PI * 0.45, true);
-    ctx.closePath();
-    ctx.fill();
+    ctx.arc(0, 0, s.radius * 0.82, -Math.PI * 0.35, Math.PI * 0.35);
+    ctx.stroke();
 
-    // Brilliant White-Hot Slash Core Smear
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = '#ffffff';
-    ctx.shadowBlur = 18;
+    // Subtle silver-white blade sheen
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.beginPath();
-    ctx.arc(0, 0, s.radius, -Math.PI * 0.38, Math.PI * 0.38);
-    ctx.arc(0, 0, s.radius * 0.55, Math.PI * 0.38, -Math.PI * 0.38, true);
+    ctx.arc(0, 0, s.radius * 0.85, -Math.PI * 0.35, Math.PI * 0.35);
+    ctx.arc(0, 0, s.radius * 0.72, Math.PI * 0.35, -Math.PI * 0.35, true);
     ctx.closePath();
     ctx.fill();
 
@@ -12226,10 +12782,14 @@ function resumeGame() {
 }
 
 function pauseToCharSelect() {
-  document.getElementById('pause-modal').classList.add('hidden');
-  document.getElementById('hud-layer').classList.add('hidden');
-  document.getElementById('controls-hint').classList.add('hidden');
-  document.getElementById('mobile-controls').classList.add('hidden');
+  const pauseModal = document.getElementById('pause-modal');
+  if (pauseModal) pauseModal.classList.add('hidden');
+  const hudLayer = document.getElementById('hud-layer');
+  if (hudLayer) hudLayer.classList.add('hidden');
+  const ctrlHint = document.getElementById('controls-hint');
+  if (ctrlHint) ctrlHint.classList.add('hidden');
+  const mobCtrl = document.getElementById('mobile-controls');
+  if (mobCtrl) mobCtrl.classList.add('hidden');
   const bossHud = document.getElementById('boss-hud-bar');
   if (bossHud) bossHud.classList.add('hidden');
   const lorePrompt = document.getElementById('lore-prompt');
@@ -12238,12 +12798,18 @@ function pauseToCharSelect() {
 }
 
 function returnToLobby() {
-  document.getElementById('pause-modal').classList.add('hidden');
-  document.getElementById('game-over-modal').classList.add('hidden');
-  document.getElementById('victory-modal').classList.add('hidden');
-  document.getElementById('hud-layer').classList.add('hidden');
-  document.getElementById('controls-hint').classList.add('hidden');
-  document.getElementById('mobile-controls').classList.add('hidden');
+  const pauseModal = document.getElementById('pause-modal');
+  if (pauseModal) pauseModal.classList.add('hidden');
+  const goModal = document.getElementById('game-over-modal');
+  if (goModal) goModal.classList.add('hidden');
+  const vicModal = document.getElementById('victory-modal');
+  if (vicModal) vicModal.classList.add('hidden');
+  const hudLayer = document.getElementById('hud-layer');
+  if (hudLayer) hudLayer.classList.add('hidden');
+  const ctrlHint = document.getElementById('controls-hint');
+  if (ctrlHint) ctrlHint.classList.add('hidden');
+  const mobCtrl = document.getElementById('mobile-controls');
+  if (mobCtrl) mobCtrl.classList.add('hidden');
   const bossHud = document.getElementById('boss-hud-bar');
   if (bossHud) bossHud.classList.add('hidden');
   const lorePrompt = document.getElementById('lore-prompt');
@@ -12392,12 +12958,7 @@ function gameLoop() {
 
   let shakeX = 0;
   let shakeY = 0;
-  if (screenShake > 0) {
-    shakeX = (Math.random() * 2 - 1) * screenShake;
-    shakeY = (Math.random() * 2 - 1) * screenShake;
-    screenShake *= 0.88;
-    if (screenShake < 0.5) screenShake = 0;
-  }
+  screenShake = 0; // Screen shake disabled completely as requested
 
   // Camera smooth tracking on player
   camera.update(player);
@@ -12427,6 +12988,7 @@ function gameLoop() {
   drawCheckpoints();
   drawGoalPortal();
   drawLevelNPCs(ctx, camera);
+  drawSector2Altars(ctx, camera);
 
   if (currentState === STATES.PLAYING) {
     updatePlatforms();

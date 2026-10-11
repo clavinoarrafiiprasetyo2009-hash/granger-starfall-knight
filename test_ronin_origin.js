@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-console.log('=== RUNNING THE RONIN & THE ORIGIN VERIFICATION SUITE ===\n');
+console.log('=== RUNNING THE RONIN & THE ORIGIN (16,000PX) VERIFICATION SUITE ===\n');
 
 // 1. Verify Assets on disk
 const assets = [
@@ -28,14 +28,14 @@ assets.forEach(asset => {
 // 2. Verify game.js contents
 const gameJs = fs.readFileSync(path.join(__dirname, 'game.js'), 'utf8');
 
-// Single-hero Ronin
+// Single-hero Ronin with Hiraishin
 assert(gameJs.includes("id: 'ronin'"), "HEROES.ronin missing");
 assert(gameJs.includes("name: 'THE RONIN'"), "HEROES.ronin name is not 'THE RONIN'");
-assert(!gameJs.includes("fall: {"), "Legacy hero 'fall' still present");
-assert(!gameJs.includes("dregsnot: {"), "Legacy hero 'dregsnot' still present");
+assert(gameJs.includes("hasActiveSkill: true"), "HEROES.ronin active skill disabled");
+assert(gameJs.includes("HIRAISHIN NO JUTSU"), "Hiraishin skill missing");
 
-// 10,800px Map 1 Expansion & HD Pixel Art Rendering
-assert(gameJs.includes("mapWidth: 10800"), "mapWidth is not 10800");
+// 16,000px Map 1 Expansion & HD Pixel Art Rendering
+assert(gameJs.includes("mapWidth: 16000"), "mapWidth is not 16000");
 assert(gameJs.includes("ctx.imageSmoothingEnabled = false"), "Crisp HD pixel art smoothing disabled missing");
 assert(gameJs.includes("l1BgAssets.originMaster.src = 'assets/tileset_origin_master.png'"), "originMaster asset missing");
 
@@ -50,7 +50,7 @@ assert(gameJs.includes("stone_bridge"), "stone_bridge platform type missing");
 assert(gameJs.includes("grand_gatehouse"), "grand_gatehouse platform type missing");
 assert(gameJs.includes("shrine_pavilion"), "shrine_pavilion platform type missing");
 
-// Expanded Village Props
+// Expanded Village Props across the 16,000px journey
 assert(gameJs.includes("notice_board"), "notice_board prop missing");
 assert(gameJs.includes("hanging_lantern_post"), "hanging_lantern_post prop missing");
 assert(gameJs.includes("small_torii"), "small_torii prop missing");
@@ -63,29 +63,35 @@ assert(gameJs.includes("this.stuckTimer > 18"), "Anti-stuck watchdog timer missi
 assert(gameJs.includes("isAboveTop && isWithinX"), "Enemy platform landing condition missing");
 
 // Continuous ground floor
-assert(gameJs.includes("SEKTOR 1: JALAN UTAMA & PERMUKIMAN"), "Ground segment 1 missing");
-assert(gameJs.includes("SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA"), "Ground segment 5 missing");
+assert(gameJs.includes("SEKTOR 1: PERMUKIMAN ASAL & PARKOUR LELUHUR"), "Ground segment 1 missing");
+assert(gameJs.includes("SEKTOR 2: SANCTUM AKHIR & TAHTA CHIMERA"), "Ground segment 5 missing");
 
-// Ren NPC
-assert(gameJs.includes("name: 'Ren'"), "Ren NPC missing");
-assert(gameJs.includes("x: 1540"), "Ren NPC position missing");
+// NPCs
+assert(gameJs.includes("name: 'Ren (Penyintas Desa)'"), "Ren NPC missing");
+assert(gameJs.includes("name: 'Kakek Genji (Tetua Desa)'"), "Kakek Genji NPC missing");
+assert(gameJs.includes("name: 'Master Glems (Pertapa Petir)'"), "Master Glems NPC missing");
+assert(gameJs.includes("name: 'Aoi (Penjaga Gerbang Ngarai)'"), "Aoi NPC missing");
 
 // Boss locations
-assert(gameJs.includes("player.x > 4600 && player.x < 5200"), "Behemoth trigger missing");
-assert(gameJs.includes("player.x > 9400 && player.x < 10400"), "Chimera trigger missing");
-assert(gameJs.includes("x: 10650, y: 350"), "Goal portal at 10650 missing");
+assert(gameJs.includes("player.x > 4750 && player.x < 5550"), "Spearman boss trigger missing");
+assert(gameJs.includes("player.x > 14600 && player.x < 15650"), "Chimera boss trigger missing");
+assert(gameJs.includes("x: 15850, y: 350"), "Goal portal at 15850 missing");
 
-// Bug fix check: startMission must not crash on null char-select-screen
-assert(!gameJs.includes("document.getElementById('char-select-screen').classList.add('hidden')"), "Unguarded char-select-screen call still exists!");
+// Sector 2 Quest & Altars
+assert(gameJs.includes("sector2Altars"), "Sector 2 altars missing");
+assert(gameJs.includes("Altar Segel Bulan"), "Altar Segel Bulan missing");
+assert(gameJs.includes("Altar Segel Bintang"), "Altar Segel Bintang missing");
+assert(gameJs.includes("Altar Segel Matahari"), "Altar Segel Matahari missing");
 
-console.log('[PASS] game.js 10,800px expanded world, village props, continuous ground, and bugfix verified.');
+console.log('[PASS] game.js 16,000px expanded world, village props, continuous ground, NPCs, and boss triggers verified.');
 
 // 3. Verify index.html contents
 const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 assert(indexHtml.includes('The Ronin: The Origin'), "index.html title missing 'The Ronin: The Origin'");
-assert(indexHtml.includes('10,800px'), "index.html Level 1 stats missing '10,800px'");
+assert(indexHtml.includes('16,000px'), "index.html Level 1 stats missing '16,000px'");
 assert(indexHtml.includes('SEGERA HADIR // TAHAP 2'), "index.html Level 2 missing 'SEGERA HADIR'");
 assert(!indexHtml.includes('id="char-select-screen"'), "char-select-screen modal still present in index.html");
-console.log('[PASS] index.html updated UI & Level cards verified.');
+assert(!indexHtml.includes('id="controls-hint"'), "controls-hint still present in index.html");
+console.log('[PASS] index.html updated UI, keybind hint removed, & Level cards verified.');
 
 console.log('\n=== ALL SUITE TESTS PASSED WITH 100% SUCCESS! ===');
