@@ -206,8 +206,8 @@
               <p id="lobby-hero-desc" class="active-hero-text">
                 Pendekar bertopi jerami (Kasa) penyintas kehancuran desa. Memantulkan proyektil musuh dengan tebasan pedang, melesat tak tersentuh dengan Shadow Dash, dan menyerap jiwa musuh.
               </p>
-              <button onclick="goToCharSelect()" class="btn-secondary" style="margin-top: 10px; width: 100%;">
-                <i data-lucide="shield" style="width: 14px; height: 14px;"></i> ILMU PEDANG & JURUS
+              <button onclick="toggleRoninSkin()" class="btn-secondary" style="margin-top: 10px; width: 100%;">
+                <i data-lucide="palette" style="width: 14px; height: 14px;"></i> GANTI SKIN: <span id="lobby-skin-btn-text">SUMI-E WANDERER</span>
               </button>
             </div>
           </div>
@@ -228,13 +228,6 @@
               </div>
             </button>
 
-            <button onclick="goToCharSelect()" class="btn-menu-option">
-              <i data-lucide="shield" style="width: 18px; height: 18px; color: #ef4444;"></i>
-              <div style="text-align: left;">
-                <div style="font-weight: 800; font-size: 15px;">ILMU PEDANG & JURUS</div>
-                <div style="font-size: 11px; color: #94a3b8;">Skins & kemampuan tersembunyi yang akan dibuka</div>
-              </div>
-            </button>
 
             <button onclick="openControlsGuide()" class="btn-menu-option">
               <i data-lucide="gamepad-2" style="width: 18px; height: 18px; color: #fbbf24;"></i>
@@ -263,85 +256,7 @@
       </div>
     </div>
 
-    <!-- ============================================== -->
-    <!-- SCREEN 2: CHARACTER SELECTION SCREEN           -->
-    <!-- ============================================== -->
-    <div id="char-select-screen" class="game-modal char-select-backdrop hidden">
-      <div class="char-select-content">
-        <!-- Top Bar -->
-        <div class="char-select-header">
-          <div>
-            <span class="arcade-subtag">TACTICAL OPERATIVES</span>
-            <h2 class="char-select-title">PILIH HERO ANDALANMU</h2>
-          </div>
-          <button onclick="goToLobby()" class="btn-secondary">
-            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> KEMBALI KE LOBBY
-          </button>
-        </div>
 
-        <!-- 5 Hero Roster Grid -->
-        <div id="hero-roster-grid" class="hero-roster-grid">
-          <!-- Dynamically populated or rendered via JS/HTML -->
-        </div>
-
-        <!-- Selected Hero Details Showcase -->
-        <div id="selected-hero-inspector" class="selected-hero-inspector">
-          <div class="inspector-portrait-box">
-            <img id="inspector-img" src="granger_reference.png" alt="Selected Hero" class="inspector-img">
-          </div>
-          <div class="inspector-details">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <h3 id="inspector-name" class="inspector-hero-name">GRANGER</h3>
-                <span id="inspector-title" class="inspector-hero-title">STARFALL KNIGHT</span>
-                <span id="inspector-skin-tier" class="skin-badge skin-badge-legend">SKIN LEGEND</span>
-              </div>
-              <span id="inspector-role-badge" class="hero-role-badge role-marksman">MARKSMAN</span>
-            </div>
-
-            <!-- Skin Variant Selector -->
-            <div class="skin-selector-bar" style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span style="font-size: 11px; font-weight: bold; color: #94a3b8; font-family: 'JetBrains Mono', monospace;">VARIAN SKIN:</span>
-              <div id="skin-options-container" style="display: flex; gap: 6px;"></div>
-            </div>
-
-            <p id="inspector-desc" class="inspector-desc">
-              Menembakkan Meriam Laser Emas raksasa yang melintasi medan tempur secara instan. Sangat mematikan untuk membasmi barisan musuh sekaligus.
-            </p>
-
-            <!-- Stat Bars -->
-            <div class="inspector-stats-grid">
-              <div class="stat-row">
-                <span class="stat-name">DAMAGE</span>
-                <div class="stat-meter"><div id="stat-damage" class="stat-fill" style="width: 95%;"></div></div>
-                <span id="stat-damage-val" class="stat-number">95</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">SPEED</span>
-                <div class="stat-meter"><div id="stat-speed" class="stat-fill" style="width: 78%; background: #38bdf8;"></div></div>
-                <span id="stat-speed-val" class="stat-number">78</span>
-              </div>
-              <div class="stat-row">
-                <span class="stat-name">RANGE</span>
-                <div class="stat-meter"><div id="stat-range" class="stat-fill" style="width: 100%; background: #fbbf24;"></div></div>
-                <span id="stat-range-val" class="stat-number">100</span>
-              </div>
-            </div>
-
-            <!-- Weapon Lore & Deployment CTA -->
-            <div class="inspector-action-row">
-              <div class="weapon-tag">
-                <span style="color: #64748b; font-size: 11px;">SENJATA UTAMA:</span>
-                <strong id="inspector-weapon" style="color: #f8fafc; font-size: 13px;">Supernova Beam Cannon</strong>
-              </div>
-              <button onclick="confirmHeroAndDeploy()" class="btn-primary-big" style="padding: 12px 28px;">
-                <i data-lucide="crosshair" style="width: 18px; height: 18px;"></i> DEPLOY SEKARANG
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- ============================================== -->
     <!-- MODAL: LEVEL / STAGE SELECT                    -->
@@ -450,8 +365,8 @@
           <div class="guide-item">
             <div class="guide-keys"><span class="key-badge">E</span></div>
             <div>
-              <strong>Skill Unik Hero [E]</strong>
-              <p>Setiap Operative dibekali skill tempur unik pada tombol <strong>E</strong>: Deadlest (AoE ledakan), Dragon Breath (Semburan naga), Slayer of Goliath (Dash kilat + shuriken kill reset), Soul Revanation (Panggil 2 hantu), dan Star Dagger (Bumerang dagger + dash teleport recast)!</p>
+              <strong>Jurus Pedang Bayangan & Fokus Batin [E]</strong>
+              <p>Mempersiapkan fokus konsentrasi batin sang Ronin: menebas dengan kecepatan ekstra, memperkuat jarak tebasan pedang, dan menyerap energi spiritual musuh!</p>
             </div>
           </div>
 
@@ -497,9 +412,6 @@
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <button onclick="resumeGame()" class="btn-primary">
             <i data-lucide="play" style="width: 16px; height: 16px;"></i> LANJUTKAN PERMAINAN
-          </button>
-          <button onclick="pauseToCharSelect()" class="btn-secondary">
-            <i data-lucide="users" style="width: 16px; height: 16px;"></i> GANTI HERO
           </button>
           <button onclick="restartMission()" class="btn-secondary">
             <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> RESTART MISI

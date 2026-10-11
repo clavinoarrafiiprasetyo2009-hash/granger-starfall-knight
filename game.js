@@ -92,7 +92,8 @@ function toggleMute() {
 }
 
 // ============================================================================
-// HEROES DATABASE (6 OPERATIVES: RONIN, FALL, DREGSNOT, STROM, ALPHA, GLEMS)
+// ============================================================================
+// PROTAGONIST DATABASE (THE RONIN: SANG PENDEKAR TUNGGAL)
 // ============================================================================
 const HEROES = {
   ronin: {
@@ -121,151 +122,6 @@ const HEROES = {
     skins: [
       { id: 'default', name: 'Sumi-e Wanderer (Ink & Silver)', tag: 'ORIGINAL RONIN', tierClass: 'skin-badge-legend', themeColor: '#f8fafc', secondaryColor: '#dc2626' },
       { id: 'crimson', name: 'Vengeful Blood (Crimson Haori)', tag: 'VENGEANCE PATH', tierClass: 'skin-badge-special', themeColor: '#ef4444', secondaryColor: '#facc15' }
-    ]
-  },
-  fall: {
-    id: 'fall',
-    name: 'FALL',
-    heroName: 'Fall',
-    title: 'STARFALL GUNSLINGER',
-    tier: 'SKIN LEGEND',
-    tierClass: 'skin-badge-legend',
-    role: 'MARKSMAN',
-    roleClass: 'role-marksman',
-    avatar: 'granger_reference.png',
-    themeColor: '#38bdf8',
-    secondaryColor: '#fbbf24',
-    stats: { damage: 95, speed: 92, range: 100 },
-    baseSpeed: 5.2,
-    maxHp: 100,
-    maxEnergy: 100,
-    weapon: 'Dual Rapid Kinetic Pistols',
-    attackType: 'PISTOL_BULLETS',
-    hasActiveSkill: true,
-    skillName: 'DEADLEST',
-    skillCooldownMax: 300, // 5 detik
-    skillDesc: 'Active [E]: Menembakkan peluru peledak berat berdaya ledak AoE masif (160 DMG)! Meledak saat mengenai target, tembok, atau habis waktu. Pasif: Basic attack cepat mengurangi CD skill (-0.5s per hit).',
-    passiveDesc: 'Rapid Trigger CDR (Attack speed tinggi, setiap hit mengurangi CD Deadlest -0.5s)',
-    desc: 'Penembak jitu dengan laju tembak sepasang pistol berkecepatan tinggi (High Attack Speed). Meluncurkan peluru peledak Deadlest berdaya ledak radius besar untuk memusnahkan gerombolan musuh.',
-    skins: [
-      { id: 'default', name: 'Starfall Gunslinger', tag: 'SKIN LEGEND', tierClass: 'skin-badge-legend', themeColor: '#38bdf8', secondaryColor: '#fbbf24' },
-      { id: 'chroma', name: 'Supernova Gold', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#f59e0b', secondaryColor: '#ffffff' }
-    ]
-  },
-  dregsnot: {
-    id: 'dregsnot',
-    name: 'DREGSNOT',
-    heroName: 'Dregsnot',
-    title: 'FIRE DRAKE SLINGER',
-    tier: 'SKIN MYTHIC',
-    tierClass: 'skin-badge-mythic',
-    role: 'GUNSLINGER',
-    roleClass: 'role-marksman',
-    avatar: 'assets/char_dragon.jpg',
-    themeColor: '#f97316',
-    secondaryColor: '#ef4444',
-    stats: { damage: 94, speed: 80, range: 90 },
-    baseSpeed: 4.8,
-    maxHp: 105,
-    maxEnergy: 100,
-    weapon: 'Drake Blasters & Dragon Breath',
-    attackType: 'FIRE_BULLETS',
-    hasActiveSkill: true,
-    skillName: 'DRAGON BREATH',
-    skillCooldownMax: 480, // 8 detik
-    skillDesc: 'Active [E]: Semburan Naga Api Raksasa ber-AoE masif (radius 75px), menembus musuh, meledak di tembok, dan meninggalkan kobaran api di jalurnya! Pasif: Dash meninggalkan jejak api membakar.',
-    passiveDesc: 'Flame Trail Dash & Piercing Dragon Breath AoE',
-    desc: 'Koboi futuristik bersenjatakan elemen naga api purba. Meluncurkan semburan Dragon Breath berukuran raksasa yang menembus barisan musuh, meledak dahsyat saat menabrak dinding, dan membakar tanah di jalurnya.',
-    skins: [
-      { id: 'default', name: 'Shadow Dragon', tag: 'SKIN MYTHIC', tierClass: 'skin-badge-mythic', themeColor: '#f97316', secondaryColor: '#ef4444' },
-      { id: 'chroma', name: 'Cyber Gunslinger', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#c084fc', secondaryColor: '#38bdf8' }
-    ]
-  },
-  strom: {
-    id: 'strom',
-    name: 'STROM',
-    heroName: 'Strom',
-    title: 'CODENAME: STORM',
-    tier: 'SKIN LEGEND',
-    tierClass: 'skin-badge-legend',
-    role: 'HYBRID ASSASSIN',
-    roleClass: 'role-assassin',
-    avatar: 'assets/char_mecha.jpg',
-    themeColor: '#eab308',
-    secondaryColor: '#a855f7',
-    stats: { damage: 94, speed: 98, range: 75 },
-    baseSpeed: 5.6,
-    maxHp: 95,
-    maxEnergy: 100,
-    weapon: 'Dual Storm Energy Blades',
-    attackType: 'HYBRID_BLADE',
-    hasActiveSkill: true,
-    skillName: 'SLAYER OF GOLIATH',
-    skillCooldownMax: 480, // 8 detik
-    skillDesc: 'Active [E]: Menusuk & menerjang menembus musuh dengan kecepatan sonik (110 DMG tusukan), sekaligus melepaskan 3 pedang energi berputar! Membunuh musuh langsung me-reset CD (0s)!',
-    passiveDesc: 'Sonic Thrust Dash & 3 Orbiting Energy Blades (Kill resets CD)',
-    desc: 'Mecha tempur sonik dengan kombo serangan ganda. Skill Slayer of Goliath menusuk cepat menembus musuh, mengelilingi tubuh dengan 3 bilah pedang energi tajam, dan seketika me-reset cooldown jika menewaskan lawan!',
-    skins: [
-      { id: 'default', name: 'Codename: Storm', tag: 'SKIN LEGEND', tierClass: 'skin-badge-legend', themeColor: '#eab308', secondaryColor: '#a855f7' },
-      { id: 'chroma', name: 'Storm Overdrive', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#f43f5e', secondaryColor: '#06b6d4' }
-    ]
-  },
-  alpha: {
-    id: 'alpha',
-    name: 'THE VOID: ALPHA',
-    heroName: 'The Void: Alpha',
-    title: 'SPECTRAL LANCER',
-    tier: 'SKIN LEGEND',
-    tierClass: 'skin-badge-legend',
-    role: 'FIGHTER / CYBORG',
-    roleClass: 'role-fighter',
-    avatar: 'assets/char_spectral.jpg',
-    themeColor: '#14b8a6',
-    secondaryColor: '#f43f5e',
-    stats: { damage: 96, speed: 74, range: 85 },
-    baseSpeed: 4.6,
-    maxHp: 130,
-    maxEnergy: 100,
-    weapon: 'Void Long Spear & Phantoms',
-    attackType: 'VOID_SPEAR',
-    hasActiveSkill: true,
-    skillName: 'SOUL REVANATION',
-    skillCooldownMax: 1200, // 20 detik
-    skillDesc: 'Active [E]: Memanggil 2 Roh Hantu pelindung yang terbang menyerang musuh (Hantu punya HP). Pasif: Musuh gugur menjatuhkan Soul (+HP & memperkuat Hantu).',
-    passiveDesc: 'Soul Collector (Ambil soul orb untuk +HP & tingkatkan stack soul)',
-    desc: 'Ksatria tombak berjangkauan panjang dari dimensi Void. Mengumpulkan jiwa (Soul) dari musuh yang gugur untuk memulihkan darah dan memperkuat 2 Roh Hantu pelindungnya.',
-    skins: [
-      { id: 'default', name: 'General Void', tag: 'SKIN LEGEND', tierClass: 'skin-badge-legend', themeColor: '#14b8a6', secondaryColor: '#f43f5e' },
-      { id: 'chroma', name: 'Crimson Onslaught', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#ef4444', secondaryColor: '#f1f5f9' }
-    ]
-  },
-  glems: {
-    id: 'glems',
-    name: 'GLEMS STARFALL',
-    heroName: 'Glems Starfall',
-    title: 'COSMIC BLADE DANCER',
-    tier: 'SKIN LEGEND',
-    tierClass: 'skin-badge-legend',
-    role: 'ASSASSIN / BLADE',
-    roleClass: 'role-ninja',
-    avatar: 'assets/char_starblade.jpg',
-    themeColor: '#818cf8',
-    secondaryColor: '#38bdf8',
-    stats: { damage: 88, speed: 95, range: 92 },
-    baseSpeed: 5.5,
-    maxHp: 90,
-    maxEnergy: 100,
-    weapon: 'Cosmic Gleam Star-Daggers',
-    attackType: 'MAGIC_DAGGERS',
-    hasActiveSkill: true,
-    skillName: 'STAR DAGGER',
-    skillCooldownMax: 360, // 6 detik
-    skillDesc: 'Active [E]: Lempar bumerang dagger tembus musuh. Tekan E lagi untuk teleport/dash ke dagger (+Shield & DMG boost 2s)! Pasif: Saat dagger ditangkap, reset CD dash.',
-    passiveDesc: 'Catch Recall (Dagger kembali memberi Speed, Shield, dan reset Dash CD)',
-    desc: 'Penari belati kosmik berkecepatan tinggi. Melemparkan bumerang Star Dagger dan dapat berteleportasi langsung ke posisi dagger di udara dengan bonus shield dan lonjakan damage!',
-    skins: [
-      { id: 'default', name: 'Cosmic Gleam', tag: 'SKIN LEGEND', tierClass: 'skin-badge-legend', themeColor: '#818cf8', secondaryColor: '#38bdf8' },
-      { id: 'chroma', name: 'Solar Gleam', tag: 'CHROMA SPECIAL', tierClass: 'skin-badge-special', themeColor: '#fbbf24', secondaryColor: '#f43f5e' }
     ]
   }
 };
@@ -1089,65 +945,58 @@ const LEVELS = {
     mapWidth: 5500,
     mapHeight: 850,
     playerStart: { x: 120, y: 350 },
-    goalPortal: { x: 5410, y: 420, w: 64, h: 90, active: true },
+    goalPortal: { x: 5410, y: 350, w: 64, h: 90, active: true },
     platforms: [
-      // AREA 1: GERBANG DESA & RERUNTUHAN RUMAH (0 .. 1120)
-      { x: 0, y: 490, w: 200, h: 140, type: 'forest_stone', label: 'VILLAGE ENTRANCE L' },
-      { x: 200, y: 530, w: 140, h: 100, type: 'forest_stone', label: 'SUNKEN TRENCH' },
-      { x: 340, y: 470, w: 420, h: 160, type: 'forest_stone', label: 'RUINED STONE MOUND' },
-      { x: 480, y: 390, w: 90, h: 80, type: 'forest_stone', label: 'STONE ARCH TOWER' },
-      { x: 780, y: 410, w: 180, h: 20, type: 'wooden_ruins', label: 'JEMBATAN KAYU' },
-      { x: 1000, y: 340, w: 140, h: 20, type: 'forest_stone', label: 'TEBING GERBANG' },
-      { x: 860, y: 240, w: 160, h: 18, type: 'wooden_ruins', label: 'ATAP RUMAH' },
+      // ==========================================================
+      // CONTINUOUS SOLID VILLAGE GROUND FLOOR (NO DEADLY CHASMS!)
+      // Spanning from x = 0 to 5500, player will never fall to death!
+      // ==========================================================
+      { x: 0,    y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'GERBANG DESA & JALAN UTAMA' },
+      { x: 1080, y: 440, w: 1200, h: 180, type: 'forest_stone', label: 'PASAR DESA & RERUNTUHAN GERBANG' },
+      { x: 2260, y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'TAMAN KUIL & LEMBAH SUNGAI' },
+      { x: 3340, y: 440, w: 1100, h: 180, type: 'forest_stone', label: 'POHON BERINGIN SUCI LELUHUR' },
+      { x: 4420, y: 440, w: 1080, h: 180, type: 'forest_stone', label: 'JANTUNG DESA & TAHTA CHIMERA' },
 
-      // JURANG 1: LEMBAH JURANG KELAM & JEMBATAN TALI / LIFT KATROL (1140 .. 1800)
-      // Bottom is empty abyss (no ground floor). Falling = abyss damage!
-      { x: 1160, y: 440, w: 220, h: 18, type: 'rope_bridge', label: 'JEMBATAN TALI JURANG 1' },
-      { x: 1400, y: 220, w: 24, h: 250, type: 'hanging_rope', label: 'SULUR GANTUNG 1' },
-      { x: 1440, y: 330, w: 140, h: 20, type: 'wooden_ruins', label: 'BALOK TEBING' },
-      { x: 1460, y: 470, w: 100, h: 20, type: 'moving_lift', minY: 320, maxY: 560, speedY: 1.6, dirY: 1, vx: 0, vy: 0, label: 'LIFT KATROL KAYU' },
-      { x: 1580, y: 200, w: 24, h: 270, type: 'hanging_rope', label: 'SULUR GANTUNG 2' },
-      { x: 1600, y: 430, w: 200, h: 18, type: 'rope_bridge', label: 'JEMBATAN TALI JURANG 2' },
+      // ==========================================================
+      // ELEVATED VILLAGE PLATFORMS, ARCHES, STAIRS & STRUCTURES
+      // (As inspired by user reference mockups ref_ruins_mockup & ref_village_mockup)
+      // ==========================================================
+      // 1. Entrance Village Archway & House Stalls (0 .. 1100)
+      { x: 380,  y: 360, w: 220, h: 80,  type: 'forest_stone', label: 'GERBANG BATU KUNO KUIL' },
+      { x: 570,  y: 395, w: 60,  h: 45,  type: 'forest_stone', label: 'TANGGA BATU' },
+      { x: 740,  y: 350, w: 180, h: 22,  type: 'wooden_ruins', label: 'WARUNG DESA (MARKET STALL)' },
+      { x: 960,  y: 310, w: 130, h: 20,  type: 'wooden_ruins', label: 'ATAP RUMAH KAYU' },
 
-      // AREA 2: GUA LEMBAH BERLUMUT & JURANG AIR TERJUN (1800 .. 2560)
-      { x: 1800, y: 490, w: 140, h: 100, type: 'forest_stone', label: 'TEBING GUA' },
-      { x: 1940, y: 520, w: 120, h: 100, type: 'forest_stone', label: 'SUNKEN GROTTO' },
-      { x: 1900, y: 370, w: 160, h: 20, type: 'wooden_ruins', label: 'BALOK GUA ATAS' },
-      { x: 2060, y: 490, w: 120, h: 18, type: 'crumble', label: 'PAPAN RETAK' },
-      { x: 2180, y: 440, w: 160, h: 80, type: 'forest_stone', label: 'SANCTUARY CHECKPOINT 2' },
+      // 2. Modular Floating Mossy Stone Platforms with Hanging Vines (1100 .. 2260)
+      // (Directly matching ref_ruins_mockup.png)
+      { x: 1160, y: 350, w: 170, h: 24,  type: 'forest_stone', label: 'BATU GANTUNG BERLUMUT 1' },
+      { x: 1370, y: 340, w: 180, h: 24,  type: 'forest_stone', label: 'BATU GANTUNG BERLUMUT 2' },
+      { x: 1590, y: 220, w: 160, h: 22,  type: 'forest_stone', label: 'TEBING BATU ATAS' },
+      { x: 1420, y: 190, w: 24,  h: 150, type: 'hanging_rope', label: 'SULUR GANTUNG 1' },
+      { x: 1780, y: 330, w: 220, h: 18,  type: 'rope_bridge',  label: 'JEMBATAN TALI DESA' },
+      
+      // 3. Elevated Village Terrace with Red-Haired NPC! (1980 .. 2260)
+      { x: 2020, y: 360, w: 240, h: 80,  type: 'forest_stone', label: 'TERAS DESA // POS WARGA' },
 
-      // JURANG 2: JURANG AIR TERJUN & RAKIT PENYEBERANGAN (2340 .. 2560)
-      // Bottomless chasm crossed by horizontal raft lift and hanging rope!
-      { x: 2360, y: 460, w: 110, h: 20, type: 'moving_lift', minX: 2350, maxX: 2530, speedX: 2.0, dirX: 1, vx: 0, vy: 0, label: 'RAKIT PENYEBERANGAN' },
-      { x: 2450, y: 220, w: 24, h: 250, type: 'hanging_rope', label: 'TALI GANTUNG JURANG' },
+      // 4. Sacred Shrine Arena & Upper Beams (2500 .. 3340)
+      // Mini Boss: Blight Fang Behemoth fights here on the solid ground at y=440!
+      { x: 2660, y: 340, w: 160, h: 20,  type: 'wooden_ruins', label: 'BALOK KUIL KIRI' },
+      { x: 2980, y: 340, w: 160, h: 20,  type: 'wooden_ruins', label: 'BALOK KUIL KANAN' },
+      { x: 3180, y: 370, w: 140, h: 20,  type: 'wooden_ruins', label: 'TANGGA KUIL' },
 
-      // AREA 3: KUIL SUCI PURBA & ARENA MINI-BOSS (2560 .. 3240)
-      // Solid unbroken floor across 2560..3240 so Behemoth mini-boss never falls!
-      { x: 2560, y: 500, w: 680, h: 110, type: 'forest_stone', label: 'SACRED SHRINE ARENA' },
-      { x: 2680, y: 380, w: 130, h: 18, type: 'wooden_ruins' },
-      { x: 2950, y: 380, w: 130, h: 18, type: 'wooden_ruins' },
+      // 5. Sacred Banyan Grove & Canopy Terraces (3340 .. 4420)
+      { x: 3420, y: 350, w: 180, h: 22,  type: 'canopy_branch', label: 'DAHAN BERINGIN 1' },
+      { x: 3640, y: 270, w: 200, h: 22,  type: 'canopy_branch', label: 'DAHAN BERINGIN 2' },
+      { x: 3880, y: 190, w: 220, h: 24,  type: 'canopy_branch', label: 'KANOPI TERTINGGI' },
+      { x: 3720, y: 150, w: 24,  h: 220, type: 'hanging_rope',  label: 'SULUR BERINGIN' },
+      { x: 4120, y: 310, w: 190, h: 20,  type: 'wooden_ruins',  label: 'GUDANG KANOPI' },
+      { x: 4330, y: 370, w: 130, h: 20,  type: 'forest_stone',  label: 'GERBANG BATU DALAM' },
 
-      // JURANG 3: JURANG KANOPI POHON PURBA & LIFT KANOPI (3240 .. 4460)
-      { x: 3240, y: 490, w: 180, h: 90, type: 'forest_stone', label: 'TEBING KELUAR KUIL' },
-      { x: 3440, y: 150, w: 42, h: 420, type: 'ruin_wall', label: 'POHON BERINGIN PURBA' },
-      { x: 3480, y: 490, w: 180, h: 80, type: 'forest_stone', label: 'SANCTUARY CHECKPOINT 3' },
-      { x: 3500, y: 410, w: 180, h: 22, type: 'canopy_branch', label: 'DAHAN KANOPI 1' },
-      { x: 3700, y: 310, w: 220, h: 24, type: 'canopy_branch', label: 'DAHAN KANOPI 2' },
-      { x: 3540, y: 270, w: 180, h: 18, type: 'rope_bridge', label: 'JEMBATAN GANTUNG KANOPI' },
-      { x: 3660, y: 160, w: 24, h: 260, type: 'hanging_rope', label: 'SULUR BERINGIN 1' },
-      { x: 3940, y: 140, w: 24, h: 240, type: 'hanging_rope', label: 'SULUR BERINGIN 2' },
-      { x: 3980, y: 240, w: 200, h: 22, type: 'wooden_ruins', label: 'GUDANG KANOPI' },
-      { x: 4160, y: 210, w: 24, h: 260, type: 'hanging_rope', label: 'SULUR BERINGIN 3' },
-      { x: 4200, y: 420, w: 110, h: 20, type: 'moving_lift', minY: 250, maxY: 480, speedY: 1.8, dirY: -1, vx: 0, vy: 0, label: 'LIFT KANOPI PURBA' },
-      { x: 4330, y: 500, w: 140, h: 80, type: 'forest_stone', label: 'TEBING GERBANG BOS' },
-
-      // AREA 5: JANTUNG DESA & TAHTA THE BLIGHT CHIMERA (4460 .. 5500)
-      // Solid unbroken floor across 4460..5500 so Blight Chimera boss never falls!
-      { x: 4460, y: 510, w: 920, h: 120, type: 'forest_stone', label: 'VILLAGE CORE ARENA' },
-      { x: 4620, y: 380, w: 150, h: 20, type: 'canopy_branch' },
-      { x: 4850, y: 310, w: 180, h: 20, type: 'wooden_ruins', label: 'ALTAR DESA' },
-      { x: 5090, y: 380, w: 150, h: 20, type: 'canopy_branch' },
-      { x: 5380, y: 510, w: 120, h: 120, type: 'forest_stone', label: 'EXTRACTION SANCTUARY' }
+      // 6. Village Core & Apex Arena (4420 .. 5500)
+      // Main Boss: The Blight Chimera fights here on the solid ground at y=440!
+      { x: 4620, y: 340, w: 160, h: 20,  type: 'canopy_branch', label: 'DAHAN ARENA KIRI' },
+      { x: 4860, y: 280, w: 180, h: 20,  type: 'wooden_ruins',  label: 'ALTAR LELUHUR DESA' },
+      { x: 5120, y: 340, w: 160, h: 20,  type: 'canopy_branch', label: 'DAHAN ARENA KANAN' }
     ],
     traps: [
       { x: 2060, y: 490, w: 120, h: 18, type: 'crumble' },
@@ -6141,7 +5990,7 @@ function updateEnemies() {
     // Level 1 Mini Boss: Blight Fang Behemoth (Ruins Arena: 2600 .. 3200)
     if (player.x > 2600 && player.x < 3200 && !defeatedBosses.treant) {
       if (!enemies.some(e => e.type === 'boss_treant')) {
-        enemies.push(new Enemy(2850, 395, 'boss_treant'));
+        enemies.push(new Enemy(2850, 335, 'boss_treant'));
       }
       if (player.x > 2630 && player.x < 3140 && (!levelBarriers.miniBossLeft.active || !levelBarriers.miniBossRight.active)) {
         levelBarriers.miniBossLeft.active = true;
@@ -6155,7 +6004,7 @@ function updateEnemies() {
     // Level 1 Main Boss: The Blight Chimera (Sunken Hollow Arena: 4500 .. 5320)
     if (player.x > 4500 && player.x < 5320 && !defeatedBosses.chimera && !isBossDefeated) {
       if (!enemies.some(e => e.type === 'boss_chimera')) {
-        enemies.push(new Enemy(4850, 394, 'boss_chimera'));
+        enemies.push(new Enemy(4850, 324, 'boss_chimera'));
       }
       if (player.x > 4530 && player.x < 5280 && (!levelBarriers.bossLeft.active || !levelBarriers.bossRight.active)) {
         levelBarriers.bossLeft.active = true;
@@ -6363,11 +6212,13 @@ const L1_BUSHES = [
 // LEVEL 1 (THE ORIGIN) USER BACKGROUND ASSETS & PARALLAX ENGINE
 // ============================================================================
 const l1BgAssets = {
+  originVillage: new Image(),
   mistyWoods: new Image(),
   ancientTotem: new Image(),
   ruinsShrine: new Image(),
   tilesetRuins: new Image()
 };
+l1BgAssets.originVillage.src = 'assets/bg_origin_village.jpg';
 l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
 l1BgAssets.ancientTotem.src = 'assets/bg_ancient_totem.jpg';
 l1BgAssets.ruinsShrine.src = 'assets/bg_ruins_shrine.jpg';
@@ -6394,94 +6245,25 @@ function drawSeamlessParallaxImage(targetCtx, img, camX, speed, targetH, yOffset
 function drawLevel1ForestParallax(cam) {
   const nowTime = Date.now();
 
-  // 1. Far Background: User Asset 'bg_misty_woods.jpg' (Morning misty woodland & pine silhouettes)
-  const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
-  if (!renderedMistyWoods) {
-    // Procedural Fallback Sky & Pines
-    const skyGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
-    skyGrad.addColorStop(0, '#4b6e79');
-    skyGrad.addColorStop(0.30, '#668e98');
-    skyGrad.addColorStop(0.60, '#8cb5bf');
-    skyGrad.addColorStop(0.85, '#b8dfe3');
-    skyGrad.addColorStop(1, '#d5eff1');
-    ctx.fillStyle = skyGrad;
-    ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
-
-    // Distant Soft Morning Sunlight Glow
-    const sunPeriod = V_WIDTH + 400;
-    const sunShift = ((Math.round(cam.x * 0.015) % sunPeriod) + sunPeriod) % sunPeriod;
-    const sunX = V_WIDTH * 0.75 - sunShift;
-    const sunY = 90;
-    ctx.save();
-    const sunGrad = ctx.createRadialGradient(sunX, sunY, 15, sunX, sunY, 160);
-    sunGrad.addColorStop(0, 'rgba(255, 255, 255, 0.40)');
-    sunGrad.addColorStop(0.3, 'rgba(230, 248, 250, 0.22)');
-    sunGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = sunGrad;
-    ctx.beginPath();
-    ctx.arc(sunX, sunY, 160, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    // Distant Slender Misty Tree Silhouettes Fallback
-    ctx.save();
-    const p1Period = 500;
-    const p1Shift = ((Math.round(cam.x * 0.03) % p1Period) + p1Period) % p1Period;
-    const p1Start = -p1Shift;
-    for (let copy = -1; p1Start + copy * p1Period < V_WIDTH + p1Period; copy++) {
-      const chunkX = p1Start + copy * p1Period;
-      L1_FAR_TREES.forEach(t => {
-        const tx = chunkX + t.x;
-        if (tx + t.w < -60 || tx > V_WIDTH + 60) return;
-        ctx.fillStyle = '#8ea8b4';
-        ctx.globalAlpha = 0.55;
-        ctx.fillRect(tx, V_HEIGHT - t.h, t.w, t.h);
-      });
+  // 1. Far Majestic Origin Village & Sacred Mountains (User reference art bg_origin_village.jpg)
+  const renderedOriginVillage = drawSeamlessParallaxImage(ctx, l1BgAssets.originVillage, cam.x, 0.08, V_HEIGHT, 0, 1.0);
+  if (!renderedOriginVillage) {
+    // Fallback to misty woods
+    const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
+    if (!renderedMistyWoods) {
+      // Procedural Fallback Sky & Pines
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
+      skyGrad.addColorStop(0, '#4b6e79');
+      skyGrad.addColorStop(0.30, '#668e98');
+      skyGrad.addColorStop(0.60, '#8cb5bf');
+      skyGrad.addColorStop(0.85, '#b8dfe3');
+      skyGrad.addColorStop(1, '#d5eff1');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
     }
-    ctx.restore();
   }
 
-  // 2. Mid-Far Layer: User Asset 'bg_ancient_totem.jpg' (Mossy stone totem in lush jungle canopy)
-  const renderedTotem = drawSeamlessParallaxImage(ctx, l1BgAssets.ancientTotem, cam.x, 0.11, 410, V_HEIGHT - 410 + 20, 0.72);
-  if (!renderedTotem) {
-    // Procedural Fallback Midground Trees
-    ctx.save();
-    const p2Period = 700;
-    const p2Shift = ((Math.round(cam.x * 0.07) % p2Period) + p2Period) % p2Period;
-    const p2Start = -p2Shift;
-    for (let copy = -1; p2Start + copy * p2Period < V_WIDTH + p2Period; copy++) {
-      const chunkX = p2Start + copy * p2Period;
-      L1_MID_TREES.forEach(t => {
-        const tx = chunkX + t.x;
-        if (tx + t.w < -100 || tx > V_WIDTH + 100) return;
-        ctx.fillStyle = '#415e68';
-        ctx.globalAlpha = 0.80;
-        ctx.fillRect(tx, 40, t.w, V_HEIGHT);
-      });
-    }
-    ctx.restore();
-  }
-
-  // 3. Midground Layer: User Asset 'bg_ruins_shrine.jpg' (Destroyed village shrine & banyan tree roots)
-  const renderedRuins = drawSeamlessParallaxImage(ctx, l1BgAssets.ruinsShrine, cam.x, 0.23, 450, V_HEIGHT - 450, 0.88);
-  if (!renderedRuins) {
-    // Procedural Fallback Near Trees & Undergrowth
-    ctx.save();
-    const p3Period = 1100;
-    const p3Shift = ((Math.round(cam.x * 0.14) % p3Period) + p3Period) % p3Period;
-    const p3Start = -p3Shift;
-    for (let copy = -1; p3Start + copy * p3Period < V_WIDTH + p3Period; copy++) {
-      const chunkX = p3Start + copy * p3Period;
-      const giantX = chunkX + 70;
-      if (giantX + 95 > -150 && giantX < V_WIDTH + 150) {
-        ctx.fillStyle = '#2f3b44';
-        ctx.fillRect(giantX, 0, 95, V_HEIGHT);
-      }
-    }
-    ctx.restore();
-  }
-
-  // 4. Volumetric Morning Sun God Rays (Filtering down through destroyed ruins canopy)
+  // 2. Volumetric Morning Sun God Rays (Filtering down through village canopy)
   ctx.save();
   const rayAngle = -0.32;
   ctx.translate(V_WIDTH * 0.72, -30);
@@ -6497,17 +6279,17 @@ function drawLevel1ForestParallax(cam) {
   ctx.fillRect(170, 0, 75, 520);
   ctx.restore();
 
-  // 5. Rolling Morning Valley Mist / Fog Banks (Static height over chasms)
+  // 3. Rolling Morning Valley Mist (Lower road over village banks)
   ctx.save();
-  const mistGrad = ctx.createLinearGradient(0, V_HEIGHT - 130, 0, V_HEIGHT);
+  const mistGrad = ctx.createLinearGradient(0, V_HEIGHT - 120, 0, V_HEIGHT);
   mistGrad.addColorStop(0, 'transparent');
-  mistGrad.addColorStop(0.5, 'rgba(180, 222, 226, 0.35)');
-  mistGrad.addColorStop(1, 'rgba(150, 205, 211, 0.65)');
+  mistGrad.addColorStop(0.5, 'rgba(180, 222, 226, 0.28)');
+  mistGrad.addColorStop(1, 'rgba(150, 205, 211, 0.55)');
   ctx.fillStyle = mistGrad;
-  ctx.fillRect(0, V_HEIGHT - 130, V_WIDTH, 130);
+  ctx.fillRect(0, V_HEIGHT - 120, V_WIDTH, 120);
   ctx.restore();
 
-  // 6. Ambient Drifting Forest Spores & Fireflies (Golden & Emerald)
+  // 4. Ambient Drifting Forest Spores & Fireflies (Golden & Emerald)
   ctx.save();
   const animTime = nowTime / 40;
   for (let s = 0; s < 28; s++) {
@@ -6524,7 +6306,7 @@ function drawLevel1ForestParallax(cam) {
   }
   ctx.restore();
 
-  // 7. Ambient Falling Forest Leaves (Swaying gently in the wind)
+  // 5. Ambient Falling Leaves & Petals (Swaying gently in the morning breeze)
   ctx.save();
   for (let l = 0; l < 16; l++) {
     const lfTime = nowTime / 24 + l * 143;
@@ -6542,6 +6324,122 @@ function drawLevel1ForestParallax(cam) {
     ctx.restore();
   }
   ctx.restore();
+}
+
+// ============================================================================
+// VILLAGE NPCS (THE ORIGIN: SURVIVORS & ALLIES)
+// ============================================================================
+const level1NPCs = [
+  {
+    x: 2120,
+    y: 360,
+    name: 'Ren',
+    speech: 'Ronin! Selamatkan desa kita dari petaka ini!',
+    hairColor: '#ef4444',
+    tunicColor: '#2563eb'
+  }
+];
+
+function drawLevelNPCs(ctx, cam) {
+  if (currentLevelId !== 1) return;
+  const now = Date.now();
+
+  level1NPCs.forEach(npc => {
+    if (npc.x < cam.x - 100 || npc.x > cam.x + V_WIDTH + 100) return;
+
+    ctx.save();
+    ctx.translate(npc.x, npc.y);
+    const breathe = Math.sin(now / 380) * 1.5;
+
+    // 1. Chibi Shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 10, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Chibi Boots & Legs
+    ctx.fillStyle = '#451a03';
+    ctx.fillRect(-6, -6, 5, 6);
+    ctx.fillRect(1, -6, 5, 6);
+
+    // 3. Chibi Blue Tunic Body
+    ctx.fillStyle = npc.tunicColor;
+    ctx.beginPath();
+    ctx.roundRect(-7, -20 + breathe * 0.4, 14, 15, [4, 4, 3, 3]);
+    ctx.fill();
+
+    // Brown leather belt & gold buckle
+    ctx.fillStyle = '#78350f';
+    ctx.fillRect(-7, -10 + breathe * 0.4, 14, 3);
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillRect(-2, -10 + breathe * 0.4, 4, 3);
+
+    // 4. Chibi Head (Peach Skin)
+    ctx.fillStyle = '#fed7aa';
+    ctx.beginPath();
+    ctx.arc(0, -25 + breathe * 0.6, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Expressive Eyes
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(-3, -26 + breathe * 0.6, 2, 3);
+    ctx.fillRect(2, -26 + breathe * 0.6, 2, 3);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(-3, -26 + breathe * 0.6, 1, 1);
+    ctx.fillRect(2, -26 + breathe * 0.6, 1, 1);
+
+    // 5. ICONIC SPIKY CRIMSON-RED HAIR (Matching user reference mockup!)
+    ctx.fillStyle = npc.hairColor;
+    ctx.beginPath();
+    ctx.arc(0, -26 + breathe * 0.6, 9.5, Math.PI * 0.8, Math.PI * 2.2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, -35 + breathe * 0.6);
+    ctx.lineTo(4, -28 + breathe * 0.6);
+    ctx.lineTo(-4, -28 + breathe * 0.6);
+    ctx.moveTo(-10, -32 + breathe * 0.6);
+    ctx.lineTo(-4, -28 + breathe * 0.6);
+    ctx.lineTo(-8, -24 + breathe * 0.6);
+    ctx.moveTo(10, -32 + breathe * 0.6);
+    ctx.lineTo(4, -28 + breathe * 0.6);
+    ctx.lineTo(8, -24 + breathe * 0.6);
+    ctx.moveTo(-6, -27 + breathe * 0.6);
+    ctx.lineTo(-2, -22 + breathe * 0.6);
+    ctx.lineTo(2, -27 + breathe * 0.6);
+    ctx.lineTo(6, -22 + breathe * 0.6);
+    ctx.lineTo(8, -27 + breathe * 0.6);
+    ctx.closePath();
+    ctx.fill();
+
+    // 6. Proximity Speech Bubble when Ronin is near!
+    const distToPlayer = Math.abs(player.x - npc.x);
+    if (distToPlayer < 90) {
+      ctx.save();
+      const bubbleBob = Math.sin(now / 250) * 2;
+      const bY = -48 + bubbleBob;
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.roundRect(-80, bY - 14, 160, 24, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-4, bY + 10);
+      ctx.lineTo(0, bY + 16);
+      ctx.lineTo(4, bY + 10);
+      ctx.fill();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '10px "Rajdhani", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(npc.speech, 0, bY + 2);
+      ctx.restore();
+    }
+
+    ctx.restore();
+  });
 }
 
 function drawParallaxBackground(cam) {
@@ -7209,6 +7107,34 @@ function drawPlatforms() {
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(mx + 1.5, p.y - 7, 1.5, 1.5);
           ctx.fillRect(mx + 4.5, p.y - 6, 1.5, 1.5);
+        }
+      }
+
+      // Wildflower Blossoms (White & buttercup yellow petals with golden centers from village mockup)
+      for (let fx = p.x + 28; fx < p.x + p.w - 28; fx += 52) {
+        const flowerSeed = (fx * 17) % 4;
+        if (flowerSeed !== 0) {
+          const petalColor = (flowerSeed % 2 === 0) ? '#ffffff' : '#fef08a';
+          // Flower stem
+          ctx.strokeStyle = '#22c55e';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(fx, p.y);
+          ctx.lineTo(fx, p.y - 5);
+          ctx.stroke();
+          // Petals
+          ctx.fillStyle = petalColor;
+          ctx.beginPath();
+          ctx.arc(fx - 1.5, p.y - 6, 1.5, 0, Math.PI * 2);
+          ctx.arc(fx + 1.5, p.y - 6, 1.5, 0, Math.PI * 2);
+          ctx.arc(fx, p.y - 7.5, 1.5, 0, Math.PI * 2);
+          ctx.arc(fx, p.y - 4.5, 1.5, 0, Math.PI * 2);
+          ctx.fill();
+          // Golden blossom center
+          ctx.fillStyle = '#f59e0b';
+          ctx.beginPath();
+          ctx.arc(fx, p.y - 6, 1, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
@@ -10513,6 +10439,25 @@ function updateLobbyHeroPreview() {
 
   const descEl = document.getElementById('lobby-hero-desc');
   if (descEl) descEl.textContent = hero.desc;
+
+  const skinBtnText = document.getElementById('lobby-skin-btn-text');
+  if (skinBtnText) {
+    skinBtnText.textContent = skinConfig.name.toUpperCase();
+  }
+}
+
+function toggleRoninSkin() {
+  const hero = HEROES.ronin;
+  if (!hero || !hero.skins) return;
+  currentSkinId = (currentSkinId === 'default') ? 'crimson' : 'default';
+  selectedSkinInRoster = currentSkinId;
+  if (typeof player !== 'undefined' && player && typeof player.applyHeroConfig === 'function') {
+    player.applyHeroConfig('ronin', currentSkinId);
+  }
+  if (window.soundEngine && typeof window.soundEngine.playMenuClick === 'function') {
+    window.soundEngine.playMenuClick();
+  }
+  updateLobbyHeroPreview();
 }
 
 function renderHeroRosterGrid() {
@@ -10992,6 +10937,7 @@ function gameLoop() {
   drawLoreTablets();
   drawCheckpoints();
   drawGoalPortal();
+  drawLevelNPCs(ctx, camera);
 
   if (currentState === STATES.PLAYING) {
     updatePlatforms();
