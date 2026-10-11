@@ -2402,6 +2402,8 @@ class Enemy {
     this.state = 'idle';
     this.stateTimer = 0;
     this.animFrame = Math.random() * 100;
+    this.turnCooldown = 0;
+    this.isLunging = false;
 
     if (type === 'drone') {
       this.w = 36;
@@ -2582,6 +2584,8 @@ class Enemy {
       this.isFinalBoss = true;
     }
 
+    this.baseSpeed = Math.abs(this.vx) || 1.8;
+
     // Auto-snap ground bosses & golems to platform surface on spawn so they never clip or fall through
     if (this.type.startsWith('boss') || this.type === 'golem') {
       const ground = platforms.find(p =>
@@ -2648,6 +2652,7 @@ class Enemy {
     this.animFrame++;
     if (this.flashTimer > 0) this.flashTimer--;
     if (this.hpBarTimer > 0) this.hpBarTimer--;
+    if (this.turnCooldown > 0) this.turnCooldown--;
 
     // ==========================================
     // 1. FLYING HUNTER ENEMIES
@@ -3050,12 +3055,12 @@ class Enemy {
           this.isGrounded = true;
         }
       });
-      if (this.x < 2600) {
-        this.x = 2600;
+      if (this.x < 4600) {
+        this.x = 4600;
         this.vx = Math.abs(this.vx);
         this.facing = 1;
-      } else if (this.x > 3170) {
-        this.x = 3170;
+      } else if (this.x > 5250) {
+        this.x = 5250;
         this.vx = -Math.abs(this.vx);
         this.facing = -1;
       }
@@ -3112,12 +3117,12 @@ class Enemy {
           this.isGrounded = true;
         }
       });
-      if (this.x < 4500) {
-        this.x = 4500;
+      if (this.x < 9400) {
+        this.x = 9400;
         this.vx = Math.abs(this.vx);
         this.facing = 1;
-      } else if (this.x > 5300) {
-        this.x = 5300;
+      } else if (this.x > 10400) {
+        this.x = 10400;
         this.vx = -Math.abs(this.vx);
         this.facing = -1;
       }
@@ -3167,6 +3172,7 @@ class Enemy {
     this.y += this.vy;
 
     this.isGrounded = false;
+    let onContinuousGround = false;
     platforms.forEach(p => {
       // Floor collision
       if (p.type === 'hazard_spikes' || p.type === 'hazard_brambles' || p.type === 'hazard_lava' || p.type === 'hanging_rope') return;
@@ -3176,23 +3182,38 @@ class Enemy {
         this.vy = 0;
         this.isGrounded = true;
 
-        if (this.x <= p.x + 4 && this.vx < 0) {
-          this.vx = Math.abs(this.vx);
-          this.facing = 1;
-        } else if (this.x + this.w >= p.x + p.w - 4 && this.vx > 0) {
-          this.vx = -Math.abs(this.vx);
-          this.facing = -1;
+        if (this.isLunging) {
+          this.isLunging = false;
+          this.vx = this.facing * (this.baseSpeed || 1.8);
+        }
+
+        if (p.y >= 430 || p.type === 'ground') {
+          onContinuousGround = true;
+        } else if (!onContinuousGround && this.turnCooldown === 0) {
+          if (this.x <= p.x + 4 && this.vx < 0) {
+            this.vx = Math.abs(this.vx);
+            this.facing = 1;
+            this.turnCooldown = 25;
+          } else if (this.x + this.w >= p.x + p.w - 4 && this.vx > 0) {
+            this.vx = -Math.abs(this.vx);
+            this.facing = -1;
+            this.turnCooldown = 25;
+          }
         }
       }
 
       // Wall collision
       if ((p.type === 'wall' || p.type === 'ruin_wall') && this.y + this.h > p.y && this.y < p.y + p.h) {
-        if (this.x + this.w > p.x && this.x < p.x + p.w / 2 && this.vx > 0) {
-          this.vx = -Math.abs(this.vx);
-          this.facing = -1;
-        } else if (this.x < p.x + p.w && this.x > p.x + p.w / 2 && this.vx < 0) {
-          this.vx = Math.abs(this.vx);
-          this.facing = 1;
+        if (this.turnCooldown === 0) {
+          if (this.x + this.w > p.x && this.x < p.x + p.w / 2 && this.vx > 0) {
+            this.vx = -Math.abs(this.vx);
+            this.facing = -1;
+            this.turnCooldown = 20;
+          } else if (this.x < p.x + p.w && this.x > p.x + p.w / 2 && this.vx < 0) {
+            this.vx = Math.abs(this.vx);
+            this.facing = 1;
+            this.turnCooldown = 20;
+          }
         }
       }
     });
@@ -3205,6 +3226,7 @@ class Enemy {
         this.facing = player.x < this.x ? -1 : 1;
         this.vy = -6.2;
         this.vx = this.facing * 5.4;
+        this.isLunging = true;
         window.soundEngine.playDash();
         floatingTexts.push(new FloatingText(this.x, this.y - 12, 'POUNCE!', '#ef4444'));
       }
@@ -3332,6 +3354,7 @@ class Enemy {
         this.facing = player.x < this.x ? -1 : 1;
         this.vy = -5.8;
         this.vx = this.facing * 5.2;
+        this.isLunging = true;
         window.soundEngine.playDash();
         floatingTexts.push(new FloatingText(this.x, this.y - 12, 'FERAL LUNGE!', '#84cc16'));
       }
@@ -6302,7 +6325,7 @@ const l1BgAssets = {
 };
 l1BgAssets.originVillage.src = 'assets/bg_origin_village.jpg';
 l1BgAssets.originPlatforms.src = 'assets/tileset_origin_platforms.png';
-l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.jpg';
+l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.png';
 l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
 l1BgAssets.ancientTotem.src = 'assets/bg_ancient_totem.jpg';
 l1BgAssets.ruinsShrine.src = 'assets/bg_ruins_shrine.jpg';
@@ -6583,18 +6606,19 @@ function drawOriginVillageFurniture(ctx, cam) {
 
   level1VillageProps.forEach(prop => {
     const pw = prop.w || 60;
+    const ph = prop.h || 60;
     if (prop.x + pw < cam.x - 120 || prop.x > cam.x + V_WIDTH + 120) return;
 
     ctx.save();
     switch (prop.type) {
       case 'torii_gate':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 396, 158, 86, 72, prop.x, prop.y - 85, prop.w, 85);
+          ctx.drawImage(furnImg, 220, 85, 60, 65, prop.x, prop.y - ph, pw, ph);
         } else {
           const gx = prop.x;
           const gy = prop.y;
-          const gw = prop.w;
-          const gh = 85;
+          const gw = pw;
+          const gh = ph;
           ctx.fillStyle = '#991b1b';
           ctx.fillRect(gx + 14, gy - gh, 15, gh);
           ctx.fillRect(gx + gw - 29, gy - gh, 15, gh);
@@ -6612,8 +6636,17 @@ function drawOriginVillageFurniture(ctx, cam) {
           ctx.quadraticCurveTo(gx + gw / 2, gy - gh + 34, gx + gw - 22, gy - gh + 26);
           ctx.stroke();
         }
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
-        ctx.fillRect(prop.x + 18, prop.y - 75, prop.w - 36, 75);
+        break;
+
+      case 'yamamon_gate':
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 280, 85, 65, 65, prop.x, prop.y - ph, pw, ph);
+        } else {
+          ctx.fillStyle = '#451a03';
+          ctx.fillRect(prop.x + 8, prop.y - ph, pw - 16, ph);
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(prop.x, prop.y - ph, pw, 14);
+        }
         break;
 
       case 'house_tiled':
@@ -6624,20 +6657,20 @@ function drawOriginVillageFurniture(ctx, cam) {
       case 'temple_ruins_pagoda':
         if (hasFurnImg) {
           const slices = {
-            house_tiled: { sx: 14, sy: 34, sw: 196, sh: 108 },
-            house_thatched: { sx: 216, sy: 50, sw: 156, sh: 92 },
-            house_shop: { sx: 382, sy: 42, sw: 186, sh: 100 },
-            shrine_hokora: { sx: 584, sy: 46, sw: 116, sh: 96 },
-            shrine_altar: { sx: 584, sy: 46, sw: 116, sh: 96 },
-            temple_ruins_pagoda: { sx: 14, sy: 34, sw: 196, sh: 108 }
+            house_tiled: { sx: 6, sy: 5, sw: 154, sh: 144 },
+            house_thatched: { sx: 150, sy: 32, sw: 154, sh: 118 },
+            house_shop: { sx: 300, sy: 12, sw: 159, sh: 137 },
+            shrine_hokora: { sx: 455, sy: 12, sw: 151, sh: 137 },
+            shrine_altar: { sx: 455, sy: 12, sw: 151, sh: 137 },
+            temple_ruins_pagoda: { sx: 6, sy: 5, sw: 154, sh: 144 }
           };
           const sl = slices[prop.type] || slices.house_tiled;
-          ctx.drawImage(furnImg, sl.sx, sl.sy, sl.sw, sl.sh, prop.x, prop.y - prop.h, prop.w, prop.h);
+          ctx.drawImage(furnImg, sl.sx, sl.sy, sl.sw, sl.sh, prop.x, prop.y - ph, pw, ph);
         } else {
           const hx = prop.x;
-          const hy = prop.y - prop.h;
-          const hw = prop.w;
-          const hh = prop.h;
+          const hy = prop.y - ph;
+          const hw = pw;
+          const hh = ph;
           ctx.fillStyle = '#451a03';
           ctx.fillRect(hx + 10, hy + 30, hw - 20, hh - 30);
           ctx.fillStyle = '#78350f';
@@ -6660,9 +6693,9 @@ function drawOriginVillageFurniture(ctx, cam) {
       case 'wooden_lantern_post':
         if (hasFurnImg) {
           if (prop.type === 'stone_lantern') {
-            ctx.drawImage(furnImg, 168, 250, 48, 76, prop.x - 14, prop.y - 48, 28, 48);
+            ctx.drawImage(furnImg, 85, 205, 35, 56, prop.x - 14, prop.y - 56, 32, 56);
           } else {
-            ctx.drawImage(furnImg, 20, 248, 82, 78, prop.x - 20, prop.y - 68, 46, 68);
+            ctx.drawImage(furnImg, 8, 195, 36, 85, prop.x - 16, prop.y - 75, 34, 75);
           }
         } else {
           const lx = prop.x;
@@ -6688,8 +6721,8 @@ function drawOriginVillageFurniture(ctx, cam) {
       case 'river_waterfall':
         const rx = prop.x;
         const ry = prop.y;
-        const rw = prop.w;
-        const rh = prop.h;
+        const rw = pw;
+        const rh = ph;
         ctx.fillStyle = '#0f172a';
         ctx.fillRect(rx, ry, rw, rh);
         const waterGrad = ctx.createLinearGradient(0, ry, 0, ry + rh);
@@ -6698,6 +6731,9 @@ function drawOriginVillageFurniture(ctx, cam) {
         waterGrad.addColorStop(1, '#083344');
         ctx.fillStyle = waterGrad;
         ctx.fillRect(rx, ry, rw, rh);
+        if (hasFurnImg) {
+          ctx.drawImage(furnImg, 95, 296, 70, 40, rx + 10, ry, Math.min(80, rw - 20), rh);
+        }
         for (let rip = rx + 6; rip < rx + rw - 6; rip += 28) {
           const ripOffset = Math.sin(now / 220 + rip * 0.08) * 3;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
@@ -6717,7 +6753,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'wooden_cart':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 326, 268, 74, 52, prop.x, prop.y - 42, 54, 42);
+          ctx.drawImage(furnImg, 188, 195, 92, 85, prop.x, prop.y - 65, 75, 65);
         } else {
           ctx.fillStyle = '#78350f';
           ctx.fillRect(prop.x, prop.y - 24, 44, 14);
@@ -6732,18 +6768,18 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'market_stall':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 470, 254, 74, 66, prop.x, prop.y - prop.h, prop.w, prop.h);
+          ctx.drawImage(furnImg, 275, 204, 51, 61, prop.x, prop.y - ph, pw, ph);
         } else {
           ctx.fillStyle = '#78350f';
-          ctx.fillRect(prop.x + 8, prop.y - prop.h + 20, prop.w - 16, prop.h - 20);
+          ctx.fillRect(prop.x + 8, prop.y - ph + 20, pw - 16, ph - 20);
           ctx.fillStyle = '#b91c1c';
-          ctx.fillRect(prop.x, prop.y - prop.h, prop.w, 18);
+          ctx.fillRect(prop.x, prop.y - ph, pw, 18);
         }
         break;
 
       case 'stone_well':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 560, 260, 58, 60, prop.x, prop.y - 48, 46, 48);
+          ctx.drawImage(furnImg, 325, 205, 70, 75, prop.x, prop.y - 65, 60, 65);
         } else {
           ctx.fillStyle = '#475569';
           ctx.fillRect(prop.x, prop.y - 24, 38, 24);
@@ -6754,7 +6790,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'jizo_statue':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 748, 368, 62, 52, prop.x - 14, prop.y - 36, 34, 36);
+          ctx.drawImage(furnImg, 445, 306, 24, 34, prop.x - 12, prop.y - 36, 24, 36);
         } else {
           ctx.fillStyle = '#64748b';
           ctx.beginPath();
@@ -6768,7 +6804,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'shiba_inu':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 678, 385, 28, 25, prop.x, prop.y - 20, 24, 20);
+          ctx.drawImage(furnImg, 410, 315, 25, 25, prop.x, prop.y - 25, 25, 25);
         } else {
           ctx.fillStyle = '#d97706';
           ctx.fillRect(prop.x, prop.y - 16, 20, 12);
@@ -6778,7 +6814,7 @@ function drawOriginVillageFurniture(ctx, cam) {
 
       case 'crows_fence':
         if (hasFurnImg) {
-          ctx.drawImage(furnImg, 604, 368, 78, 52, prop.x, prop.y - 42, 60, 42);
+          ctx.drawImage(furnImg, 359, 279, 56, 61, prop.x, prop.y - 52, 54, 52);
         } else {
           ctx.fillStyle = '#78350f';
           ctx.fillRect(prop.x, prop.y - 26, 48, 4);
@@ -6793,16 +6829,23 @@ function drawOriginVillageFurniture(ctx, cam) {
         break;
 
       case 'bamboo_fence':
-        ctx.fillStyle = '#65a30d';
-        for (let bfx = prop.x; bfx < prop.x + (prop.w || 80); bfx += 10) {
-          ctx.fillRect(bfx, prop.y - 24, 6, 24);
-          ctx.fillStyle = '#4d7c0f';
-          ctx.fillRect(bfx, prop.y - 14, 6, 2);
+        if (hasFurnImg) {
+          for (let bfx = prop.x; bfx < prop.x + pw; bfx += 60) {
+            const segW = Math.min(65, prop.x + pw - bfx);
+            ctx.drawImage(furnImg, 8, 130, 90, 69, bfx, prop.y - 48, segW, 48);
+          }
+        } else {
           ctx.fillStyle = '#65a30d';
+          for (let bfx = prop.x; bfx < prop.x + pw; bfx += 10) {
+            ctx.fillRect(bfx, prop.y - 24, 6, 24);
+            ctx.fillStyle = '#4d7c0f';
+            ctx.fillRect(bfx, prop.y - 14, 6, 2);
+            ctx.fillStyle = '#65a30d';
+          }
+          ctx.fillStyle = '#3f6212';
+          ctx.fillRect(prop.x, prop.y - 18, pw, 3);
+          ctx.fillRect(prop.x, prop.y - 8, pw, 3);
         }
-        ctx.fillStyle = '#3f6212';
-        ctx.fillRect(prop.x, prop.y - 18, prop.w || 80, 3);
-        ctx.fillRect(prop.x, prop.y - 8, prop.w || 80, 3);
         break;
 
       default:
@@ -7542,7 +7585,7 @@ function drawPlatforms() {
       ctx.save();
       const platImg = l1BgAssets.originPlatforms;
       if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 24, 52, 156, 120, p.x, p.y, p.w, p.h + 35);
+        ctx.drawImage(platImg, 18, 39, 110, 80, p.x, p.y, p.w, p.h + 35);
       } else {
         ctx.fillStyle = '#1c192c';
         ctx.beginPath();
@@ -7577,7 +7620,7 @@ function drawPlatforms() {
       ctx.save();
       const platImg = l1BgAssets.originPlatforms;
       if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 295, 164, 168, 34, p.x, p.y, p.w, p.h);
+        ctx.drawImage(platImg, 206, 115, 118, 24, p.x, p.y, p.w, p.h);
       } else {
         ctx.fillStyle = '#242234';
         ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -7593,7 +7636,7 @@ function drawPlatforms() {
       ctx.save();
       const platImg = l1BgAssets.originPlatforms;
       if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 642, 230, 174, 38, p.x, p.y, p.w, p.h);
+        ctx.drawImage(platImg, 450, 160, 124, 28, p.x, p.y, p.w, p.h);
       } else {
         ctx.fillStyle = '#451a03';
         ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -7615,7 +7658,7 @@ function drawPlatforms() {
       ctx.save();
       const platImg = l1BgAssets.originPlatforms;
       if (platImg && platImg.complete && platImg.naturalWidth > 0) {
-        ctx.drawImage(platImg, 18, 190, 188, 130, p.x, p.y - 35, p.w, p.h + 35);
+        ctx.drawImage(platImg, 13, 130, 138, 96, p.x, p.y - 35, p.w, p.h + 35);
       } else {
         ctx.fillStyle = '#1e1b2e';
         ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -7635,21 +7678,26 @@ function drawPlatforms() {
     // LEVEL 1: TAIKO-BASHI ARCHED RED WOODEN BRIDGE OVER RIVER
     } else if (p.type === 'taiko_bridge') {
       ctx.save();
-      ctx.fillStyle = '#7f1d1d';
-      ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
-      ctx.strokeStyle = '#dc2626';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y - 12);
-      ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 22, p.x + p.w, p.y - 12);
-      ctx.stroke();
-      for (let bx = p.x + 12; bx < p.x + p.w - 10; bx += 24) {
-        const archUp = Math.sin(((bx - p.x) / p.w) * Math.PI) * 8;
-        ctx.fillStyle = '#b91c1c';
-        ctx.fillRect(bx, p.y - 12 - archUp, 3, 14 + archUp);
+      const furnImg = l1BgAssets.originFurniture;
+      if (furnImg && furnImg.complete && furnImg.naturalWidth > 0) {
+        ctx.drawImage(furnImg, 7, 276, 92, 79, p.x, p.y - 15, p.w, p.h + 15);
+      } else {
+        ctx.fillStyle = '#7f1d1d';
+        ctx.fillRect(p.x, p.y + 4, p.w, p.h - 4);
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y - 12);
+        ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 22, p.x + p.w, p.y - 12);
+        ctx.stroke();
+        for (let bx = p.x + 12; bx < p.x + p.w - 10; bx += 24) {
+          const archUp = Math.sin(((bx - p.x) / p.w) * Math.PI) * 8;
+          ctx.fillStyle = '#b91c1c';
+          ctx.fillRect(bx, p.y - 12 - archUp, 3, 14 + archUp);
+        }
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(p.x, p.y, p.w, 4);
       }
-      ctx.fillStyle = '#451a03';
-      ctx.fillRect(p.x, p.y, p.w, 4);
       ctx.restore();
 
     // LEVEL 1: WALKABLE JAPANESE HOUSE ROOF

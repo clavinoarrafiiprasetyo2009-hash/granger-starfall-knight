@@ -12,7 +12,7 @@ const assets = [
   'tileset_verdant_ruins.jpg',
   'bg_origin_village.jpg',
   'tileset_origin_platforms.png',
-  'tileset_origin_furniture.jpg'
+  'tileset_origin_furniture.png'
 ];
 
 assets.forEach(asset => {
@@ -38,7 +38,12 @@ assert(gameJs.includes("SECTOR_DEFS_L1"), "SECTOR_DEFS_L1 missing");
 assert(gameJs.includes("drawOriginVillageFurniture"), "drawOriginVillageFurniture function missing");
 assert(gameJs.includes("level1VillageProps"), "level1VillageProps array missing");
 assert(gameJs.includes("l1BgAssets.originPlatforms"), "l1BgAssets.originPlatforms missing");
-assert(gameJs.includes("l1BgAssets.originFurniture"), "l1BgAssets.originFurniture missing");
+assert(gameJs.includes("l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.png'"), "tileset_origin_furniture.png missing");
+
+// Enemy AI jitter & stuck fixes
+assert(gameJs.includes("onContinuousGround"), "Enemy onContinuousGround fix missing");
+assert(gameJs.includes("this.turnCooldown = 25"), "turnCooldown for floating platform ledge turnaround missing");
+assert(gameJs.includes("this.isLunging = true"), "Hound lunge state tracking missing");
 
 // Continuous ground floor
 assert(gameJs.includes("SEKTOR 1: JALAN UTAMA & PERMUKIMAN"), "Ground segment 1 missing");
