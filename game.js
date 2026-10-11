@@ -7,6 +7,7 @@
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
 
 // Fixed internal canvas resolution (16:9 widescreen retro)
 const V_WIDTH = 854;
@@ -968,65 +969,73 @@ const LEVELS = {
       { x: 8720, y: 440, w: 2180, h: 180, type: 'forest_stone', label: 'SEKTOR 5 & 6: SANCTUM & TAHTA CHIMERA' },
 
       // ==========================================================
-      // MULTI-TIERED ELEVATED VILLAGE PLATFORMS, ARCHES, ISLANDS & BRIDGES
-      // Directly matching user assets tileset_origin_platforms & tileset_origin_furniture!
+      // MULTI-TIERED AIRBORNE PLATFORMS, BRIDGES & SACRED ISLANDS
+      // Organised with smooth jump parabolas and authentic pixel art assets!
       // ==========================================================
       // --- SEKTOR 1: GERBANG KUIL & PERMUKIMAN ASAL (0 .. 1800) ---
-      { x: 80,   y: 350, w: 140, h: 90,  type: 'torii_gate',     label: 'GERBANG TORII DEPAN' },
-      { x: 360,  y: 330, w: 240, h: 24,  type: 'village_roof',   label: 'ATAP RUMAH WARGA 1' },
-      { x: 620,  y: 360, w: 80,  h: 80,  type: 'forest_stone',   label: 'SUMUR BATU DESA' },
-      { x: 780,  y: 330, w: 160, h: 22,  type: 'wooden_ruins',   label: 'WARUNG MAKAN DESA' },
-      { x: 960,  y: 260, w: 150, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG 1' },
-      { x: 1140, y: 190, w: 170, h: 26,  type: 'floating_island', label: 'PULAU MELAYANG TINGGI 1' },
-      { x: 1340, y: 260, w: 150, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG 2' },
-      { x: 1480, y: 360, w: 220, h: 80,  type: 'forest_stone',   label: 'TERAS DESA // POS WARGA REN' },
-      { x: 1720, y: 350, w: 120, h: 90,  type: 'yamamon_gate',   label: 'GERBANG YAMAMON' },
+      { x: 80,   y: 350, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII DEPAN' },
+      { x: 370,  y: 305, w: 180, h: 22,  type: 'village_roof',        label: 'ATAP RUMAH WARGA' },
+      { x: 620,  y: 260, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM KAYU BANNER 1' },
+      { x: 820,  y: 320, w: 140, h: 24,  type: 'wooden_arch_bridge',  label: 'JEMBATAN KAYU LENGKUNG' },
+      { x: 1060, y: 332, w: 150, h: 22,  type: 'village_roof',        label: 'ATAP PONDOK WARGA' },
+      { x: 1260, y: 260, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU SEDANG 1' },
+      { x: 1440, y: 180, w: 130, h: 50,  type: 'floating_island',     label: 'PULAU MELAYANG TINGGI 1' },
+      { x: 1620, y: 240, w: 120, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG SULUR' },
+      { x: 1720, y: 344, w: 100, h: 20,  type: 'yamamon_gate',        label: 'GERBANG YAMAMON' },
 
       // --- SEKTOR 2: PASAR DESA & JEMBATAN SUNGAI SAKURA (1800 .. 3800) ---
-      { x: 1940, y: 330, w: 240, h: 24,  type: 'village_roof',   label: 'TOKO PASAR TRADISIONAL' },
-      { x: 2220, y: 350, w: 160, h: 20,  type: 'wooden_ruins',   label: 'KIOS PASAR' },
-      { x: 2480, y: 390, w: 240, h: 24,  type: 'taiko_bridge',   label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
-      { x: 2800, y: 330, w: 180, h: 20,  type: 'hanging_wood',   label: 'DERMAGA TEPI SUNGAI' },
-      { x: 3040, y: 250, w: 180, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN GANTUNG KAYU' },
-      { x: 3280, y: 170, w: 180, h: 24,  type: 'floating_island', label: 'PULAU MELAYANG SUNGAI SAKURA' },
-      { x: 3520, y: 260, w: 160, h: 22,  type: 'floating_stone', label: 'BATU GANTUNG PASAR' },
-      { x: 3720, y: 360, w: 180, h: 80,  type: 'forest_stone',   label: 'TANGGA MASUK HUTAN BAMBU' },
+      { x: 1940, y: 311, w: 180, h: 22,  type: 'village_roof',        label: 'TOKO PASAR TRADISIONAL' },
+      { x: 2180, y: 260, w: 110, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM KAYU BANNER 2' },
+      { x: 2460, y: 375, w: 160, h: 28,  type: 'taiko_bridge',        label: 'JEMBATAN LENGKUNG TAIKO-BASHI' },
+      { x: 2680, y: 340, w: 140, h: 26,  type: 'stone_bridge',        label: 'JEMBATAN BATU SUNGAI' },
+      { x: 2880, y: 270, w: 120, h: 22,  type: 'hanging_wood',        label: 'DERMAGA GANTUNG KAYU' },
+      { x: 3060, y: 200, w: 90,  h: 36,  type: 'floating_island_small', label: 'PULAU BATU KECIL 1' },
+      { x: 3220, y: 150, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU MELAYANG SAKURA' },
+      { x: 3420, y: 230, w: 120, h: 22,  type: 'hanging_wood',        label: 'JEMBATAN GANTUNG KAYU' },
+      { x: 3600, y: 310, w: 130, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG PASAR' },
 
       // --- SEKTOR 3: HUTAN BAMBU & KUIL ZEN BERLUMUT (3800 .. 5600) ---
-      // Mini Boss: Blight Fang Behemoth fights on solid ground at y=440!
-      { x: 3960, y: 340, w: 180, h: 22,  type: 'forest_stone',   label: 'PAGAR BATU TAMAN ZEN' },
-      { x: 4200, y: 270, w: 160, h: 22,  type: 'floating_stone', label: 'BATU TAMAN ZEN 1' },
-      { x: 4420, y: 200, w: 180, h: 24,  type: 'floating_island', label: 'PULAU ZEN TERTINGGI' },
-      { x: 4660, y: 320, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA BEHEMOTH KIRI' },
-      { x: 5040, y: 320, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA BEHEMOTH KANAN' },
-      { x: 5280, y: 370, w: 140, h: 20,  type: 'forest_stone',   label: 'TANGGA KELUAR ARENA' },
-      { x: 5460, y: 330, w: 160, h: 22,  type: 'wooden_ruins',   label: 'PONDOK PENJAGA PURBA' },
+      // Mini Boss: Blight Fang Behemoth fights on ground at y=440!
+      { x: 3950, y: 340, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU TAMAN ZEN 1' },
+      { x: 4130, y: 270, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU ZEN 2' },
+      { x: 4300, y: 210, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR ZEN' },
+      { x: 4490, y: 160, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU ZEN TERTINGGI' },
+      { x: 4680, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KIRI' },
+      { x: 5020, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA BEHEMOTH KANAN' },
+      { x: 5260, y: 340, w: 130, h: 24,  type: 'floating_stone',      label: 'BATU KELUAR ARENA' },
+      { x: 5460, y: 330, w: 120, h: 22,  type: 'village_roof',        label: 'ATAP KUIL HOKORA' },
 
       // --- SEKTOR 4: MENARA BATU & TEROWONGAN RAHASIA (5600 .. 7500) ---
-      { x: 5740, y: 310, w: 220, h: 130, type: 'stone_tunnel',   label: 'PINTU TEROWONGAN BATU PURBA' },
-      { x: 6020, y: 350, w: 160, h: 24,  type: 'floating_stone', label: 'BATU GANTUNG GUA 1' },
-      { x: 6240, y: 270, w: 180, h: 24,  type: 'floating_island', label: 'PULAU BATU STALAKTIT' },
-      { x: 6480, y: 180, w: 200, h: 26,  type: 'floating_island', label: 'PULAU RAHASIA EMAS LELUHUR' },
-      { x: 6740, y: 270, w: 160, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN KAYU MENARA' },
-      { x: 6960, y: 340, w: 180, h: 100, type: 'forest_stone',   label: 'DASAR MENARA BATU' },
-      { x: 7200, y: 260, w: 160, h: 22,  type: 'floating_stone', label: 'BATU GANTUNG MENARA' },
-      { x: 7420, y: 360, w: 180, h: 80,  type: 'forest_stone',   label: 'TERAS BERINGIN SUCI' },
+      { x: 5740, y: 344, w: 160, h: 96,  type: 'stone_tunnel',        label: 'PINTU TEROWONGAN BATU PURBA' },
+      { x: 5930, y: 385, w: 90,  h: 55,  type: 'stairs_stone',        label: 'TANGGA BATU TEROWONGAN' },
+      { x: 6060, y: 320, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG GUA 1' },
+      { x: 6240, y: 240, w: 110, h: 40,  type: 'floating_island_med', label: 'PULAU BATU STALAKTIT' },
+      { x: 6420, y: 160, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU RAHASIA EMAS LELUHUR' },
+      { x: 6620, y: 230, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN GANTUNG MENARA' },
+      { x: 6810, y: 345, w: 220, h: 95,  type: 'grand_gatehouse',     label: 'GERBANG BENTENG PURBA' },
+      { x: 7080, y: 330, w: 100, h: 110, type: 'watchtower',          label: 'MENARA PENGAWAS BATU' },
+      { x: 7220, y: 385, w: 110, h: 55,  type: 'stairs_railing',      label: 'TANGGA PAGAR KAYU' },
+      { x: 7380, y: 320, w: 120, h: 24,  type: 'floating_stone',      label: 'BATU GANTUNG MENARA' },
 
       // --- SEKTOR 5: SANCTUM POHON BERINGIN SUCI (7500 .. 9200) ---
-      { x: 7640, y: 350, w: 200, h: 22,  type: 'canopy_branch',  label: 'AKAR BERINGIN SUCI 1' },
-      { x: 7900, y: 270, w: 220, h: 24,  type: 'canopy_branch',  label: 'DAHAN KANOPI PURBA 2' },
-      { x: 8180, y: 190, w: 240, h: 26,  type: 'canopy_branch',  label: 'DAHAN KANOPI TERTINGGI' },
-      { x: 8480, y: 270, w: 200, h: 22,  type: 'hanging_wood',   label: 'JEMBATAN SULUR POHON' },
-      { x: 8740, y: 340, w: 180, h: 24,  type: 'wooden_ruins',   label: 'ALTAR RESTORASI SUCI' },
-      { x: 8980, y: 350, w: 160, h: 90,  type: 'torii_gate',     label: 'GERBANG TORII SANCTUM' },
+      { x: 7660, y: 340, w: 140, h: 24,  type: 'floating_stone',      label: 'AKAR BERINGIN SUCI 1' },
+      { x: 7860, y: 260, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'PLATFORM BANNER SUCI' },
+      { x: 8040, y: 200, w: 150, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN BATU KANOPI' },
+      { x: 8250, y: 150, w: 140, h: 50,  type: 'floating_island',     label: 'PULAU KANOPI TERTINGGI' },
+      { x: 8450, y: 220, w: 130, h: 24,  type: 'rope_bridge',         label: 'JEMBATAN SULUR POHON' },
+      { x: 8640, y: 300, w: 120, h: 22,  type: 'hanging_wood',        label: 'DERMAGA RESTORASI SUCI' },
+      { x: 8820, y: 340, w: 130, h: 24,  type: 'wooden_ruins',        label: 'ALTAR RESTORASI SUCI' },
+      { x: 8980, y: 344, w: 120, h: 20,  type: 'torii_gate',          label: 'GERBANG TORII SANCTUM' },
 
       // --- SEKTOR 6: TAHTA KUIL UTAMA & INTI PETAKA (9200 .. 10800) ---
-      // Main Boss: The Blight Chimera fights on solid ground at y=440!
-      { x: 9280, y: 360, w: 160, h: 80,  type: 'forest_stone',   label: 'TANGGA MASUK SANCTUM' },
-      { x: 9540, y: 330, w: 180, h: 20,  type: 'wooden_ruins',   label: 'BALOK ARENA CHIMERA KIRI' },
-      { x: 9820, y: 260, w: 220, h: 22,  type: 'wooden_ruins',   label: 'ALTAR TAHTA TERTINGGI' },
-      { x: 10120, y: 330, w: 180, h: 20, type: 'wooden_ruins',   label: 'BALOK ARENA CHIMERA KANAN' },
-      { x: 10400, y: 360, w: 160, h: 80, type: 'forest_stone',   label: 'TIANG GERBANG KEMENANGAN' }
+      // Main Boss: The Blight Chimera fights on ground at y=440!
+      { x: 9280, y: 385, w: 100, h: 55,  type: 'stairs_stone',        label: 'TANGGA MASUK SANCTUM' },
+      { x: 9420, y: 345, w: 220, h: 95,  type: 'grand_gatehouse',     label: 'GERBANG TAHTA KUIL' },
+      { x: 9680, y: 310, w: 120, h: 24,  type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KIRI' },
+      { x: 9880, y: 230, w: 160, h: 28,  type: 'stone_bridge',        label: 'JEMBATAN TAHTA TERTINGGI' },
+      { x: 10120, y: 310, w: 120, h: 24, type: 'hanging_wood_banner', label: 'BALOK ARENA CHIMERA KANAN' },
+      { x: 10380, y: 330, w: 100, h: 110, type: 'watchtower',         label: 'MENARA PENGAWAS KEMENANGAN' },
+      { x: 10560, y: 350, w: 160, h: 90,  type: 'forest_stone',        label: 'TIANG GERBANG KEMENANGAN' }
     ],
     traps: [
       { x: 2060, y: 490, w: 120, h: 18, type: 'crumble' },
@@ -1121,34 +1130,33 @@ Ia memangsa jiwa warga kami untuk membangun kekuatannya. Ronin... bebaskan jiwa 
       { x: 5700, y: 350, w: 32, h: 120, hp: 3, maxHp: 3, isBroken: false, flashTimer: 0 }
     ],
     stationedEnemies: [
-      { x: 460,  y: 390, type: 'bramble_drone' },
-      { x: 620,  y: 410, type: 'blight_hound' },
-      { x: 1050, y: 260, type: 'spore_spitter' },
-      { x: 1300, y: 380, type: 'bramble_drone' },
-      { x: 1620, y: 410, type: 'blight_hound' },
-      { x: 1980, y: 290, type: 'wood_stalker' },
-      { x: 2260, y: 360, type: 'spore_spitter' },
-      { x: 2420, y: 320, type: 'bramble_drone' },
-      { x: 2920, y: 410, type: 'blight_hound' },
-      { x: 3180, y: 240, type: 'wood_stalker' },
-      { x: 3540, y: 330, type: 'wood_stalker' },
-      { x: 3780, y: 230, type: 'spore_spitter' },
-      { x: 4050, y: 390, type: 'blight_hound' },
-      { x: 4260, y: 300, type: 'bramble_drone' },
-      { x: 4460, y: 180, type: 'wood_stalker' },
-      { x: 5360, y: 420, type: 'blight_hound' },
-      { x: 5880, y: 390, type: 'bramble_drone' },
-      { x: 6120, y: 330, type: 'spore_spitter' },
-      { x: 6360, y: 250, type: 'wood_stalker' },
-      { x: 6820, y: 410, type: 'blight_hound' },
-      { x: 7100, y: 320, type: 'bramble_drone' },
-      { x: 7520, y: 410, type: 'blight_hound' },
-      { x: 7800, y: 330, type: 'spore_spitter' },
-      { x: 8060, y: 250, type: 'wood_stalker' },
-      { x: 8360, y: 170, type: 'bramble_drone' },
-      { x: 8640, y: 410, type: 'blight_hound' },
-      { x: 9160, y: 390, type: 'bramble_drone' },
-      { x: 9380, y: 340, type: 'spore_spitter' }
+      { x: 460,  y: 320, type: 'bramble_drone' },
+      { x: 520,  y: 408, type: 'blight_hound' },
+      { x: 1060, y: 290, type: 'spore_spitter' },
+      { x: 1300, y: 300, type: 'bramble_drone' },
+      { x: 1360, y: 408, type: 'blight_hound' },
+      { x: 1940, y: 257, type: 'wood_stalker' },
+      { x: 2420, y: 280, type: 'bramble_drone' },
+      { x: 2680, y: 298, type: 'spore_spitter' },
+      { x: 2920, y: 408, type: 'blight_hound' },
+      { x: 3220, y: 96,  type: 'wood_stalker' },
+      { x: 3950, y: 298, type: 'spore_spitter' },
+      { x: 4050, y: 408, type: 'blight_hound' },
+      { x: 4260, y: 240, type: 'bramble_drone' },
+      { x: 4490, y: 106, type: 'wood_stalker' },
+      { x: 5360, y: 408, type: 'blight_hound' },
+      { x: 5880, y: 280, type: 'bramble_drone' },
+      { x: 6060, y: 278, type: 'spore_spitter' },
+      { x: 6240, y: 408, type: 'blight_hound' },
+      { x: 6420, y: 106, type: 'wood_stalker' },
+      { x: 7100, y: 260, type: 'bramble_drone' },
+      { x: 7420, y: 408, type: 'blight_hound' },
+      { x: 7660, y: 298, type: 'spore_spitter' },
+      { x: 8250, y: 96,  type: 'wood_stalker' },
+      { x: 8360, y: 180, type: 'bramble_drone' },
+      { x: 8560, y: 408, type: 'blight_hound' },
+      { x: 9160, y: 300, type: 'bramble_drone' },
+      { x: 9680, y: 268, type: 'spore_spitter' }
     ]
   },
   2: {
@@ -2586,8 +2594,9 @@ class Enemy {
 
     this.baseSpeed = Math.abs(this.vx) || 1.8;
 
-    // Auto-snap ground bosses & golems to platform surface on spawn so they never clip or fall through
-    if (this.type.startsWith('boss') || this.type === 'golem') {
+    // Auto-snap non-flying ground enemies to platform surface on spawn so they never clip or fall through
+    const isFlying = this.type === 'drone' || this.type === 'ruin_specter' || this.type === 'pyro_drake' || this.type === 'bramble_drone';
+    if (!isFlying) {
       const ground = platforms.find(p =>
         this.x + this.w > p.x && this.x < p.x + p.w &&
         p.type !== 'hazard_spikes' && p.type !== 'hazard_brambles' && p.type !== 'hanging_rope' &&
@@ -3174,10 +3183,13 @@ class Enemy {
     this.isGrounded = false;
     let onContinuousGround = false;
     platforms.forEach(p => {
-      // Floor collision
       if (p.type === 'hazard_spikes' || p.type === 'hazard_brambles' || p.type === 'hazard_lava' || p.type === 'hanging_rope') return;
-      if (this.x + this.w > p.x && this.x < p.x + p.w &&
-          this.y + this.h >= p.y && this.y + this.h - this.vy <= p.y + 28) {
+
+      // Platform landing
+      const isAboveTop = this.y + this.h >= p.y && this.y + this.h - this.vy <= p.y + 28;
+      const isWithinX = this.x + this.w > p.x + 2 && this.x < p.x + p.w - 2;
+
+      if (isAboveTop && isWithinX) {
         this.y = p.y - this.h;
         this.vy = 0;
         this.isGrounded = true;
@@ -3200,16 +3212,17 @@ class Enemy {
             this.turnCooldown = 25;
           }
         }
-      }
-
-      // Wall collision
-      if ((p.type === 'wall' || p.type === 'ruin_wall') && this.y + this.h > p.y && this.y < p.y + p.h) {
-        if (this.turnCooldown === 0) {
-          if (this.x + this.w > p.x && this.x < p.x + p.w / 2 && this.vx > 0) {
+      } else {
+        // Horizontal obstacle/wall collision (blocks movement into sides of any solid elevated platforms or walls)
+        const verticalOverlap = this.y + this.h > p.y + 8 && this.y < p.y + p.h - 4;
+        if (verticalOverlap && this.turnCooldown === 0) {
+          if (this.vx > 0 && this.x + this.w >= p.x && this.x < p.x + 18) {
+            this.x = p.x - this.w;
             this.vx = -Math.abs(this.vx);
             this.facing = -1;
             this.turnCooldown = 20;
-          } else if (this.x < p.x + p.w && this.x > p.x + p.w / 2 && this.vx < 0) {
+          } else if (this.vx < 0 && this.x <= p.x + p.w && this.x + this.w > p.x + p.w - 18) {
+            this.x = p.x + p.w;
             this.vx = Math.abs(this.vx);
             this.facing = 1;
             this.turnCooldown = 20;
@@ -3217,6 +3230,20 @@ class Enemy {
         }
       }
     });
+
+    // Anti-stuck watchdog: If stuck against an edge or entity for 18 frames, reverse direction!
+    if (Math.abs(this.x - (this.lastX ?? this.x)) < 0.15 && Math.abs(this.vx) > 0.2) {
+      this.stuckTimer = (this.stuckTimer || 0) + 1;
+      if (this.stuckTimer > 18) {
+        this.vx = -this.vx;
+        this.facing = this.vx > 0 ? 1 : -1;
+        this.turnCooldown = 25;
+        this.stuckTimer = 0;
+      }
+    } else {
+      this.stuckTimer = 0;
+    }
+    this.lastX = this.x;
 
     // Special AI for Cyber Hound
     if (this.type === 'cyber_hound') {
@@ -6316,6 +6343,8 @@ const L1_BUSHES = [
 // ============================================================================
 const l1BgAssets = {
   originVillage: new Image(),
+  originMaster: new Image(),
+  originWallPanorama: new Image(),
   originPlatforms: new Image(),
   originFurniture: new Image(),
   mistyWoods: new Image(),
@@ -6324,6 +6353,8 @@ const l1BgAssets = {
   tilesetRuins: new Image()
 };
 l1BgAssets.originVillage.src = 'assets/bg_origin_village.jpg';
+l1BgAssets.originMaster.src = 'assets/tileset_origin_master.png';
+l1BgAssets.originWallPanorama.src = 'assets/bg_origin_wall_panorama.png';
 l1BgAssets.originPlatforms.src = 'assets/tileset_origin_platforms.png';
 l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.png';
 l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
@@ -6354,6 +6385,9 @@ function drawLevel1ForestParallax(cam) {
 
   // 1. Far Majestic Origin Village & Sacred Mountains (User reference art bg_origin_village.jpg)
   const renderedOriginVillage = drawSeamlessParallaxImage(ctx, l1BgAssets.originVillage, cam.x, 0.08, V_HEIGHT, 0, 1.0);
+
+  // 1b. Seamless Stone Fortress Wall Panorama (User asset bg_origin_wall_panorama.png at midground 0.18x speed)
+  drawSeamlessParallaxImage(ctx, l1BgAssets.originWallPanorama, cam.x, 0.18, 240, V_HEIGHT - 310, 0.88);
   if (!renderedOriginVillage) {
     // Fallback to misty woods
     const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
@@ -6556,47 +6590,68 @@ function drawLevelNPCs(ctx, cam) {
 const level1VillageProps = [
   // Sektor 1: Gerbang Kuil & Permukiman Asal (0 .. 1800)
   { type: 'torii_gate',          x: 80,   y: 440, w: 100, h: 96 },
-  { type: 'stone_lantern',       x: 230,  y: 440 },
-  { type: 'bamboo_fence',        x: 270,  y: 440, w: 80 },
+  { type: 'notice_board',        x: 200,  y: 440 },
+  { type: 'stone_lantern',       x: 240,  y: 440 },
+  { type: 'bamboo_fence',        x: 270,  y: 440, w: 90 },
   { type: 'house_tiled',         x: 370,  y: 440, w: 180, h: 135 },
-  { type: 'wooden_cart',         x: 580,  y: 440 },
-  { type: 'stone_well',          x: 650,  y: 440 },
-  { type: 'bamboo_fence',        x: 710,  y: 440, w: 100 },
+  { type: 'crate_sacks',         x: 565,  y: 440 },
+  { type: 'wooden_cart',         x: 640,  y: 440 },
+  { type: 'stone_well',          x: 720,  y: 440 },
+  { type: 'bamboo_fence',        x: 775,  y: 440, w: 90 },
+  { type: 'flowering_shrub',     x: 880,  y: 440 },
   { type: 'house_thatched',      x: 1060, y: 440, w: 150, h: 108 },
-  { type: 'stone_lantern',       x: 1240, y: 440 },
-  { type: 'wooden_lantern_post', x: 1380, y: 440 },
+  { type: 'hanging_lantern_post', x: 1230, y: 440 },
+  { type: 'stone_monument',      x: 1380, y: 440 },
+  { type: 'crate_sacks',         x: 1580, y: 440 },
   { type: 'yamamon_gate',        x: 1720, y: 440, w: 92, h: 96 },
 
   // Sektor 2: Pasar Tradisional & Jembatan Sungai Sakura (1800 .. 3800)
   { type: 'crows_fence',         x: 1860, y: 440 },
   { type: 'house_shop',          x: 1940, y: 440, w: 180, h: 129 },
-  { type: 'shiba_inu',           x: 2140, y: 440 },
+  { type: 'notice_board',        x: 2130, y: 440 },
+  { type: 'shiba_inu',           x: 2165, y: 440 },
   { type: 'market_stall',        x: 2200, y: 440, w: 80, h: 98 },
-  { type: 'wooden_cart',         x: 2310, y: 440 },
+  { type: 'crate_sacks',         x: 2310, y: 440 },
   { type: 'river_waterfall',     x: 2460, y: 440, w: 240, h: 70 },
-  { type: 'wooden_lantern_post', x: 2740, y: 440 },
+  { type: 'hanging_lantern_post', x: 2740, y: 440 },
+  { type: 'flowering_shrub',     x: 2980, y: 440 },
+  { type: 'wooden_cart',         x: 3200, y: 440 },
   { type: 'stone_lantern',       x: 3420, y: 440 },
   { type: 'bamboo_fence',        x: 3580, y: 440, w: 140 },
 
   // Sektor 3: Hutan Bambu & Kuil Zen Berlumut (3800 .. 5600)
+  { type: 'small_torii',         x: 3880, y: 440 },
   { type: 'jizo_statue',         x: 4120, y: 440 },
   { type: 'stone_lantern',       x: 4400, y: 440 },
+  { type: 'ruined_arch',         x: 4580, y: 440 },
+  { type: 'flowering_shrub',     x: 5260, y: 440 },
   { type: 'shrine_hokora',       x: 5460, y: 440, w: 110, h: 110 },
   { type: 'crows_fence',         x: 5600, y: 440 },
 
   // Sektor 4: Menara Purba & Terowongan Rahasia (5600 .. 7500)
+  { type: 'wall_door',           x: 5660, y: 440 },
+  { type: 'notice_board',        x: 6020, y: 440 },
+  { type: 'crate_sacks',         x: 6360, y: 440 },
   { type: 'stone_lantern',       x: 6760, y: 440 },
-  { type: 'jizo_statue',         x: 7460, y: 440 },
+  { type: 'watchtower',          x: 7080, y: 440 },
+  { type: 'stone_monument',      x: 7460, y: 440 },
 
   // Sektor 5: Sanctum Pohon Beringin Suci (7500 .. 9200)
+  { type: 'small_torii',         x: 7580, y: 440 },
+  { type: 'flowering_shrub',     x: 7780, y: 440 },
+  { type: 'jizo_statue',         x: 8200, y: 440 },
+  { type: 'crate_sacks',         x: 8520, y: 440 },
   { type: 'shrine_altar',        x: 8740, y: 440, w: 110, h: 110 },
   { type: 'wooden_lantern_post', x: 8940, y: 440 },
   { type: 'torii_gate',          x: 8980, y: 440, w: 100, h: 96 },
 
   // Sektor 6: Tahta Kuil & Arena Akhir (9200 .. 10800)
-  { type: 'stone_lantern',       x: 9320,  y: 440 },
+  { type: 'hanging_lantern_post', x: 9240, y: 440 },
+  { type: 'stone_lantern',       x: 9340,  y: 440 },
+  { type: 'ruined_arch',         x: 9460,  y: 440 },
   { type: 'temple_ruins_pagoda', x: 9780,  y: 440, w: 200, h: 150 },
-  { type: 'stone_lantern',       x: 10420, y: 440 }
+  { type: 'watchtower',          x: 10380, y: 440 },
+  { type: 'stone_monument',      x: 10520, y: 440 }
 ];
 
 function drawOriginVillageFurniture(ctx, cam) {
@@ -6604,6 +6659,8 @@ function drawOriginVillageFurniture(ctx, cam) {
   const now = Date.now();
   const furnImg = l1BgAssets.originFurniture;
   const hasFurnImg = furnImg && furnImg.complete && furnImg.naturalWidth > 0;
+  const masterImg = l1BgAssets.originMaster;
+  const hasMasterImg = masterImg && masterImg.complete && masterImg.naturalWidth > 0;
 
   level1VillageProps.forEach(prop => {
     const pw = prop.w || 60;
@@ -6846,6 +6903,110 @@ function drawOriginVillageFurniture(ctx, cam) {
           ctx.fillStyle = '#3f6212';
           ctx.fillRect(prop.x, prop.y - 18, pw, 3);
           ctx.fillRect(prop.x, prop.y - 8, pw, 3);
+        }
+        break;
+
+      case 'notice_board':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 686, 420, 24, 59, prop.x, prop.y - 65, 32, 65);
+        } else {
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x + 12, prop.y - 60, 8, 60);
+          ctx.fillStyle = '#b45309';
+          ctx.fillRect(prop.x, prop.y - 58, 32, 28);
+        }
+        break;
+
+      case 'hanging_lantern_post':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 712, 420, 33, 60, prop.x, prop.y - 70, 36, 70);
+        } else {
+          ctx.fillStyle = '#451a03';
+          ctx.fillRect(prop.x + 14, prop.y - 70, 6, 70);
+          ctx.fillRect(prop.x + 4, prop.y - 68, 26, 6);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(prop.x + 6, prop.y - 56, 12, 16);
+        }
+        const hflicker = Math.sin(now / 180 + prop.x * 0.05) * 4;
+        const hlg = ctx.createRadialGradient(prop.x + 12, prop.y - 48, 2, prop.x + 12, prop.y - 48, 44 + hflicker);
+        hlg.addColorStop(0, 'rgba(251, 191, 36, 0.45)');
+        hlg.addColorStop(0.6, 'rgba(245, 158, 11, 0.15)');
+        hlg.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = hlg;
+        ctx.beginPath();
+        ctx.arc(prop.x + 12, prop.y - 48, 44 + hflicker, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+
+      case 'small_torii':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 750, 420, 65, 60, prop.x, prop.y - 65, 68, 65);
+        } else {
+          ctx.fillStyle = '#dc2626';
+          ctx.fillRect(prop.x + 10, prop.y - 60, 10, 60);
+          ctx.fillRect(prop.x + 48, prop.y - 60, 10, 60);
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(prop.x, prop.y - 64, 68, 10);
+        }
+        break;
+
+      case 'stone_monument':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 855, 440, 23, 39, prop.x, prop.y - 45, 28, 45);
+        } else {
+          ctx.fillStyle = '#64748b';
+          ctx.fillRect(prop.x, prop.y - 42, 24, 42);
+        }
+        break;
+
+      case 'crate_sacks':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 880, 445, 65, 34, prop.x, prop.y - 40, 68, 40);
+        } else {
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(prop.x, prop.y - 32, 34, 32);
+          ctx.fillStyle = '#d97706';
+          ctx.fillRect(prop.x + 36, prop.y - 28, 28, 28);
+        }
+        break;
+
+      case 'flowering_shrub':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 945, 443, 50, 35, prop.x, prop.y - 40, 54, 40);
+        } else {
+          ctx.fillStyle = '#16a34a';
+          ctx.beginPath();
+          ctx.arc(prop.x + 24, prop.y - 18, 20, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+
+      case 'ruined_arch':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 480, 418, 65, 60, prop.x, prop.y - 65, 70, 65);
+        } else {
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(prop.x, prop.y - 60, 18, 60);
+          ctx.fillRect(prop.x + 52, prop.y - 60, 18, 60);
+          ctx.fillRect(prop.x, prop.y - 65, 70, 14);
+        }
+        break;
+
+      case 'watchtower':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 830, 190, 70, 97, prop.x, prop.y - 110, 80, 110);
+        } else {
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(prop.x, prop.y - 100, 70, 100);
+        }
+        break;
+
+      case 'wall_door':
+        if (hasMasterImg) {
+          ctx.drawImage(masterImg, 100, 190, 90, 99, prop.x, prop.y - 110, 100, 110);
+        } else {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(prop.x, prop.y - 100, 90, 100);
         }
         break;
 
@@ -7597,11 +7758,14 @@ function drawPlatforms() {
       }
       ctx.restore();
 
-    // LEVEL 1: FLOATING MOSSY ROCK ISLAND (MATCHING tileset_origin_platforms.png)
+    // LEVEL 1: FLOATING MOSSY ROCK ISLAND (MATCHING tileset_origin_master.png & platforms.png)
     } else if (p.type === 'floating_island') {
       ctx.save();
+      const masterImg = l1BgAssets.originMaster;
       const platImg = l1BgAssets.originPlatforms;
-      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 340, 37, 110, 118, p.x, p.y, p.w, p.h + 50);
+      } else if (platImg && platImg.complete && platImg.naturalWidth > 0) {
         ctx.drawImage(platImg, 18, 39, 110, 80, p.x, p.y, p.w, p.h + 35);
       } else {
         ctx.fillStyle = '#1c192c';
@@ -7632,11 +7796,42 @@ function drawPlatforms() {
       }
       ctx.restore();
 
+    // LEVEL 1: MEDIUM FLOATING ISLAND
+    } else if (p.type === 'floating_island_med') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 160, 70, 50, 60, p.x, p.y, p.w, p.h + 25);
+      } else {
+        ctx.fillStyle = '#1c192c';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+      }
+      ctx.restore();
+
+    // LEVEL 1: SMALL TEARDROP FLOATING ISLAND
+    } else if (p.type === 'floating_island_small') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 210, 70, 50, 60, p.x, p.y, p.w, p.h + 20);
+      } else {
+        ctx.fillStyle = '#1c192c';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+      }
+      ctx.restore();
+
     // LEVEL 1: FLOATING MOSSY STONE SLAB
     } else if (p.type === 'floating_stone') {
       ctx.save();
+      const masterImg = l1BgAssets.originMaster;
       const platImg = l1BgAssets.originPlatforms;
-      if (platImg && platImg.complete && platImg.naturalWidth > 0) {
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 295, 70, 105, 45, p.x, p.y, p.w, p.h + 15);
+      } else if (platImg && platImg.complete && platImg.naturalWidth > 0) {
         ctx.drawImage(platImg, 206, 115, 118, 24, p.x, p.y, p.w, p.h);
       } else {
         ctx.fillStyle = '#242234';
@@ -7667,6 +7862,94 @@ function drawPlatforms() {
         ctx.moveTo(p.x + p.w - 8, p.y);
         ctx.lineTo(p.x + p.w - 8, p.y + p.h + 12);
         ctx.stroke();
+      }
+      ctx.restore();
+
+    // LEVEL 1: WOODEN PLATFORM WITH CEREMONIAL BANNER
+    } else if (p.type === 'hanging_wood_banner') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 525, 42, 100, 113, p.x, p.y, p.w, p.h + 75);
+      } else {
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+      }
+      ctx.restore();
+
+    // LEVEL 1: ANCIENT STONE ARCH BRIDGE
+    } else if (p.type === 'stone_bridge') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 243, 419, 127, 58, p.x, p.y - 12, p.w, p.h + 20);
+      } else {
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(p.x, p.y, p.w, 4);
+      }
+      ctx.restore();
+
+    // LEVEL 1: WOODEN ARCHED BRIDGE
+    } else if (p.type === 'wooden_arch_bridge') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 8, 419, 120, 59, p.x, p.y - 10, p.w, p.h + 20);
+      } else {
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      }
+      ctx.restore();
+
+    // LEVEL 1: GRAND FORTRESS GATEHOUSE PLATFORM
+    } else if (p.type === 'grand_gatehouse') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 675, 300, 245, 95, p.x, p.y - 10, p.w, p.h + 10);
+      } else {
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      }
+      ctx.restore();
+
+    // LEVEL 1: STONE WATCHTOWER PARAPET
+    } else if (p.type === 'watchtower') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 830, 190, 70, 97, p.x, p.y, p.w, p.h);
+      } else {
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      }
+      ctx.restore();
+
+    // LEVEL 1: STAIRS WITH RAILING
+    } else if (p.type === 'stairs_railing') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 525, 321, 85, 54, p.x, p.y, p.w, p.h);
+      } else {
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+      }
+      ctx.restore();
+
+    // LEVEL 1: STONE STAIRS RAMP
+    } else if (p.type === 'stairs_stone') {
+      ctx.save();
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        ctx.drawImage(masterImg, 610, 325, 60, 50, p.x, p.y, p.w, p.h);
+      } else {
+        ctx.fillStyle = '#475569';
+        ctx.fillRect(p.x, p.y, p.w, p.h);
       }
       ctx.restore();
 
@@ -7803,50 +8086,58 @@ function drawPlatforms() {
     // LEVEL 1: SUSPENDED ROPE BRIDGES OVER CHASMS
     } else if (p.type === 'rope_bridge') {
       ctx.save();
-      // Wooden anchor pilings at bridge ends
-      ctx.fillStyle = '#451a03';
-      ctx.fillRect(p.x - 6, p.y - 14, 10, p.h + 18);
-      ctx.fillRect(p.x + p.w - 4, p.y - 14, 10, p.h + 18);
-      // Coiled hemp rope wraps on pilings
-      ctx.fillStyle = '#b45309';
-      ctx.fillRect(p.x - 6, p.y - 10, 10, 5);
-      ctx.fillRect(p.x + p.w - 4, p.y - 10, 10, 5);
+      const masterImg = l1BgAssets.originMaster;
+      if (masterImg && masterImg.complete && masterImg.naturalWidth > 0) {
+        for (let bx = p.x; bx < p.x + p.w; bx += 95) {
+          const segW = Math.min(95, p.x + p.w - bx);
+          ctx.drawImage(masterImg, 139, 421, segW, 47, bx, p.y - 12, segW, p.h + 20);
+        }
+      } else {
+        // Wooden anchor pilings at bridge ends
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(p.x - 6, p.y - 14, 10, p.h + 18);
+        ctx.fillRect(p.x + p.w - 4, p.y - 14, 10, p.h + 18);
+        // Coiled hemp rope wraps on pilings
+        ctx.fillStyle = '#b45309';
+        ctx.fillRect(p.x - 6, p.y - 10, 10, 5);
+        ctx.fillRect(p.x + p.w - 4, p.y - 10, 10, 5);
 
-      // Sagging top guide rope
-      const sagMax = Math.min(18, p.w * 0.08);
-      ctx.strokeStyle = '#92400e';
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y - 10);
-      ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 10 + sagMax, p.x + p.w, p.y - 10);
-      ctx.stroke();
-
-      // Slatted wooden bridge planks along bottom deck
-      const plankCount = Math.floor(p.w / 16);
-      for (let i = 0; i <= plankCount; i++) {
-        const t = i / plankCount;
-        const bx = p.x + t * (p.w - 14);
-        const sag = Math.sin(t * Math.PI) * (sagMax * 0.5);
-        const by = p.y + sag;
-
-        // Vertical suspension cord connecting top rope to plank
-        const topRopeY = (p.y - 10) + Math.sin(t * Math.PI) * sagMax;
-        ctx.strokeStyle = '#d97706';
-        ctx.lineWidth = 1.2;
+        // Sagging top guide rope
+        const sagMax = Math.min(18, p.w * 0.08);
+        ctx.strokeStyle = '#92400e';
+        ctx.lineWidth = 3.5;
         ctx.beginPath();
-        ctx.moveTo(bx + 6, topRopeY);
-        ctx.lineTo(bx + 6, by);
+        ctx.moveTo(p.x, p.y - 10);
+        ctx.quadraticCurveTo(p.x + p.w / 2, p.y - 10 + sagMax, p.x + p.w, p.y - 10);
         ctx.stroke();
 
-        // Wooden plank
-        ctx.fillStyle = (i % 2 === 0) ? '#5c2e0b' : '#451a03';
-        ctx.fillRect(bx, by, 12, p.h);
-        ctx.fillStyle = '#78350f';
-        ctx.fillRect(bx, by, 12, 3);
-        // Iron rivets
-        ctx.fillStyle = '#94a3b8';
-        ctx.fillRect(bx + 2, by + 4, 2, 2);
-        ctx.fillRect(bx + 8, by + 4, 2, 2);
+        // Slatted wooden bridge planks along bottom deck
+        const plankCount = Math.floor(p.w / 16);
+        for (let i = 0; i <= plankCount; i++) {
+          const t = i / plankCount;
+          const bx = p.x + t * (p.w - 14);
+          const sag = Math.sin(t * Math.PI) * (sagMax * 0.5);
+          const by = p.y + sag;
+
+          // Vertical suspension cord connecting top rope to plank
+          const topRopeY = (p.y - 10) + Math.sin(t * Math.PI) * sagMax;
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(bx + 6, topRopeY);
+          ctx.lineTo(bx + 6, by);
+          ctx.stroke();
+
+          // Wooden plank
+          ctx.fillStyle = (i % 2 === 0) ? '#5c2e0b' : '#451a03';
+          ctx.fillRect(bx, by, 12, p.h);
+          ctx.fillStyle = '#78350f';
+          ctx.fillRect(bx, by, 12, 3);
+          // Iron rivets
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillRect(bx + 2, by + 4, 2, 2);
+          ctx.fillRect(bx + 8, by + 4, 2, 2);
+        }
       }
       ctx.restore();
 

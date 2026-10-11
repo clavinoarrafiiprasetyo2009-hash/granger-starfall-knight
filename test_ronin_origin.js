@@ -12,7 +12,9 @@ const assets = [
   'tileset_verdant_ruins.jpg',
   'bg_origin_village.jpg',
   'tileset_origin_platforms.png',
-  'tileset_origin_furniture.png'
+  'tileset_origin_furniture.png',
+  'tileset_origin_master.png',
+  'bg_origin_wall_panorama.png'
 ];
 
 assets.forEach(asset => {
@@ -32,18 +34,32 @@ assert(gameJs.includes("name: 'THE RONIN'"), "HEROES.ronin name is not 'THE RONI
 assert(!gameJs.includes("fall: {"), "Legacy hero 'fall' still present");
 assert(!gameJs.includes("dregsnot: {"), "Legacy hero 'dregsnot' still present");
 
-// 10,800px Map 1 Expansion
+// 10,800px Map 1 Expansion & HD Pixel Art Rendering
 assert(gameJs.includes("mapWidth: 10800"), "mapWidth is not 10800");
-assert(gameJs.includes("SECTOR_DEFS_L1"), "SECTOR_DEFS_L1 missing");
-assert(gameJs.includes("drawOriginVillageFurniture"), "drawOriginVillageFurniture function missing");
-assert(gameJs.includes("level1VillageProps"), "level1VillageProps array missing");
-assert(gameJs.includes("l1BgAssets.originPlatforms"), "l1BgAssets.originPlatforms missing");
-assert(gameJs.includes("l1BgAssets.originFurniture.src = 'assets/tileset_origin_furniture.png'"), "tileset_origin_furniture.png missing");
+assert(gameJs.includes("ctx.imageSmoothingEnabled = false"), "Crisp HD pixel art smoothing disabled missing");
+assert(gameJs.includes("l1BgAssets.originMaster.src = 'assets/tileset_origin_master.png'"), "originMaster asset missing");
+assert(gameJs.includes("l1BgAssets.originWallPanorama.src = 'assets/bg_origin_wall_panorama.png'"), "originWallPanorama asset missing");
+assert(gameJs.includes("drawSeamlessParallaxImage(ctx, l1BgAssets.originWallPanorama"), "Wall panorama parallax call missing");
 
-// Enemy AI jitter & stuck fixes
+// Airborne & Ground Platforms using new master asset types
+assert(gameJs.includes("hanging_wood_banner"), "hanging_wood_banner platform type missing");
+assert(gameJs.includes("floating_island_med"), "floating_island_med platform type missing");
+assert(gameJs.includes("floating_island_small"), "floating_island_small platform type missing");
+assert(gameJs.includes("stone_bridge"), "stone_bridge platform type missing");
+assert(gameJs.includes("wooden_arch_bridge"), "wooden_arch_bridge platform type missing");
+assert(gameJs.includes("grand_gatehouse"), "grand_gatehouse platform type missing");
+
+// Expanded Village Props
+assert(gameJs.includes("notice_board"), "notice_board prop missing");
+assert(gameJs.includes("hanging_lantern_post"), "hanging_lantern_post prop missing");
+assert(gameJs.includes("small_torii"), "small_torii prop missing");
+assert(gameJs.includes("crate_sacks"), "crate_sacks prop missing");
+assert(gameJs.includes("flowering_shrub"), "flowering_shrub prop missing");
+
+// Enemy AI Anti-stuck watchdog & collision
 assert(gameJs.includes("onContinuousGround"), "Enemy onContinuousGround fix missing");
-assert(gameJs.includes("this.turnCooldown = 25"), "turnCooldown for floating platform ledge turnaround missing");
-assert(gameJs.includes("this.isLunging = true"), "Hound lunge state tracking missing");
+assert(gameJs.includes("this.stuckTimer > 18"), "Anti-stuck watchdog timer missing");
+assert(gameJs.includes("isAboveTop && isWithinX"), "Enemy platform landing condition missing");
 
 // Continuous ground floor
 assert(gameJs.includes("SEKTOR 1: JALAN UTAMA & PERMUKIMAN"), "Ground segment 1 missing");
