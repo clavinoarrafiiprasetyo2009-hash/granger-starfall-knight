@@ -16,7 +16,8 @@ const assets = [
   'tileset_origin_master.png',
   'bg_origin_wall_panorama.png',
   'slash_effects_clean.png',
-  'slash_blood_clean.png'
+  'slash_blood_clean.png',
+  'slash_white_clean.png'
 ];
 
 assets.forEach(asset => {
@@ -88,6 +89,7 @@ assert(gameJs.includes("DINDING MENARA KABUT KIRI (WALL JUMP)"), "Gorge mist tow
 assert(gameJs.includes("DINDING BASTION KIRI (WALL JUMP)"), "Sector 2 bastion chimney missing");
 assert(gameJs.includes("drawSakuraWeather"), "drawSakuraWeather function missing");
 assert(gameJs.includes("slashBloodImg.src = 'assets/slash_blood_clean.png'"), "slashBloodImg source missing");
+assert(gameJs.includes("slashWhiteImg.src = 'assets/slash_white_clean.png'"), "slashWhiteImg source missing");
 
 console.log('[PASS] game.js 17,000px expanded world, village props, undulating ground, NPCs, and boss triggers verified.');
 

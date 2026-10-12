@@ -71,6 +71,8 @@ console.log('[PASS] Lord Kageyoshi Samurai Warlord Boss AI with wind-up telegrap
 // 6. Check authentic anime katana slash spritesheet & proper thickness from user reference
 assert(gameJs.includes("slash_effects_clean.png"), "assets/slash_effects_clean.png reference missing");
 assert(gameJs.includes("slash_blood_clean.png"), "assets/slash_blood_clean.png reference missing");
+assert(gameJs.includes("slash_white_clean.png"), "assets/slash_white_clean.png reference missing");
+assert(gameJs.includes("WHITE_SLASH_FRAMES"), "WHITE_SLASH_FRAMES sprite definitions missing");
 assert(gameJs.includes("CRIMSON_SLASH_FRAMES"), "CRIMSON_SLASH_FRAMES sprite definitions missing");
 assert(gameJs.includes("SLASH_SPRITE_FRAMES"), "SLASH_SPRITE_FRAMES sprite definitions missing");
 assert(gameJs.includes("const rInner = s.radius * 0.74;"), "Authentic crescent thickness (0.74) missing");

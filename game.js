@@ -5953,6 +5953,8 @@ function triggerHeroAttack() {
       ));
     }
 
+    player.slashCombo = !player.slashCombo;
+
     player.activeSlashSmear = {
       x: smearOriginX,
       y: smearOriginY,
@@ -5963,7 +5965,8 @@ function triggerHeroAttack() {
       maxLife: 14,
       color: player.activeSecondaryColor,
       edgeColor: player.activeThemeColor,
-      inAir: !player.isGrounded
+      inAir: !player.isGrounded,
+      combo: player.slashCombo
     };
 
     // 1. DOWNWARD NAIL POGO IN AIR (HOLLOW KNIGHT STYLE)
@@ -11497,6 +11500,85 @@ slashSheetImg.src = 'assets/slash_effects_clean.png';
 const slashBloodImg = new Image();
 slashBloodImg.src = 'assets/slash_blood_clean.png';
 
+const slashWhiteImg = new Image();
+slashWhiteImg.src = 'assets/slash_white_clean.png';
+
+// User Reference "Slash Utama" & White Anime Katana Spritesheet Animation Frames
+const WHITE_SLASH_FRAMES = {
+  horizontal: [
+    { x: 37, y: 57, w: 62, h: 3 },
+    { x: 132, y: 55, w: 49, h: 7 },
+    { x: 208, y: 40, w: 30, h: 31 },
+    { x: 285, y: 41, w: 79, h: 34 },
+    { x: 403, y: 37, w: 96, h: 36 },
+    { x: 539, y: 36, w: 105, h: 39 },
+    { x: 683, y: 31, w: 107, h: 46 },
+    { x: 813, y: 38, w: 98, h: 28 }
+  ],
+  vertical: [
+    { x: 61, y: 121, w: 6, h: 55 },
+    { x: 130, y: 118, w: 7, h: 61 },
+    { x: 195, y: 115, w: 10, h: 65 },
+    { x: 264, y: 115, w: 11, h: 66 },
+    { x: 326, y: 115, w: 29, h: 63 },
+    { x: 405, y: 115, w: 28, h: 63 },
+    { x: 492, y: 119, w: 16, h: 61 },
+    { x: 571, y: 127, w: 6, h: 41 }
+  ],
+  upward: [
+    { x: 29, y: 224, w: 45, h: 33 },
+    { x: 109, y: 216, w: 55, h: 40 },
+    { x: 201, y: 215, w: 60, h: 40 },
+    { x: 293, y: 216, w: 71, h: 36 },
+    { x: 394, y: 221, w: 67, h: 22 },
+    { x: 492, y: 224, w: 51, h: 21 }
+  ],
+  downward: [
+    { x: 32, y: 297, w: 49, h: 30 },
+    { x: 123, y: 295, w: 56, h: 38 },
+    { x: 216, y: 293, w: 64, h: 38 },
+    { x: 314, y: 295, w: 61, h: 37 },
+    { x: 405, y: 299, w: 65, h: 31 },
+    { x: 524, y: 308, w: 50, h: 19 }
+  ],
+  combo: [
+    { x: 30, y: 389, w: 79, h: 14 },
+    { x: 127, y: 377, w: 74, h: 25 },
+    { x: 224, y: 375, w: 70, h: 28 },
+    { x: 322, y: 386, w: 52, h: 13 },
+    { x: 396, y: 381, w: 68, h: 21 },
+    { x: 485, y: 380, w: 69, h: 21 },
+    { x: 570, y: 376, w: 78, h: 25 },
+    { x: 660, y: 374, w: 59, h: 21 },
+    { x: 737, y: 377, w: 95, h: 17 }
+  ],
+  air: [
+    { x: 29, y: 448, w: 75, h: 31 },
+    { x: 127, y: 447, w: 71, h: 35 },
+    { x: 217, y: 448, w: 77, h: 30 },
+    { x: 316, y: 447, w: 81, h: 35 },
+    { x: 417, y: 448, w: 89, h: 29 },
+    { x: 537, y: 454, w: 76, h: 20 },
+    { x: 629, y: 454, w: 71, h: 16 },
+    { x: 763, y: 453, w: 52, h: 8 }
+  ],
+  hit_impact: [
+    { x: 39, y: 525, w: 40, h: 39 },
+    { x: 97, y: 521, w: 59, h: 43 },
+    { x: 177, y: 517, w: 48, h: 53 },
+    { x: 249, y: 517, w: 52, h: 47 },
+    { x: 320, y: 518, w: 58, h: 45 },
+    { x: 398, y: 521, w: 60, h: 39 },
+    { x: 493, y: 530, w: 55, h: 20 },
+    { x: 581, y: 536, w: 52, h: 7 },
+    { x: 725, y: 537, w: 50, h: 2 },
+    { x: 835, y: 537, w: 65, h: 2 }
+  ],
+  ground_impact: [
+    { x: 819, y: 601, w: 138, h: 40 }
+  ]
+};
+
 const CRIMSON_SLASH_FRAMES = {
   basic_swing: [
     { x: 29, y: 65, w: 56, h: 30 },
@@ -11554,12 +11636,31 @@ class SlashImpactEffect {
     this.type = type;
     this.scale = scale;
     this.life = 0;
-    this.maxLife = type === 'hit_impact' ? 10 : 12;
+    this.maxLife = type === 'hit_impact' ? 12 : 14;
   }
   update() {
     this.life++;
   }
   draw(ctx) {
+    // 1. Primary White/Crimson Hit Sparks & Ground Rings from New Spritesheet
+    if (slashWhiteImg.complete && slashWhiteImg.naturalWidth > 0) {
+      const animKey = this.type === 'dust_impact' ? 'ground_impact' : 'hit_impact';
+      const frames = WHITE_SLASH_FRAMES[animKey];
+      if (frames && frames.length > 0) {
+        const progress = this.life / this.maxLife;
+        const fIdx = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+        const f = frames[fIdx];
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, 1 - progress * 0.6);
+        const dw = f.w * this.scale * (animKey === 'ground_impact' ? 1.4 : 1.3);
+        const dh = f.h * this.scale * (animKey === 'ground_impact' ? 1.4 : 1.3);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, this.x - dw / 2, this.y - dh / 2, dw, dh);
+        ctx.restore();
+        return;
+      }
+    }
+
+    // Fallback to crimson blood sprites
     if (!slashBloodImg.complete || !slashBloodImg.naturalWidth) return;
     const frames = CRIMSON_SLASH_FRAMES[this.type];
     if (!frames) return;
@@ -11623,7 +11724,72 @@ function drawSlashSmear(ctx) {
 
   const progress = Math.max(0, Math.min(1, 1 - (s.life / s.maxLife)));
 
-  // 1. New Crimson / Blood Katana Slash Spritesheet Rendering
+  // 1. Primary White/Silver Anime Katana Spritesheet (User Exact Choice: "Slash Utama")
+  if (slashWhiteImg.complete && slashWhiteImg.naturalWidth > 0) {
+    let animKey = 'horizontal';
+    if (s.aim === 'up') {
+      animKey = 'upward';
+    } else if (s.aim === 'down') {
+      animKey = 'downward';
+    } else if (s.inAir) {
+      animKey = 'air';
+    } else if (s.combo) {
+      animKey = 'combo';
+    } else {
+      animKey = 'horizontal';
+    }
+
+    const frames = WHITE_SLASH_FRAMES[animKey];
+    if (frames && frames.length > 0) {
+      const frameIdx = Math.min(frames.length - 1, Math.floor(progress * frames.length));
+      const f = frames[frameIdx];
+
+      ctx.save();
+      ctx.globalAlpha = Math.min(1.0, alpha * 1.35);
+
+      if (animKey === 'horizontal') {
+        const scale = (s.radius / 76) * 1.45;
+        const dw = f.w * scale;
+        const dh = f.h * scale;
+        ctx.translate(s.x, s.y);
+        ctx.scale(s.facing, 1);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.5, dw, dh);
+      } else if (animKey === 'combo') {
+        const scale = (s.radius / 76) * 1.45;
+        const dw = f.w * scale;
+        const dh = f.h * scale;
+        ctx.translate(s.x, s.y);
+        ctx.scale(s.facing, 1);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.5, dw, dh);
+      } else if (animKey === 'air') {
+        const scale = (s.radius / 76) * 1.5;
+        const dw = f.w * scale;
+        const dh = f.h * scale;
+        ctx.translate(s.x, s.y);
+        ctx.scale(s.facing, 1);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 4 * scale, -dh * 0.5, dw, dh);
+      } else if (animKey === 'upward') {
+        const scale = (s.radius / 76) * 1.45;
+        const dw = f.w * scale;
+        const dh = f.h * scale;
+        ctx.translate(s.x, s.y - 12);
+        ctx.scale(s.facing, 1);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, -dw * 0.3, -dh * 0.95, dw, dh);
+      } else if (animKey === 'downward') {
+        const scale = (s.radius / 76) * 1.45;
+        const dw = f.w * scale;
+        const dh = f.h * scale;
+        ctx.translate(s.x, s.y + 14);
+        ctx.scale(s.facing, 1);
+        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, -dw * 0.35, 2, dw, dh);
+      }
+
+      ctx.restore();
+      return;
+    }
+  }
+
+  // 2. Crimson / Blood Katana Slash Spritesheet Rendering Fallback
   if (slashBloodImg.complete && slashBloodImg.naturalWidth > 0) {
     let animKey = 'basic_swing';
     if (s.aim === 'up') {
