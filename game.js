@@ -7460,27 +7460,38 @@ function drawLevel1ForestParallax(cam) {
     // Fallback to misty woods
     const renderedMistyWoods = drawSeamlessParallaxImage(ctx, l1BgAssets.mistyWoods, cam.x, 0.04, V_HEIGHT, 0, 1.0);
     if (!renderedMistyWoods) {
-      // Procedural Fallback Sky & Pines
+      // Procedural Fallback Sky & Pines: Dark Twilight of Retribution
       const skyGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
-      skyGrad.addColorStop(0, '#4b6e79');
-      skyGrad.addColorStop(0.30, '#668e98');
-      skyGrad.addColorStop(0.60, '#8cb5bf');
-      skyGrad.addColorStop(0.85, '#b8dfe3');
-      skyGrad.addColorStop(1, '#d5eff1');
+      skyGrad.addColorStop(0, '#090b14');
+      skyGrad.addColorStop(0.30, '#151022');
+      skyGrad.addColorStop(0.60, '#2b121e');
+      skyGrad.addColorStop(0.85, '#3b141e');
+      skyGrad.addColorStop(1, '#180910');
       ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
     }
   }
 
-  // 2. Volumetric Morning Sun God Rays (Filtering down through village canopy)
+  // Cinematic Dark Vengeance Atmosphere Overlay (Moody twilight of retribution over burnt ruins)
+  ctx.save();
+  const darkVengeanceGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
+  darkVengeanceGrad.addColorStop(0, 'rgba(8, 10, 22, 0.55)');    // Deep dark night sky
+  darkVengeanceGrad.addColorStop(0.50, 'rgba(28, 12, 20, 0.42)'); // Crimson twilight over burnt village
+  darkVengeanceGrad.addColorStop(1, 'rgba(10, 8, 14, 0.50)');    // Smoldering ruins ground darkness
+  ctx.fillStyle = darkVengeanceGrad;
+  ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
+  ctx.restore();
+
+  // 2. Volumetric Blood-Twilight Vengeance Rays (Crimson moonlight filtering through burnt smoke)
   ctx.save();
   const rayAngle = -0.32;
   ctx.translate(V_WIDTH * 0.72, -30);
   ctx.rotate(rayAngle);
-  const rayPulse = 0.06 + Math.sin(nowTime / 1400) * 0.025;
+  const rayPulse = 0.07 + Math.sin(nowTime / 1400) * 0.028;
   const rayGrad = ctx.createLinearGradient(0, 0, 0, 520);
-  rayGrad.addColorStop(0, `rgba(255, 255, 220, ${rayPulse * 1.6})`);
-  rayGrad.addColorStop(0.5, `rgba(210, 240, 235, ${rayPulse})`);
+  rayGrad.addColorStop(0, `rgba(239, 68, 68, ${rayPulse * 1.8})`);
+  rayGrad.addColorStop(0.45, `rgba(185, 28, 28, ${rayPulse * 1.2})`);
+  rayGrad.addColorStop(0.85, `rgba(88, 28, 38, ${rayPulse * 0.6})`);
   rayGrad.addColorStop(1, 'transparent');
   ctx.fillStyle = rayGrad;
   ctx.fillRect(-150, 0, 85, 520);
@@ -7488,36 +7499,36 @@ function drawLevel1ForestParallax(cam) {
   ctx.fillRect(170, 0, 75, 520);
   ctx.restore();
 
-  // 3. Rolling Morning Valley Mist (Lower road over village banks)
+  // 3. Rolling Smoldering Valley Smoke & Ground Mist (Lower road over burnt village banks)
   ctx.save();
-  const mistGrad = ctx.createLinearGradient(0, V_HEIGHT - 120, 0, V_HEIGHT);
+  const mistGrad = ctx.createLinearGradient(0, V_HEIGHT - 130, 0, V_HEIGHT);
   mistGrad.addColorStop(0, 'transparent');
-  mistGrad.addColorStop(0.5, 'rgba(180, 222, 226, 0.28)');
-  mistGrad.addColorStop(1, 'rgba(150, 205, 211, 0.55)');
+  mistGrad.addColorStop(0.4, 'rgba(30, 20, 28, 0.45)');
+  mistGrad.addColorStop(1, 'rgba(15, 12, 20, 0.75)');
   ctx.fillStyle = mistGrad;
-  ctx.fillRect(0, V_HEIGHT - 120, V_WIDTH, 120);
+  ctx.fillRect(0, V_HEIGHT - 130, V_WIDTH, 130);
   ctx.restore();
 
-  // 4. Ambient Drifting Forest Spores & Fireflies (Golden & Emerald)
+  // 4. Ambient Rising Smoldering Village Embers & Charcoal Sparks (Crimson, Ember & Gold)
   ctx.save();
   const animTime = nowTime / 40;
-  for (let s = 0; s < 28; s++) {
-    const spX = Math.round(((s * 97 - cam.x * 0.18 + animTime) % V_WIDTH + V_WIDTH) % V_WIDTH);
-    const spY = Math.round(((s * 53 + Math.sin(nowTime / 500 + s) * 18) % (V_HEIGHT - 90) + (V_HEIGHT - 90)) % (V_HEIGHT - 90));
-    const alpha = 0.35 + Math.sin(nowTime / 350 + s) * 0.28;
-    ctx.globalAlpha = Math.max(0.12, alpha);
-    ctx.fillStyle = s % 2 === 0 ? '#6ee7b7' : '#fef08a';
+  for (let s = 0; s < 32; s++) {
+    const spX = Math.round(((s * 97 - cam.x * 0.18 + animTime * 0.6) % V_WIDTH + V_WIDTH) % V_WIDTH);
+    const spY = Math.round(((s * 53 - (nowTime / 30 + s * 17) % (V_HEIGHT - 60)) % (V_HEIGHT - 60) + (V_HEIGHT - 60)) % (V_HEIGHT - 60));
+    const alpha = 0.4 + Math.sin(nowTime / 280 + s) * 0.3;
+    ctx.globalAlpha = Math.max(0.15, alpha);
+    ctx.fillStyle = s % 3 === 0 ? '#ef4444' : (s % 3 === 1 ? '#f97316' : '#fbbf24');
     ctx.shadowColor = ctx.fillStyle;
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 9;
     ctx.beginPath();
     ctx.arc(spX, spY, (s % 3) + 1.2, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
 
-  // 5. Ambient Falling Leaves & Petals (Swaying gently in the morning breeze)
+  // 5. Dark Crimson Blood Petals & Charcoal Ash Flakes (Swaying in the cold wind of vengeance)
   ctx.save();
-  for (let l = 0; l < 16; l++) {
+  for (let l = 0; l < 20; l++) {
     const lfTime = nowTime / 24 + l * 143;
     const lfX = Math.round(((l * 127 - cam.x * 0.32 + lfTime * 0.75) % (V_WIDTH + 80) + (V_WIDTH + 80)) % (V_WIDTH + 80) - 40);
     const lfY = Math.round(((l * 69 + lfTime * 0.55 + Math.sin(nowTime / 420 + l) * 22) % (V_HEIGHT + 40) + (V_HEIGHT + 40)) % (V_HEIGHT + 40) - 20);
@@ -7525,8 +7536,8 @@ function drawLevel1ForestParallax(cam) {
     ctx.save();
     ctx.translate(lfX, lfY);
     ctx.rotate(lRot);
-    ctx.fillStyle = l % 3 === 0 ? '#4ade80' : (l % 3 === 1 ? '#86efac' : '#f59e0b');
-    ctx.globalAlpha = 0.65;
+    ctx.fillStyle = l % 3 === 0 ? '#b91c1c' : (l % 3 === 1 ? '#881337' : '#27272a');
+    ctx.globalAlpha = 0.75;
     ctx.beginPath();
     ctx.ellipse(0, 0, 4.5, 2.0, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -10812,9 +10823,13 @@ function drawGoalPortal() {
   ctx.restore();
 }
 
-// Level 1 Atmospheric Weather: Serene Drifting Sakura Petals (Hollow Knight / Samurai Aesthetic)
+// Level 1 Atmospheric Weather: Blood-Sakura Petals & Smoldering Ash Flakes (Dark Vengeance Aesthetic)
 const sakuraPetals = [];
 for (let i = 0; i < 55; i++) {
+  const rand = Math.random();
+  const petalColor = rand > 0.55
+    ? 'rgba(185, 28, 28, 0.88)'   // Deep Blood-Crimson Petal
+    : (rand > 0.25 ? 'rgba(136, 19, 55, 0.82)' : 'rgba(39, 39, 42, 0.85)'); // Dark Wine & Burnt Soot Ash
   sakuraPetals.push({
     x: Math.random() * (V_WIDTH + 80) - 40,
     y: Math.random() * (V_HEIGHT + 40) - 20,
@@ -10824,7 +10839,7 @@ for (let i = 0; i < 55; i++) {
     angle: Math.random() * Math.PI * 2,
     angleSpeed: (Math.random() - 0.5) * 0.04,
     flutter: Math.random() * Math.PI * 2,
-    color: Math.random() > 0.4 ? 'rgba(255, 183, 197, 0.82)' : 'rgba(254, 215, 226, 0.72)'
+    color: petalColor
   });
 }
 
@@ -10849,14 +10864,24 @@ function drawSakuraWeather() {
     ctx.translate(p.x, p.y);
     ctx.rotate(p.angle);
     ctx.fillStyle = p.color;
-    ctx.shadowColor = '#f472b6';
-    ctx.shadowBlur = 5;
+    ctx.shadowColor = p.color.includes('39, 39') ? '#52525b' : '#ef4444';
+    ctx.shadowBlur = 6;
     ctx.beginPath();
     ctx.ellipse(0, 0, p.size * 1.15, p.size * 0.55, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.restore();
   });
+
+  // Cinematic Dark Vengeance Vignette (Dark brooding edges framing the screen like Hollow Knight)
+  ctx.save();
+  const vigGrad = ctx.createRadialGradient(V_WIDTH / 2, V_HEIGHT / 2, V_WIDTH * 0.28, V_WIDTH / 2, V_HEIGHT / 2, V_WIDTH * 0.72);
+  vigGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+  vigGrad.addColorStop(0.65, 'rgba(6, 6, 14, 0.35)');
+  vigGrad.addColorStop(1, 'rgba(3, 3, 8, 0.70)');
+  ctx.fillStyle = vigGrad;
+  ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
+  ctx.restore();
 }
 
 function drawCyberWeather() {
@@ -11652,8 +11677,10 @@ class SlashImpactEffect {
         const f = frames[fIdx];
         ctx.save();
         ctx.globalAlpha = Math.max(0, 1 - progress * 0.6);
-        const dw = f.w * this.scale * (animKey === 'ground_impact' ? 1.4 : 1.3);
-        const dh = f.h * this.scale * (animKey === 'ground_impact' ? 1.4 : 1.3);
+        ctx.shadowColor = '#ef4444';
+        ctx.shadowBlur = 12;
+        const dw = f.w * this.scale * (animKey === 'ground_impact' ? 1.55 : 1.45);
+        const dh = f.h * this.scale * (animKey === 'ground_impact' ? 1.55 : 1.45);
         ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, this.x - dw / 2, this.y - dh / 2, dw, dh);
         ctx.restore();
         return;
@@ -11745,43 +11772,91 @@ function drawSlashSmear(ctx) {
       const f = frames[frameIdx];
 
       ctx.save();
-      ctx.globalAlpha = Math.min(1.0, alpha * 1.35);
+
+      let scale = (s.radius / 76) * 1.68;
+      let dw = f.w * scale;
+      let dh = f.h * scale;
+      let ox = 0;
+      let oy = 0;
 
       if (animKey === 'horizontal') {
-        const scale = (s.radius / 76) * 1.45;
-        const dw = f.w * scale;
-        const dh = f.h * scale;
+        scale = (s.radius / 76) * 1.68;
+        dw = f.w * scale;
+        dh = f.h * scale * 1.45; // Visibly thickened crescent blade arc
         ctx.translate(s.x, s.y);
         ctx.scale(s.facing, 1);
-        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.5, dw, dh);
+        ox = 8 * scale;
+        oy = -dh * 0.5;
       } else if (animKey === 'combo') {
-        const scale = (s.radius / 76) * 1.45;
-        const dw = f.w * scale;
-        const dh = f.h * scale;
+        scale = (s.radius / 76) * 1.68;
+        dw = f.w * scale;
+        dh = f.h * scale * 1.45;
         ctx.translate(s.x, s.y);
         ctx.scale(s.facing, 1);
-        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 6 * scale, -dh * 0.5, dw, dh);
+        ox = 8 * scale;
+        oy = -dh * 0.5;
       } else if (animKey === 'air') {
-        const scale = (s.radius / 76) * 1.5;
-        const dw = f.w * scale;
-        const dh = f.h * scale;
+        scale = (s.radius / 76) * 1.72;
+        dw = f.w * scale;
+        dh = f.h * scale * 1.45;
         ctx.translate(s.x, s.y);
         ctx.scale(s.facing, 1);
-        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, 4 * scale, -dh * 0.5, dw, dh);
+        ox = 6 * scale;
+        oy = -dh * 0.5;
       } else if (animKey === 'upward') {
-        const scale = (s.radius / 76) * 1.45;
-        const dw = f.w * scale;
-        const dh = f.h * scale;
-        ctx.translate(s.x, s.y - 12);
+        scale = (s.radius / 76) * 1.68;
+        dw = f.w * scale * 1.45; // Visibly thickened vertical swath
+        dh = f.h * scale;
+        ctx.translate(s.x, s.y - 14);
         ctx.scale(s.facing, 1);
-        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, -dw * 0.3, -dh * 0.95, dw, dh);
+        ox = -dw * 0.3;
+        oy = -dh * 0.95;
       } else if (animKey === 'downward') {
-        const scale = (s.radius / 76) * 1.45;
-        const dw = f.w * scale;
-        const dh = f.h * scale;
+        scale = (s.radius / 76) * 1.68;
+        dw = f.w * scale * 1.45;
+        dh = f.h * scale;
         ctx.translate(s.x, s.y + 14);
         ctx.scale(s.facing, 1);
-        ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, -dw * 0.35, 2, dw, dh);
+        ox = -dw * 0.35;
+        oy = 2;
+      }
+
+      // Layer 1: Dark Vengeance Crimson Aura (Deep retribution shadow dilation for heavy presence)
+      ctx.save();
+      ctx.shadowColor = '#dc2626';
+      ctx.shadowBlur = 16;
+      ctx.globalAlpha = Math.min(1.0, alpha * 0.9);
+      ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, ox - 1.5, oy - 2.5, dw + 3, dh + 5);
+      ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, ox + 1.5, oy + 2.5, dw + 3, dh + 5);
+      ctx.restore();
+
+      // Layer 2: Thickened Silver-White Blade Body
+      ctx.save();
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 8;
+      ctx.globalAlpha = Math.min(1.0, alpha * 1.45);
+      ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, ox, oy, dw, dh);
+      ctx.restore();
+
+      // Layer 3: Solid Razor Core Punch
+      ctx.save();
+      ctx.globalAlpha = Math.min(1.0, alpha * 1.7);
+      ctx.drawImage(slashWhiteImg, f.x, f.y, f.w, f.h, ox, oy, dw, dh);
+      ctx.restore();
+
+      // Layer 4: Trailing Vengeance Ember Wisps
+      if (alpha > 0.25) {
+        ctx.save();
+        ctx.fillStyle = '#ef4444';
+        ctx.shadowColor = '#b91c1c';
+        ctx.shadowBlur = 8;
+        const sparkSpread = progress * 20;
+        ctx.beginPath();
+        ctx.arc(ox + dw * 0.4 - sparkSpread, oy + dh * 0.45, 2.0, 0, Math.PI * 2);
+        ctx.arc(ox + dw * 0.7 - sparkSpread * 1.2, oy + dh * 0.35, 1.5, 0, Math.PI * 2);
+        ctx.arc(ox + dw * 0.85 - sparkSpread * 0.7, oy + dh * 0.65, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       }
 
       ctx.restore();
