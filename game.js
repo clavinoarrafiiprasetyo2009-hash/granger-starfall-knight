@@ -1489,7 +1489,20 @@ function loadLevel(levelId) {
   MAP_HEIGHT = lvl.mapHeight;
 
   platforms.length = 0;
-  lvl.platforms.forEach(p => platforms.push({ ...p }));
+  if (levelId === 1 && typeof localStorage !== 'undefined' && localStorage.getItem('ronin_masterpiece_map_v1')) {
+    try {
+      const customPlatforms = JSON.parse(localStorage.getItem('ronin_masterpiece_map_v1'));
+      if (Array.isArray(customPlatforms) && customPlatforms.length > 0) {
+        customPlatforms.forEach(p => platforms.push({ ...p }));
+      } else {
+        lvl.platforms.forEach(p => platforms.push({ ...p }));
+      }
+    } catch (e) {
+      lvl.platforms.forEach(p => platforms.push({ ...p }));
+    }
+  } else {
+    lvl.platforms.forEach(p => platforms.push({ ...p }));
+  }
 
   traps.length = 0;
   lvl.traps.forEach(t => traps.push(new Trap(t.x, t.y, t.w, t.h, t.type)));
@@ -7432,6 +7445,224 @@ l1BgAssets.mistyWoods.src = 'assets/bg_misty_woods.jpg';
 l1BgAssets.ancientTotem.src = 'assets/bg_ancient_totem.jpg';
 l1BgAssets.ruinsShrine.src = 'assets/bg_ruins_shrine.jpg';
 l1BgAssets.tilesetRuins.src = 'assets/tileset_verdant_ruins.jpg';
+l1BgAssets.terrainRonin = new Image();
+l1BgAssets.terrainRonin.src = 'assets/new asset/terrain_ronin_clean.png';
+
+// ============================================================================
+// NEW ASSETS: THE RONIN MASTER TERRAIN & CLIFF TILESET (AUTHENTIC PIXEL ART)
+// ============================================================================
+const RONIN_TERRAIN_TILES = {
+  // 1. Ground Top
+  ground_top_left: { x: 31, y: 140, w: 66, h: 68 },
+  ground_top_center_1: { x: 111, y: 144, w: 64, h: 64 },
+  ground_top_center_2: { x: 189, y: 142, w: 66, h: 66 },
+  ground_top_right: { x: 269, y: 146, w: 66, h: 62 },
+  ground_top_step_l: { x: 349, y: 146, w: 66, h: 62 },
+  ground_top_step_r: { x: 429, y: 144, w: 64, h: 62 },
+  ground_top_slope: { x: 507, y: 142, w: 58, h: 64 },
+
+  // 2. Ground Middle
+  ground_mid_plain: { x: 33, y: 220, w: 64, h: 62 },
+  ground_mid_stones_1: { x: 111, y: 220, w: 64, h: 62 },
+  ground_mid_stones_2: { x: 191, y: 220, w: 64, h: 62 },
+  ground_mid_compact: { x: 269, y: 220, w: 66, h: 62 },
+  ground_mid_layer: { x: 349, y: 220, w: 66, h: 62 },
+
+  // 3. Ground Bottom
+  ground_bot_dark_1: { x: 33, y: 296, w: 62, h: 60 },
+  ground_bot_dark_2: { x: 113, y: 296, w: 62, h: 60 },
+  ground_bot_rocky: { x: 193, y: 296, w: 62, h: 60 },
+  ground_bot_deep: { x: 355, y: 296, w: 56, h: 60 },
+
+  // 4. Cliff Straight
+  cliff_tall_wall: { x: 31, y: 475, w: 132, h: 244 },
+  cliff_mid_wall: { x: 183, y: 485, w: 82, h: 126 },
+  cliff_jagged_face: { x: 289, y: 483, w: 94, h: 126 },
+  cliff_mixed_wall: { x: 417, y: 503, w: 72, h: 106 },
+  cliff_spire_wall: { x: 395, y: 539, w: 14, h: 64 },
+  cliff_moss_wall: { x: 507, y: 531, w: 58, h: 110 },
+
+  // 5. Cliff Corners
+  cliff_corner_tl: { x: 1176, y: 136, w: 70, h: 90 },
+  cliff_corner_tr: { x: 1404, y: 134, w: 96, h: 90 },
+  cliff_corner_ml: { x: 1178, y: 244, w: 78, h: 100 },
+  cliff_corner_mr: { x: 1404, y: 244, w: 94, h: 94 },
+  cliff_corner_bl: { x: 1198, y: 354, w: 58, h: 72 },
+  cliff_corner_br: { x: 1424, y: 352, w: 64, h: 72 },
+
+  // 6. Cliff Shapes
+  cliff_taper_base_1: { x: 189, y: 623, w: 86, h: 96 },
+  cliff_taper_base_2: { x: 301, y: 625, w: 76, h: 94 },
+  cliff_stepped_ledge: { x: 401, y: 625, w: 74, h: 94 },
+  cliff_narrow_spur: { x: 501, y: 655, w: 46, h: 64 },
+
+  // 7. Rocky Ground
+  rocky_top_1: { x: 612, y: 481, w: 68, h: 66 },
+  rocky_top_2: { x: 698, y: 481, w: 76, h: 66 },
+  rocky_top_3: { x: 794, y: 481, w: 84, h: 66 },
+  rocky_mid_1: { x: 616, y: 573, w: 92, h: 64 },
+  rocky_mid_2: { x: 730, y: 571, w: 62, h: 66 },
+  rocky_bot_1: { x: 616, y: 655, w: 90, h: 70 },
+  rocky_bot_2: { x: 724, y: 657, w: 76, h: 68 },
+
+  // 8. Roots
+  root_giant: { x: 426, y: 784, w: 70, h: 156 },
+  root_hanging_2: { x: 600, y: 786, w: 64, h: 146 },
+  root_spire: { x: 682, y: 788, w: 32, h: 130 },
+  root_short: { x: 514, y: 786, w: 66, h: 64 },
+  root_clump: { x: 524, y: 864, w: 64, h: 72 },
+
+  // 9. Floating Platforms
+  plat_long_grass: { x: 610, y: 136, w: 292, h: 56 },
+  plat_mid_grass: { x: 926, y: 142, w: 110, h: 58 },
+  plat_small_step: { x: 1058, y: 140, w: 68, h: 56 },
+  plat_wood_rope: { x: 610, y: 288, w: 240, h: 64 },
+  plat_wood_mid: { x: 612, y: 356, w: 158, h: 64 },
+  plat_stone_ledge: { x: 876, y: 296, w: 104, h: 52 },
+  plat_hanging_isle: { x: 1068, y: 300, w: 52, h: 68 }
+};
+
+function drawRoninGround(ctx, p, img) {
+  ctx.save();
+  ctx.fillStyle = '#1c1512';
+  ctx.fillRect(p.x, p.y, p.w, p.h);
+
+  const tileW = 48;
+  const topH = 46;
+
+  // Middle & deep underground soil
+  const midY = p.y + topH - 10;
+  const midH = Math.max(0, p.h - topH + 10);
+  if (midH > 0) {
+    const rows = Math.ceil(midH / 44);
+    for (let r = 0; r < rows; r++) {
+      const curY = midY + r * 44;
+      const curH = Math.min(44, p.y + p.h - curY);
+      if (curH <= 0) continue;
+      const isBot = (r >= rows - 1 || curY + curH >= p.y + p.h - 8);
+      for (let bx = p.x; bx < p.x + p.w; bx += tileW) {
+        const curW = Math.min(tileW, p.x + p.w - bx);
+        const idx = (Math.floor(bx / tileW) + r * 3) % 3;
+        const tile = isBot
+          ? (idx === 0 ? RONIN_TERRAIN_TILES.ground_bot_dark_1 : RONIN_TERRAIN_TILES.ground_bot_rocky)
+          : (idx === 0 ? RONIN_TERRAIN_TILES.ground_mid_stones_1 : (idx === 1 ? RONIN_TERRAIN_TILES.ground_mid_plain : RONIN_TERRAIN_TILES.ground_mid_stones_2));
+        ctx.drawImage(img, tile.x, tile.y, tile.w, tile.h, bx, curY, curW, curH);
+      }
+    }
+  }
+
+  // Signature lush dark grass top rim
+  for (let bx = p.x; bx < p.x + p.w; bx += tileW) {
+    const curW = Math.min(tileW, p.x + p.w - bx);
+    const isLeft = (bx === p.x);
+    const isRight = (bx + tileW >= p.x + p.w);
+    let tile = RONIN_TERRAIN_TILES.ground_top_center_1;
+    if (isLeft && p.w <= 300) {
+      tile = RONIN_TERRAIN_TILES.ground_top_left;
+    } else if (isRight && p.w <= 300) {
+      tile = RONIN_TERRAIN_TILES.ground_top_right;
+    } else {
+      tile = (Math.floor(bx / tileW) % 2 === 0) ? RONIN_TERRAIN_TILES.ground_top_center_1 : RONIN_TERRAIN_TILES.ground_top_center_2;
+    }
+    ctx.drawImage(img, tile.x, tile.y, tile.w, tile.h, bx, p.y - 2, curW, topH);
+  }
+
+  // Exposed under-roots if elevated
+  if (p.y + p.h < 560 && p.w >= 80) {
+    for (let rx = p.x + 28; rx < p.x + p.w - 30; rx += 140) {
+      const rTile = ((rx * 7) % 2 === 0) ? RONIN_TERRAIN_TILES.root_short : RONIN_TERRAIN_TILES.root_clump;
+      ctx.drawImage(img, rTile.x, rTile.y, rTile.w, rTile.h, rx, p.y + p.h - 8, 36, 36);
+    }
+  }
+  ctx.restore();
+}
+
+function drawRoninCliffWall(ctx, p, img) {
+  ctx.save();
+  ctx.fillStyle = '#18141f';
+  ctx.fillRect(p.x, p.y, p.w, p.h);
+
+  const cliffH = 110;
+  const rows = Math.ceil(p.h / cliffH);
+  for (let r = 0; r < rows; r++) {
+    const cy = p.y + r * cliffH;
+    const curH = Math.min(cliffH, p.y + p.h - cy);
+    if (curH <= 0) continue;
+    const tile = (r % 2 === 0) ? RONIN_TERRAIN_TILES.cliff_tall_wall : RONIN_TERRAIN_TILES.cliff_jagged_face;
+    ctx.drawImage(img, tile.x, tile.y, tile.w, tile.h, p.x, cy, p.w, curH);
+  }
+
+  // Top mossy cap
+  const topCap = RONIN_TERRAIN_TILES.cliff_corner_tl;
+  ctx.drawImage(img, topCap.x, topCap.y, topCap.w, 36, p.x - 2, p.y - 2, p.w + 4, 24);
+
+  // Bottom tapering spur
+  const botSpur = RONIN_TERRAIN_TILES.cliff_narrow_spur;
+  ctx.drawImage(img, botSpur.x, botSpur.y, botSpur.w, botSpur.h, p.x + (p.w - 28) / 2, p.y + p.h - 18, 28, 24);
+  ctx.restore();
+}
+
+function drawRoninFloatingIsland(ctx, p, img) {
+  ctx.save();
+  if (p.w >= 200) {
+    const plat = RONIN_TERRAIN_TILES.plat_long_grass;
+    ctx.drawImage(img, plat.x, plat.y, plat.w, plat.h, p.x, p.y, p.w, Math.min(p.h + 24, 56));
+  } else if (p.w >= 85) {
+    const plat = RONIN_TERRAIN_TILES.plat_mid_grass;
+    ctx.drawImage(img, plat.x, plat.y, plat.w, plat.h, p.x, p.y, p.w, Math.min(p.h + 20, 52));
+  } else {
+    const plat = RONIN_TERRAIN_TILES.plat_small_step;
+    ctx.drawImage(img, plat.x, plat.y, plat.w, plat.h, p.x, p.y, p.w, Math.min(p.h + 16, 44));
+  }
+
+  // Hanging roots under island
+  if (p.h >= 20 && p.w >= 70) {
+    const root = RONIN_TERRAIN_TILES.root_giant;
+    const rw = Math.min(p.w * 0.45, 46);
+    const rh = Math.min(p.w * 0.65, 76);
+    ctx.drawImage(img, root.x, root.y, root.w, root.h, p.x + (p.w - rw) / 2, p.y + p.h - 6, rw, rh);
+  }
+  ctx.restore();
+}
+
+function drawRoninSteppedTerrace(ctx, p, img) {
+  ctx.save();
+  ctx.fillStyle = '#1b1722';
+  ctx.fillRect(p.x, p.y, p.w, p.h);
+
+  const bTile = RONIN_TERRAIN_TILES.rocky_top_1;
+  const tileH = 40;
+  const rows = Math.ceil(p.h / tileH);
+  for (let r = 0; r < rows; r++) {
+    const cy = p.y + r * tileH;
+    const curH = Math.min(tileH, p.y + p.h - cy);
+    for (let bx = p.x; bx < p.x + p.w; bx += 48) {
+      const curW = Math.min(48, p.x + p.w - bx);
+      ctx.drawImage(img, bTile.x, bTile.y, bTile.w, bTile.h, bx, cy, curW, curH);
+    }
+  }
+
+  const ledge = RONIN_TERRAIN_TILES.cliff_stepped_ledge;
+  ctx.drawImage(img, ledge.x, ledge.y, ledge.w, ledge.h, p.x - 4, p.y, 36, Math.min(p.h, 60));
+
+  for (let bx = p.x; bx < p.x + p.w; bx += 48) {
+    const curW = Math.min(48, p.x + p.w - bx);
+    const topTile = RONIN_TERRAIN_TILES.ground_top_center_1;
+    ctx.drawImage(img, topTile.x, topTile.y, topTile.w, topTile.h, bx, p.y - 2, curW, 36);
+  }
+  ctx.restore();
+}
+
+function drawRoninTreeRoot(ctx, p, img) {
+  ctx.save();
+  const root = RONIN_TERRAIN_TILES.root_giant;
+  ctx.drawImage(img, root.x, root.y, root.w, root.h, p.x, p.y, p.w, p.h);
+  if (p.w > 60) {
+    const r2 = RONIN_TERRAIN_TILES.root_hanging_2;
+    ctx.drawImage(img, r2.x, r2.y, r2.w, r2.h, p.x + p.w - 38, p.y + 6, 36, p.h - 6);
+  }
+  ctx.restore();
+}
 
 function drawSeamlessParallaxImage(targetCtx, img, camX, speed, targetH, yOffset, alpha = 1.0) {
   if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) return false;
@@ -8769,6 +9000,10 @@ function drawPlatforms() {
     // 0. LEVEL 1: FOREST STONE & VILLAGE PATHS
     // 0. LEVEL 1: ANCIENT MOSS-COVERED COBBLESTONE BRICKS (EXACT PIXEL ART REFERENCE STYLE)
     if (p.type === 'forest_stone') {
+      if (currentLevelId === 1 && l1BgAssets.terrainRonin && l1BgAssets.terrainRonin.complete && l1BgAssets.terrainRonin.naturalWidth > 0) {
+        drawRoninGround(ctx, p, l1BgAssets.terrainRonin);
+        return;
+      }
       ctx.save();
       // Foundation fill
       ctx.fillStyle = '#171522';
@@ -8968,6 +9203,10 @@ function drawPlatforms() {
 
     // LEVEL 1: SACRED CELESTIAL SPIRIT ISLAND (STALACTITE MONOLITH & GLOWING SPIRIT RUNES)
     } else if (p.type === 'floating_island' || p.type === 'floating_island_med' || p.type === 'floating_island_small' || p.type === 'floating_stone') {
+      if (currentLevelId === 1 && l1BgAssets.terrainRonin && l1BgAssets.terrainRonin.complete && l1BgAssets.terrainRonin.naturalWidth > 0) {
+        drawRoninFloatingIsland(ctx, p, l1BgAssets.terrainRonin);
+        return;
+      }
       ctx.save();
       const stalactiteLen = Math.min(65, p.w * 0.45);
 
@@ -9356,6 +9595,10 @@ function drawPlatforms() {
 
     // LEVEL 1: GROUNDED STEPPED STONE TERRACE (GROUND TO P.Y)
     } else if (p.type === 'stepped_terrace' || p.type === 'stairs_stone' || p.type === 'stairs_railing') {
+      if (currentLevelId === 1 && l1BgAssets.terrainRonin && l1BgAssets.terrainRonin.complete && l1BgAssets.terrainRonin.naturalWidth > 0) {
+        drawRoninSteppedTerrace(ctx, p, l1BgAssets.terrainRonin);
+        return;
+      }
       ctx.save();
       const groundY = 440;
       const wallH = Math.max(40, groundY - p.y);
@@ -9807,6 +10050,10 @@ function drawPlatforms() {
 
     // LEVEL 1: GROUNDED ANCIENT BANYAN TREE ROOT (GROUND TO P.Y)
     } else if (p.type === 'tree_root') {
+      if (currentLevelId === 1 && l1BgAssets.terrainRonin && l1BgAssets.terrainRonin.complete && l1BgAssets.terrainRonin.naturalWidth > 0) {
+        drawRoninTreeRoot(ctx, p, l1BgAssets.terrainRonin);
+        return;
+      }
       ctx.save();
       const groundY = 440;
       const rootH = Math.max(40, groundY - p.y);
@@ -10166,6 +10413,10 @@ function drawPlatforms() {
 
     // 2. ANCIENT RUINS WALL-JUMP PILLARS
     } else if (p.type === 'ruin_wall') {
+      if (currentLevelId === 1 && l1BgAssets.terrainRonin && l1BgAssets.terrainRonin.complete && l1BgAssets.terrainRonin.naturalWidth > 0) {
+        drawRoninCliffWall(ctx, p, l1BgAssets.terrainRonin);
+        return;
+      }
       ctx.save();
       ctx.fillStyle = '#1c1917';
       ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -14392,6 +14643,11 @@ function gameLoop() {
     if (ft.life <= 0) floatingTexts.splice(t, 1);
   }
 
+  // World Builder Gizmos & Selection Box
+  if (isEditorMode) {
+    drawEditorGizmos(ctx);
+  }
+
   ctx.restore(); // Restore in-world camera translation
 
   // 3. Screen space weather overlay (Cyber Rain)
@@ -14400,6 +14656,489 @@ function gameLoop() {
   ctx.restore(); // Restore screen shake
 
   requestAnimationFrame(gameLoop);
+}
+
+// ============================================================================
+// UNITY-STYLE WORLD & TERRAIN MAP BUILDER ENGINE
+// ============================================================================
+let isEditorMode = false;
+let selectedPlatform = null;
+let editorDragMode = null; // 'move', 'se', 'sw', 'ne', 'nw', 'e', 's', 'pan'
+let editorSnap = 20;
+let editorDragStart = { mouseX: 0, mouseY: 0, origX: 0, origY: 0, origW: 0, origH: 0, camX: 0, camY: 0 };
+let editorActiveTab = 'ground';
+
+const EDITOR_PALETTE = {
+  ground: [
+    { type: 'forest_stone', label: 'Tanah Datar Panjang', w: 400, h: 180, desc: 'Tanah rumput gelap & akar' },
+    { type: 'forest_stone', label: 'Tanah Datar Sedang', w: 220, h: 160, desc: 'Bongkahan tanah rumput' },
+    { type: 'forest_stone', label: 'Gundukan Lereng Tanah', w: 140, h: 120, desc: 'Gundukan tanah miring' },
+    { type: 'stepped_terrace', label: 'Teras Bertingkat Batu', w: 180, h: 180, desc: 'Undakan batu tebing' },
+    { type: 'forest_stone', label: 'Dasar Cekungan Lembah', w: 320, h: 180, desc: 'Dasar lembah bertanah' }
+  ],
+  cliff: [
+    { type: 'ruin_wall', label: 'Dinding Tebing Kiri (Wall Jump)', w: 40, h: 260, desc: 'Tebing vertikal wall-jump' },
+    { type: 'ruin_wall', label: 'Dinding Tebing Kanan (Wall Jump)', w: 40, h: 260, desc: 'Tebing vertikal wall-jump' },
+    { type: 'ruin_wall', label: 'Menara Tebing Purba', w: 80, h: 360, desc: 'Menara tebing batu tinggi' },
+    { type: 'forest_stone', label: 'Tebing Overhang Runcing', w: 90, h: 140, desc: 'Tebing menjorok keluar' }
+  ],
+  island: [
+    { type: 'floating_island', label: 'Pulau Rumput Melayang Besar', w: 240, h: 48, desc: 'Pulau melayang rumput panjang' },
+    { type: 'floating_island', label: 'Pulau Melayang Sedang', w: 120, h: 40, desc: 'Pulau melayang sedang' },
+    { type: 'floating_island', label: 'Pijakan Batu Melayang Kecil', w: 60, h: 28, desc: 'Pijakan micro' },
+    { type: 'tree_root', label: 'Akar Gantung Raksasa', w: 90, h: 130, desc: 'Platform akar beringin' }
+  ],
+  props: [
+    { type: 'torii_gate', label: 'Gerbang Torii Merah', w: 120, h: 22, desc: 'Gerbang kuil tradisional' },
+    { type: 'yamamon_gate', label: 'Gerbang Yamamon Benteng', w: 160, h: 24, desc: 'Gerbang benteng desa' },
+    { type: 'village_house', label: 'Rumah Desa Atap Genteng', w: 180, h: 24, desc: 'Rumah tradisional desa' },
+    { type: 'watchtower', label: 'Menara Pengawas Desa', w: 150, h: 26, desc: 'Menara pengawas kayu' },
+    { type: 'taiko_bridge', label: 'Jembatan Lengkung Taiko', w: 180, h: 28, desc: 'Jembatan merah sungai' },
+    { type: 'rope_bridge', label: 'Jembatan Tali Jurang', w: 140, h: 24, desc: 'Jembatan gantung jurang' },
+    { type: 'hanging_wood_banner', label: 'Balok Kayu Bertali & Banner', w: 140, h: 24, desc: 'Platform balok kayu gantung' },
+    { type: 'shrine_pavilion', label: 'Paviliun Altar Shinto', w: 140, h: 24, desc: 'Altar kuil suci' },
+    { type: 'stone_bridge', label: 'Jembatan Batu Megalitik', w: 180, h: 50, desc: 'Jembatan batu kuno' }
+  ]
+};
+
+function toggleMapEditor() {
+  isEditorMode = !isEditorMode;
+  const overlay = document.getElementById('unity-map-editor-overlay');
+  const btn = document.getElementById('builder-btn');
+  if (overlay) {
+    if (isEditorMode) {
+      overlay.classList.remove('hidden');
+      if (btn) btn.style.background = '#f59e0b';
+      if (btn) btn.style.color = '#000';
+      switchPaletteTab(editorActiveTab);
+      updateInspector(selectedPlatform);
+    } else {
+      overlay.classList.add('hidden');
+      if (btn) btn.style.background = '';
+      if (btn) btn.style.color = '#fbbf24';
+      selectedPlatform = null;
+      editorDragMode = null;
+    }
+  }
+}
+
+function switchPaletteTab(tabKey) {
+  editorActiveTab = tabKey;
+  ['ground', 'cliff', 'island', 'props'].forEach(t => {
+    const tabEl = document.getElementById(`tab-${t}`);
+    if (tabEl) {
+      if (t === tabKey) {
+        tabEl.style.background = '#f59e0b';
+        tabEl.style.color = '#000';
+        tabEl.style.fontWeight = 'bold';
+      } else {
+        tabEl.style.background = '#1e293b';
+        tabEl.style.color = '#94a3b8';
+        tabEl.style.fontWeight = 'normal';
+      }
+    }
+  });
+
+  const listEl = document.getElementById('palette-items-list');
+  if (!listEl) return;
+  listEl.innerHTML = '';
+
+  const items = EDITOR_PALETTE[tabKey] || [];
+  items.forEach(item => {
+    const btn = document.createElement('div');
+    btn.className = 'btn-clickable';
+    btn.style.cssText = 'background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 2px; transition: all 0.15s ease;';
+    btn.onmouseover = () => { btn.style.borderColor = '#f59e0b'; btn.style.background = '#334155'; };
+    btn.onmouseout = () => { btn.style.borderColor = '#334155'; btn.style.background = '#1e293b'; };
+    btn.onclick = () => spawnPlatformFromPalette(item.type, item.label, item.w, item.h);
+
+    btn.innerHTML = `
+      <div style="font-weight: 700; font-size: 11px; color: #f8fafc;">+ ${item.label}</div>
+      <div style="font-size: 10px; color: #94a3b8;">${item.w}x${item.h}px • ${item.type}</div>
+      <div style="font-size: 9px; color: #64748b;">${item.desc}</div>
+    `;
+    listEl.appendChild(btn);
+  });
+}
+
+function spawnPlatformFromPalette(type, label, w, h) {
+  const spawnX = Math.round((camera.x + V_WIDTH / 2 - w / 2) / editorSnap) * editorSnap;
+  const spawnY = Math.round((camera.y + V_HEIGHT / 2 - h / 2) / editorSnap) * editorSnap;
+  const newPlat = { x: spawnX, y: spawnY, w, h, type, label };
+  platforms.push(newPlat);
+  selectPlatform(newPlat);
+  saveCustomMap(true);
+}
+
+function selectPlatform(p) {
+  selectedPlatform = p;
+  updateInspector(p);
+  const selNameEl = document.getElementById('ed-selected-name');
+  if (selNameEl) {
+    selNameEl.textContent = p ? (p.label || p.type) : 'Tidak ada';
+  }
+}
+
+function updateInspector(p) {
+  const panel = document.getElementById('inspector-content');
+  if (!panel) return;
+  if (!p) {
+    panel.innerHTML = `
+      <div style="color: #64748b; font-size: 12px; text-align: center; padding: 24px 0;">
+        Klik objek di layar untuk melihat properti & mengeditnya.<br><br>
+        Total Platform: <b style="color: #38bdf8;">${platforms.length}</b><br>
+        Panjang Map: <b style="color: #38bdf8;">17,000px</b>
+      </div>
+    `;
+    return;
+  }
+
+  const allTypes = [
+    'forest_stone', 'stepped_terrace', 'ruin_wall', 'floating_island',
+    'village_house', 'torii_gate', 'taiko_bridge', 'watchtower',
+    'tree_root', 'hanging_wood_banner', 'stone_bridge', 'yamamon_gate',
+    'rope_bridge', 'shrine_pavilion', 'hazard_spikes', 'ground'
+  ];
+
+  let typeOptions = '';
+  allTypes.forEach(t => {
+    typeOptions += `<option value="${t}" ${t === p.type ? 'selected' : ''}>${t}</option>`;
+  });
+
+  panel.innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+      <div>
+        <label style="color: #94a3b8; display: block; margin-bottom: 2px;">Label Nama:</label>
+        <input type="text" id="insp-label" value="${p.label || ''}" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 11px;" oninput="applyInspectorChanges()">
+      </div>
+
+      <div>
+        <label style="color: #94a3b8; display: block; margin-bottom: 2px;">Tipe Platform:</label>
+        <select id="insp-type" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #fff; padding: 4px 6px; border-radius: 4px; font-size: 11px;" onchange="applyInspectorChanges()">
+          ${typeOptions}
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <div>
+          <label style="color: #94a3b8; display: block; margin-bottom: 2px;">X (px):</label>
+          <input type="number" id="insp-x" value="${Math.round(p.x)}" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #38bdf8; padding: 4px 6px; border-radius: 4px; font-size: 11px;" oninput="applyInspectorChanges()">
+        </div>
+        <div>
+          <label style="color: #94a3b8; display: block; margin-bottom: 2px;">Y (px):</label>
+          <input type="number" id="insp-y" value="${Math.round(p.y)}" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #38bdf8; padding: 4px 6px; border-radius: 4px; font-size: 11px;" oninput="applyInspectorChanges()">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+        <div>
+          <label style="color: #94a3b8; display: block; margin-bottom: 2px;">Lebar W:</label>
+          <input type="number" id="insp-w" value="${Math.round(p.w)}" min="10" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #facc15; padding: 4px 6px; border-radius: 4px; font-size: 11px;" oninput="applyInspectorChanges()">
+        </div>
+        <div>
+          <label style="color: #94a3b8; display: block; margin-bottom: 2px;">Tinggi H:</label>
+          <input type="number" id="insp-h" value="${Math.round(p.h)}" min="6" style="width: 100%; background: #0f172a; border: 1px solid #334155; color: #facc15; padding: 4px 6px; border-radius: 4px; font-size: 11px;" oninput="applyInspectorChanges()">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 6px; margin-top: 10px;">
+        <button onclick="editorDuplicateSelected()" class="score-badge btn-clickable" style="flex: 1; padding: 6px; background: #1e293b; color: #e2e8f0; font-size: 11px;">
+          ⧉ DUPLIKAT
+        </button>
+        <button onclick="editorDeleteSelected()" class="score-badge btn-clickable" style="flex: 1; padding: 6px; background: #991b1b; color: #fff; font-size: 11px;">
+          🗑 HAPUS
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function applyInspectorChanges() {
+  if (!selectedPlatform) return;
+  const p = selectedPlatform;
+  const lbl = document.getElementById('insp-label');
+  const typ = document.getElementById('insp-type');
+  const ix = document.getElementById('insp-x');
+  const iy = document.getElementById('insp-y');
+  const iw = document.getElementById('insp-w');
+  const ih = document.getElementById('insp-h');
+
+  if (lbl) p.label = lbl.value;
+  if (typ) p.type = typ.value;
+  if (ix) p.x = parseFloat(ix.value) || 0;
+  if (iy) p.y = parseFloat(iy.value) || 0;
+  if (iw) p.w = Math.max(10, parseFloat(iw.value) || 10);
+  if (ih) p.h = Math.max(6, parseFloat(ih.value) || 6);
+
+  saveCustomMap(true);
+}
+
+function toggleEditorSnap() {
+  if (editorSnap === 20) {
+    editorSnap = 10;
+  } else if (editorSnap === 10) {
+    editorSnap = 1;
+  } else {
+    editorSnap = 20;
+  }
+  const snapText = document.getElementById('ed-snap-text');
+  if (snapText) snapText.textContent = (editorSnap === 1) ? 'OFF' : `${editorSnap}px`;
+}
+
+function editorDuplicateSelected() {
+  if (!selectedPlatform) return;
+  const copy = { ...selectedPlatform };
+  copy.x += 40;
+  copy.y += 20;
+  if (copy.label) copy.label += ' (Copy)';
+  platforms.push(copy);
+  selectPlatform(copy);
+  saveCustomMap(true);
+}
+
+function editorDeleteSelected() {
+  if (!selectedPlatform) return;
+  const idx = platforms.indexOf(selectedPlatform);
+  if (idx !== -1) {
+    platforms.splice(idx, 1);
+    selectPlatform(null);
+    saveCustomMap(true);
+  }
+}
+
+function saveCustomMap(silent = false) {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('ronin_masterpiece_map_v1', JSON.stringify(platforms));
+      if (!silent) {
+        alert('Map berhasil disimpan ke browser! Desain Anda sekarang permanen.');
+      }
+    }
+  } catch (e) {
+    console.error('Error saving map to localStorage:', e);
+  }
+}
+
+function exportMapJSON() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(platforms, null, 2));
+  const dlAnchor = document.createElement('a');
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", "ronin_map_17000px.json");
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+}
+
+function resetDefaultMap() {
+  if (confirm('Kembalikan peta ke desain default asli? Perubahan Anda di browser akan di-reset.')) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('ronin_masterpiece_map_v1');
+    }
+    loadLevel(1);
+    selectPlatform(null);
+    alert('Peta telah di-reset ke versi bawaan.');
+  }
+}
+
+function drawEditorGizmos(ctx) {
+  if (!isEditorMode) return;
+  ctx.save();
+
+  // Draw faint bounding box on all platforms
+  platforms.forEach(p => {
+    if (p.x + p.w < camera.x - 50 || p.x > camera.x + V_WIDTH + 50) return;
+    ctx.strokeStyle = (p === selectedPlatform) ? '#fbbf24' : 'rgba(148, 163, 184, 0.35)';
+    ctx.lineWidth = (p === selectedPlatform) ? 2.5 : 1;
+    ctx.strokeRect(p.x, p.y, p.w, p.h);
+  });
+
+  if (selectedPlatform) {
+    const p = selectedPlatform;
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 2.5;
+    ctx.strokeRect(p.x, p.y, p.w, p.h);
+
+    const hs = 6;
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
+
+    const handles = [
+      [p.x, p.y], [p.x + p.w / 2, p.y], [p.x + p.w, p.y],
+      [p.x, p.y + p.h / 2], [p.x + p.w, p.y + p.h / 2],
+      [p.x, p.y + p.h], [p.x + p.w / 2, p.y + p.h], [p.x + p.w, p.y + p.h]
+    ];
+    handles.forEach(([hx, hy]) => {
+      ctx.fillRect(hx - hs / 2, hy - hs / 2, hs, hs);
+      ctx.strokeRect(hx - hs / 2, hy - hs / 2, hs, hs);
+    });
+
+    // Floating tag
+    ctx.font = '10px "Rajdhani", sans-serif';
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    const infoText = `${p.label || p.type} [${Math.round(p.w)}x${Math.round(p.h)}] (X:${Math.round(p.x)}, Y:${Math.round(p.y)})`;
+    const tw = ctx.measureText(infoText).width;
+    ctx.fillRect(p.x, p.y - 18, tw + 10, 16);
+    ctx.strokeStyle = '#fbbf24';
+    ctx.strokeRect(p.x, p.y - 18, tw + 10, 16);
+    ctx.fillStyle = '#fef08a';
+    ctx.fillText(infoText, p.x + 5, p.y - 6);
+  }
+  ctx.restore();
+}
+
+// Canvas & Window events for Map Builder
+if (typeof canvas !== 'undefined' && canvas) {
+  canvas.addEventListener('contextmenu', (e) => {
+    if (isEditorMode) e.preventDefault();
+  });
+
+  canvas.addEventListener('wheel', (e) => {
+    if (isEditorMode) {
+      e.preventDefault();
+      camera.x = Math.max(0, Math.min(MAP_WIDTH - V_WIDTH, camera.x + e.deltaY * 0.8));
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('mousedown', (e) => {
+    if (!isEditorMode) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const wx = camera.x + mx;
+    const wy = camera.y + my;
+
+    if (e.button === 2 || e.button === 1 || e.altKey) {
+      editorDragMode = 'pan';
+      editorDragStart = { mouseX: e.clientX, mouseY: e.clientY, camX: camera.x, camY: camera.y };
+      return;
+    }
+
+    if (selectedPlatform) {
+      const p = selectedPlatform;
+      const hs = 10;
+      if (Math.hypot(wx - (p.x + p.w), wy - (p.y + p.h)) < hs) {
+        editorDragMode = 'se';
+      } else if (Math.hypot(wx - p.x, wy - (p.y + p.h)) < hs) {
+        editorDragMode = 'sw';
+      } else if (Math.hypot(wx - (p.x + p.w), wy - p.y) < hs) {
+        editorDragMode = 'ne';
+      } else if (Math.hypot(wx - p.x, wy - p.y) < hs) {
+        editorDragMode = 'nw';
+      } else if (Math.abs(wx - (p.x + p.w)) < hs && wy >= p.y && wy <= p.y + p.h) {
+        editorDragMode = 'e';
+      } else if (Math.abs(wy - (p.y + p.h)) < hs && wx >= p.x && wx <= p.x + p.w) {
+        editorDragMode = 's';
+      } else if (wx >= p.x && wx <= p.x + p.w && wy >= p.y && wy <= p.y + p.h) {
+        editorDragMode = 'move';
+      }
+      if (editorDragMode) {
+        editorDragStart = { mouseX: wx, mouseY: wy, origX: p.x, origY: p.y, origW: p.w, origH: p.h };
+        return;
+      }
+    }
+
+    let found = null;
+    for (let i = platforms.length - 1; i >= 0; i--) {
+      const pl = platforms[i];
+      if (wx >= pl.x && wx <= pl.x + pl.w && wy >= pl.y && wy <= pl.y + pl.h) {
+        found = pl;
+        break;
+      }
+    }
+    selectPlatform(found);
+    if (found) {
+      editorDragMode = 'move';
+      editorDragStart = { mouseX: wx, mouseY: wy, origX: found.x, origY: found.y, origW: found.w, origH: found.h };
+    }
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isEditorMode) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+    const wx = camera.x + mx;
+    const wy = camera.y + my;
+
+    const posXEl = document.getElementById('ed-pos-x');
+    const posYEl = document.getElementById('ed-pos-y');
+    if (posXEl) posXEl.textContent = Math.round(wx);
+    if (posYEl) posYEl.textContent = Math.round(wy);
+
+    if (!editorDragMode) return;
+
+    if (editorDragMode === 'pan') {
+      const dx = (e.clientX - editorDragStart.mouseX) * 1.5;
+      camera.x = Math.max(0, Math.min(MAP_WIDTH - V_WIDTH, editorDragStart.camX - dx));
+      return;
+    }
+
+    if (!selectedPlatform) return;
+    const p = selectedPlatform;
+    const dx = wx - editorDragStart.mouseX;
+    const dy = wy - editorDragStart.mouseY;
+
+    if (editorDragMode === 'move') {
+      let nx = editorDragStart.origX + dx;
+      let ny = editorDragStart.origY + dy;
+      if (editorSnap > 1) {
+        nx = Math.round(nx / editorSnap) * editorSnap;
+        ny = Math.round(ny / editorSnap) * editorSnap;
+      }
+      p.x = nx;
+      p.y = ny;
+    } else if (editorDragMode === 'se' || editorDragMode === 'e' || editorDragMode === 's') {
+      let nw = Math.max(16, editorDragStart.origW + dx);
+      let nh = Math.max(8, editorDragStart.origH + dy);
+      if (editorSnap > 1) {
+        nw = Math.round(nw / editorSnap) * editorSnap;
+        nh = Math.round(nh / editorSnap) * editorSnap;
+      }
+      if (editorDragMode === 'se' || editorDragMode === 'e') p.w = nw;
+      if (editorDragMode === 'se' || editorDragMode === 's') p.h = nh;
+    }
+
+    const ix = document.getElementById('insp-x');
+    const iy = document.getElementById('insp-y');
+    const iw = document.getElementById('insp-w');
+    const ih = document.getElementById('insp-h');
+    if (ix) ix.value = Math.round(p.x);
+    if (iy) iy.value = Math.round(p.y);
+    if (iw) iw.value = Math.round(p.w);
+    if (ih) ih.value = Math.round(p.h);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (editorDragMode && editorDragMode !== 'pan') {
+      saveCustomMap(true);
+    }
+    editorDragMode = null;
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'F2') {
+      e.preventDefault();
+      toggleMapEditor();
+    }
+    if (isEditorMode) {
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
+          e.preventDefault();
+          editorDeleteSelected();
+        }
+      } else if (e.ctrlKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        editorDuplicateSelected();
+      } else if (e.key === 'Escape') {
+        selectPlatform(null);
+      }
+    }
+  });
 }
 
 // Initialize Mobile Controls and DOM Ready
@@ -14411,3 +15150,4 @@ window.addEventListener('DOMContentLoaded', () => {
   updateHeroHudInfo();
   requestAnimationFrame(gameLoop);
 });
+

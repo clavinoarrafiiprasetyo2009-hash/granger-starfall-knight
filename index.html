@@ -91,6 +91,10 @@
 
       <!-- Right Score & In-game Menu Controls -->
       <div style="display: flex; gap: 8px; pointer-events: auto; align-items: center;">
+        <button id="builder-btn" onclick="toggleMapEditor()" class="score-badge btn-clickable" style="border-color: #f59e0b; color: #fbbf24;" title="Buka Unity-Style World & Terrain Builder [F2]">
+          <i data-lucide="wrench" style="width: 14px; height: 14px;"></i>
+          <span>BUILDER [F2]</span>
+        </button>
         <button id="pause-btn" onclick="openPauseMenu()" class="score-badge btn-clickable" title="Pause / Menu">
           <i data-lucide="pause" style="width: 14px; height: 14px;"></i>
           <span>MENU</span>
@@ -512,6 +516,98 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- UNITY-STYLE WORLD & TERRAIN MAP BUILDER OVERLAY (TOGGLE [F2])  -->
+    <!-- ============================================================== -->
+    <div id="unity-map-editor-overlay" class="hidden" style="position: absolute; inset: 0; z-index: 100; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Rajdhani', sans-serif;">
+      
+      <!-- TOP TOOLBAR -->
+      <div style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border-bottom: 2px solid #334155; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; pointer-events: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="background: #f59e0b; color: #000; font-weight: 800; font-size: 11px; padding: 4px 8px; border-radius: 4px; letter-spacing: 1px;">
+            🛠️ WORLD BUILDER
+          </div>
+          <span style="color: #cbd5e1; font-size: 13px; font-weight: 600;">THE RONIN // 17,000PX UNIFIED WORLD</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button id="ed-btn-snap" onclick="toggleEditorSnap()" class="score-badge btn-clickable" style="background: #1e293b; color: #e2e8f0; border-color: #475569;" title="Toggle Grid Snapping">
+            <span>📐 SNAP: <b id="ed-snap-text" style="color: #38bdf8;">20px</b></span>
+          </button>
+          <button onclick="editorDuplicateSelected()" class="score-badge btn-clickable" style="background: #1e293b; color: #e2e8f0; border-color: #475569;" title="Duplikat Platform [Ctrl+D]">
+            <span>⧉ DUPLIKAT</span>
+          </button>
+          <button onclick="editorDeleteSelected()" class="score-badge btn-clickable" style="background: #1e293b; color: #f87171; border-color: #ef4444;" title="Hapus Platform [Del]">
+            <span>🗑 HAPUS</span>
+          </button>
+          <button onclick="saveCustomMap()" class="score-badge btn-clickable" style="background: #047857; color: #fff; border-color: #10b981;" title="Simpan ke Browser">
+            <span>💾 SIMPAN MAP</span>
+          </button>
+          <button onclick="exportMapJSON()" class="score-badge btn-clickable" style="background: #1e293b; color: #cbd5e1; border-color: #475569;" title="Download File JSON">
+            <span>⬇ EXPORT</span>
+          </button>
+          <button onclick="resetDefaultMap()" class="score-badge btn-clickable" style="background: #1e293b; color: #94a3b8; border-color: #334155;" title="Kembali ke Map Bawaan">
+            <span>↺ RESET</span>
+          </button>
+          <button onclick="toggleMapEditor()" class="score-badge btn-clickable" style="background: #f59e0b; color: #000; font-weight: 700; border-color: #fbbf24;" title="Tutup Editor & Coba Mainkan [F2]">
+            <span>▶ TEST PLAY [F2]</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MIDDLE WORKSPACE (PALETTE ON LEFT, INSPECTOR ON RIGHT) -->
+      <div style="flex: 1; display: flex; justify-content: space-between; padding: 12px; pointer-events: none; overflow: hidden;">
+        
+        <!-- LEFT ASSET DRAWER / PALETTE -->
+        <div style="width: 250px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); border: 1px solid #334155; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; pointer-events: auto; max-height: calc(100vh - 120px); box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+          <div style="font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span>KATALOG TILESET & ASSET</span>
+            <span style="font-size: 9px; color: #94a3b8;">KLIK UNTUK SPAWN</span>
+          </div>
+
+          <!-- Tabs -->
+          <div style="display: flex; gap: 4px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px;">
+            <button onclick="switchPaletteTab('ground')" id="tab-ground" class="score-badge btn-clickable" style="padding: 3px 6px; font-size: 10px; background: #334155; color: #fff;">🏔️ TANAH</button>
+            <button onclick="switchPaletteTab('cliff')" id="tab-cliff" class="score-badge btn-clickable" style="padding: 3px 6px; font-size: 10px; background: #1e293b; color: #94a3b8;">🧗 TEBING</button>
+            <button onclick="switchPaletteTab('island')" id="tab-island" class="score-badge btn-clickable" style="padding: 3px 6px; font-size: 10px; background: #1e293b; color: #94a3b8;">🏝️ PULAU</button>
+            <button onclick="switchPaletteTab('props')" id="tab-props" class="score-badge btn-clickable" style="padding: 3px 6px; font-size: 10px; background: #1e293b; color: #94a3b8;">⛩️ PROPS</button>
+          </div>
+
+          <!-- Items Scroll Area -->
+          <div id="palette-items-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+
+        <!-- RIGHT INSPECTOR PANEL -->
+        <div id="editor-inspector-panel" style="width: 250px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px); border: 1px solid #334155; border-radius: 8px; padding: 12px; pointer-events: auto; max-height: calc(100vh - 120px); overflow-y: auto; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+          <div style="font-size: 11px; font-weight: 800; color: #38bdf8; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px;">
+            INSPECTOR // PROPERTI OBJEK
+          </div>
+
+          <div id="inspector-content">
+            <div style="color: #64748b; font-size: 12px; text-align: center; padding: 24px 0;">
+              Klik platform atau objek di layar untuk mengedit posisi & ukurannya.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM STATUS BAR -->
+      <div style="background: rgba(15, 23, 42, 0.95); border-top: 1px solid #334155; padding: 6px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #94a3b8; pointer-events: auto;">
+        <div>
+          <span>CURSOR WORLD: <b id="ed-pos-x" style="color: #38bdf8;">0</b>, <b id="ed-pos-y" style="color: #38bdf8;">0</b></span>
+          <span style="margin: 0 8px; color: #475569;">|</span>
+          <span>TERPILIH: <b id="ed-selected-name" style="color: #facc15;">Tidak ada</b></span>
+        </div>
+        <div style="font-size: 10px; color: #64748b;">
+          [Klik Kiri] Pilih/Geser • [Drag Kotak Sudut] Resize • [Klik Kanan / Wheel] Geser Kamera • [F2] Play/Edit
+        </div>
+      </div>
+
     </div>
 
   </div>

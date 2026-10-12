@@ -1,0 +1,1110 @@
+{
+  "sheet": "assets/terrain_ronin_clean.png",
+  "sheet_size": [
+    1536,
+    1024
+  ],
+  "categories": {
+    "1_ground_top": [
+      {
+        "id": "ground_top_left_edge",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_left_edge.png",
+        "bbox": [
+          31,
+          140,
+          97,
+          208
+        ],
+        "w": 66,
+        "h": 68,
+        "description": "Ujung kiri permukaan tanah berumput"
+      },
+      {
+        "id": "ground_top_center_1",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_center_1.png",
+        "bbox": [
+          111,
+          144,
+          175,
+          208
+        ],
+        "w": 64,
+        "h": 64,
+        "description": "Permukaan tanah tengah variasi 1"
+      },
+      {
+        "id": "ground_top_center_2",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_center_2.png",
+        "bbox": [
+          189,
+          142,
+          255,
+          208
+        ],
+        "w": 66,
+        "h": 66,
+        "description": "Permukaan tanah tengah variasi 2"
+      },
+      {
+        "id": "ground_top_right_edge",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_right_edge.png",
+        "bbox": [
+          269,
+          146,
+          335,
+          208
+        ],
+        "w": 66,
+        "h": 62,
+        "description": "Ujung kanan permukaan tanah berumput"
+      },
+      {
+        "id": "ground_top_step_left",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_step_left.png",
+        "bbox": [
+          349,
+          146,
+          415,
+          208
+        ],
+        "w": 66,
+        "h": 62,
+        "description": "Permukaan bertingkat kiri"
+      },
+      {
+        "id": "ground_top_step_right",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_step_right.png",
+        "bbox": [
+          429,
+          144,
+          493,
+          206
+        ],
+        "w": 64,
+        "h": 62,
+        "description": "Permukaan bertingkat kanan"
+      },
+      {
+        "id": "ground_top_slope_45",
+        "file": "assets/new asset/tiles/1_ground_top/ground_top_slope_45.png",
+        "bbox": [
+          507,
+          142,
+          565,
+          206
+        ],
+        "w": 58,
+        "h": 64,
+        "description": "Kemiringan lereng rumput 45 derajat"
+      }
+    ],
+    "2_ground_middle": [
+      {
+        "id": "ground_mid_dirt_plain",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_plain.png",
+        "bbox": [
+          33,
+          220,
+          97,
+          282
+        ],
+        "w": 64,
+        "h": 62,
+        "description": "Tanah tengah cokelat polos"
+      },
+      {
+        "id": "ground_mid_dirt_stones_1",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_stones_1.png",
+        "bbox": [
+          111,
+          220,
+          175,
+          282
+        ],
+        "w": 64,
+        "h": 62,
+        "description": "Tanah tengah dengan kerikil dan batu kecil 1"
+      },
+      {
+        "id": "ground_mid_dirt_stones_2",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_stones_2.png",
+        "bbox": [
+          191,
+          220,
+          255,
+          282
+        ],
+        "w": 64,
+        "h": 62,
+        "description": "Tanah tengah dengan kerikil dan batu kecil 2"
+      },
+      {
+        "id": "ground_mid_dirt_compact",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_compact.png",
+        "bbox": [
+          269,
+          220,
+          335,
+          282
+        ],
+        "w": 66,
+        "h": 62,
+        "description": "Tanah padat tengah"
+      },
+      {
+        "id": "ground_mid_dirt_layer",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_layer.png",
+        "bbox": [
+          349,
+          220,
+          415,
+          282
+        ],
+        "w": 66,
+        "h": 62,
+        "description": "Tanah berlapis tengah"
+      },
+      {
+        "id": "ground_mid_dirt_dark",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_dirt_dark.png",
+        "bbox": [
+          429,
+          220,
+          493,
+          282
+        ],
+        "w": 64,
+        "h": 62,
+        "description": "Tanah transisi ke bawah"
+      },
+      {
+        "id": "ground_mid_slope_sub",
+        "file": "assets/new asset/tiles/2_ground_middle/ground_mid_slope_sub.png",
+        "bbox": [
+          509,
+          220,
+          565,
+          278
+        ],
+        "w": 56,
+        "h": 58,
+        "description": "Sudut dalam tanah miring"
+      }
+    ],
+    "3_ground_bottom": [
+      {
+        "id": "ground_bottom_dark_1",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_dark_1.png",
+        "bbox": [
+          33,
+          296,
+          95,
+          356
+        ],
+        "w": 62,
+        "h": 60,
+        "description": "Tanah dasar gelap bawah tanah 1"
+      },
+      {
+        "id": "ground_bottom_dark_2",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_dark_2.png",
+        "bbox": [
+          113,
+          296,
+          175,
+          356
+        ],
+        "w": 62,
+        "h": 60,
+        "description": "Tanah dasar gelap bawah tanah 2"
+      },
+      {
+        "id": "ground_bottom_rocky_1",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_rocky_1.png",
+        "bbox": [
+          193,
+          296,
+          255,
+          356
+        ],
+        "w": 62,
+        "h": 60,
+        "description": "Tanah dasar berbatu 1"
+      },
+      {
+        "id": "ground_bottom_rocky_2",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_rocky_2.png",
+        "bbox": [
+          273,
+          296,
+          333,
+          356
+        ],
+        "w": 60,
+        "h": 60,
+        "description": "Tanah dasar berbatu 2"
+      },
+      {
+        "id": "ground_bottom_deep_soil",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_deep_soil.png",
+        "bbox": [
+          355,
+          296,
+          411,
+          356
+        ],
+        "w": 56,
+        "h": 60,
+        "description": "Tanah lapisan terdalam"
+      },
+      {
+        "id": "ground_bottom_compact",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_compact.png",
+        "bbox": [
+          433,
+          296,
+          493,
+          356
+        ],
+        "w": 60,
+        "h": 60,
+        "description": "Bongkahan tanah padat bawah"
+      },
+      {
+        "id": "ground_bottom_slope",
+        "file": "assets/new asset/tiles/3_ground_bottom/ground_bottom_slope.png",
+        "bbox": [
+          511,
+          294,
+          565,
+          356
+        ],
+        "w": 54,
+        "h": 62,
+        "description": "Sudut bawah tanah menyempit"
+      }
+    ],
+    "4_cliff_straight": [
+      {
+        "id": "cliff_tall_wall_drop",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_tall_wall_drop.png",
+        "bbox": [
+          31,
+          475,
+          163,
+          719
+        ],
+        "w": 132,
+        "h": 244,
+        "description": "Tebing tegak vertikal tinggi dengan dinding batu"
+      },
+      {
+        "id": "cliff_vertical_drop_mid",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_vertical_drop_mid.png",
+        "bbox": [
+          183,
+          485,
+          265,
+          611
+        ],
+        "w": 82,
+        "h": 126,
+        "description": "Tebing dinding vertikal sedang"
+      },
+      {
+        "id": "cliff_jagged_face_drop",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_jagged_face_drop.png",
+        "bbox": [
+          289,
+          483,
+          383,
+          609
+        ],
+        "w": 94,
+        "h": 126,
+        "description": "Dinding batu tebing bergerigi tajam"
+      },
+      {
+        "id": "cliff_straight_wall_mixed",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_straight_wall_mixed.png",
+        "bbox": [
+          417,
+          503,
+          489,
+          609
+        ],
+        "w": 72,
+        "h": 106,
+        "description": "Dinding tebing campuran tanah dan batu"
+      },
+      {
+        "id": "cliff_thin_spire_wall",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_thin_spire_wall.png",
+        "bbox": [
+          395,
+          539,
+          409,
+          603
+        ],
+        "w": 14,
+        "h": 64,
+        "description": "Pilar batu tebing ramping vertikal"
+      },
+      {
+        "id": "cliff_vertical_moss_drop",
+        "file": "assets/new asset/tiles/4_cliff_straight/cliff_vertical_moss_drop.png",
+        "bbox": [
+          507,
+          531,
+          565,
+          641
+        ],
+        "w": 58,
+        "h": 110,
+        "description": "Dinding tebing dengan lumut gantung"
+      }
+    ],
+    "5_cliff_outer_corners": [
+      {
+        "id": "cliff_corner_outer_top_left",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_top_left.png",
+        "bbox": [
+          1176,
+          136,
+          1246,
+          226
+        ],
+        "w": 70,
+        "h": 90,
+        "description": "Sudut luar kiri atas dengan lumut gantung"
+      },
+      {
+        "id": "cliff_corner_outer_top_right",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_top_right.png",
+        "bbox": [
+          1404,
+          134,
+          1500,
+          224
+        ],
+        "w": 96,
+        "h": 90,
+        "description": "Sudut luar kanan atas dengan lumut gantung"
+      },
+      {
+        "id": "cliff_corner_outer_mid_left",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_mid_left.png",
+        "bbox": [
+          1178,
+          244,
+          1256,
+          344
+        ],
+        "w": 78,
+        "h": 100,
+        "description": "Sudut luar dinding kiri tengah bertingkat"
+      },
+      {
+        "id": "cliff_corner_outer_mid_right",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_mid_right.png",
+        "bbox": [
+          1404,
+          244,
+          1498,
+          338
+        ],
+        "w": 94,
+        "h": 94,
+        "description": "Sudut luar dinding kanan tengah bertingkat"
+      },
+      {
+        "id": "cliff_corner_outer_bot_left",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_bot_left.png",
+        "bbox": [
+          1198,
+          354,
+          1256,
+          426
+        ],
+        "w": 58,
+        "h": 72,
+        "description": "Sudut luar kiri bawah tebing meruncing"
+      },
+      {
+        "id": "cliff_corner_outer_bot_right",
+        "file": "assets/new asset/tiles/5_cliff_outer_corners/cliff_corner_outer_bot_right.png",
+        "bbox": [
+          1424,
+          352,
+          1488,
+          424
+        ],
+        "w": 64,
+        "h": 72,
+        "description": "Sudut luar kanan bawah tebing meruncing"
+      }
+    ],
+    "6_cliff_inner_corners": [
+      {
+        "id": "cliff_corner_inner_top_mid",
+        "file": "assets/new asset/tiles/6_cliff_inner_corners/cliff_corner_inner_top_mid.png",
+        "bbox": [
+          1290,
+          136,
+          1370,
+          228
+        ],
+        "w": 80,
+        "h": 92,
+        "description": "Sudut dalam atas cekungan tebing"
+      },
+      {
+        "id": "cliff_corner_inner_vertical",
+        "file": "assets/new asset/tiles/6_cliff_inner_corners/cliff_corner_inner_vertical.png",
+        "bbox": [
+          1290,
+          244,
+          1368,
+          340
+        ],
+        "w": 78,
+        "h": 96,
+        "description": "Dinding cekungan dalam vertikal"
+      },
+      {
+        "id": "cliff_corner_inner_bottom",
+        "file": "assets/new asset/tiles/6_cliff_inner_corners/cliff_corner_inner_bottom.png",
+        "bbox": [
+          1314,
+          354,
+          1364,
+          420
+        ],
+        "w": 50,
+        "h": 66,
+        "description": "Sudut dalam dasar cekungan tebing"
+      }
+    ],
+    "7_cliff_shapes": [
+      {
+        "id": "cliff_shape_tapering_base_1",
+        "file": "assets/new asset/tiles/7_cliff_shapes/cliff_shape_tapering_base_1.png",
+        "bbox": [
+          189,
+          623,
+          275,
+          719
+        ],
+        "w": 86,
+        "h": 96,
+        "description": "Bagian bawah tebing menyempit ke tengah 1"
+      },
+      {
+        "id": "cliff_shape_tapering_base_2",
+        "file": "assets/new asset/tiles/7_cliff_shapes/cliff_shape_tapering_base_2.png",
+        "bbox": [
+          301,
+          625,
+          377,
+          719
+        ],
+        "w": 76,
+        "h": 94,
+        "description": "Bagian bawah tebing menyempit ke tengah 2"
+      },
+      {
+        "id": "cliff_shape_stepped_ledge",
+        "file": "assets/new asset/tiles/7_cliff_shapes/cliff_shape_stepped_ledge.png",
+        "bbox": [
+          401,
+          625,
+          475,
+          719
+        ],
+        "w": 74,
+        "h": 94,
+        "description": "Tebing bertingkat dengan undakan batu"
+      },
+      {
+        "id": "cliff_shape_narrow_spur",
+        "file": "assets/new asset/tiles/7_cliff_shapes/cliff_shape_narrow_spur.png",
+        "bbox": [
+          501,
+          655,
+          547,
+          719
+        ],
+        "w": 46,
+        "h": 64,
+        "description": "Ujung runcing dasar tebing batu"
+      }
+    ],
+    "8_rocky_ground": [
+      {
+        "id": "rocky_ground_top_flat_1",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_top_flat_1.png",
+        "bbox": [
+          612,
+          481,
+          680,
+          547
+        ],
+        "w": 68,
+        "h": 66,
+        "description": "Tanah berbatu permukaan atas 1"
+      },
+      {
+        "id": "rocky_ground_top_flat_2",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_top_flat_2.png",
+        "bbox": [
+          698,
+          481,
+          774,
+          547
+        ],
+        "w": 76,
+        "h": 66,
+        "description": "Tanah berbatu permukaan atas 2"
+      },
+      {
+        "id": "rocky_ground_top_flat_3",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_top_flat_3.png",
+        "bbox": [
+          794,
+          481,
+          878,
+          547
+        ],
+        "w": 84,
+        "h": 66,
+        "description": "Tanah berbatu permukaan atas 3"
+      },
+      {
+        "id": "rocky_ground_top_slope",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_top_slope.png",
+        "bbox": [
+          896,
+          483,
+          948,
+          547
+        ],
+        "w": 52,
+        "h": 64,
+        "description": "Tanah berbatu kemiringan lereng"
+      },
+      {
+        "id": "rocky_ground_pillar_stone",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_pillar_stone.png",
+        "bbox": [
+          972,
+          477,
+          1010,
+          549
+        ],
+        "w": 38,
+        "h": 72,
+        "description": "Pilar batu tebing berdiri"
+      },
+      {
+        "id": "rocky_ground_mid_block_1",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_mid_block_1.png",
+        "bbox": [
+          616,
+          573,
+          708,
+          637
+        ],
+        "w": 92,
+        "h": 64,
+        "description": "Bongkahan batu besar tengah 1"
+      },
+      {
+        "id": "rocky_ground_mid_block_2",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_mid_block_2.png",
+        "bbox": [
+          730,
+          571,
+          792,
+          637
+        ],
+        "w": 62,
+        "h": 66,
+        "description": "Bongkahan batu besar tengah 2"
+      },
+      {
+        "id": "rocky_ground_mid_boulder",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_mid_boulder.png",
+        "bbox": [
+          816,
+          571,
+          852,
+          617
+        ],
+        "w": 36,
+        "h": 46,
+        "description": "Batu bulat tebing tengah"
+      },
+      {
+        "id": "rocky_ground_angular_rock",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_angular_rock.png",
+        "bbox": [
+          854,
+          573,
+          920,
+          633
+        ],
+        "w": 66,
+        "h": 60,
+        "description": "Batu sudut tajam tengah"
+      },
+      {
+        "id": "rocky_ground_bevel_rock",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_bevel_rock.png",
+        "bbox": [
+          942,
+          575,
+          998,
+          629
+        ],
+        "w": 56,
+        "h": 54,
+        "description": "Batu bersudut runcing"
+      },
+      {
+        "id": "rocky_ground_bot_boulder_1",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_bot_boulder_1.png",
+        "bbox": [
+          616,
+          655,
+          706,
+          725
+        ],
+        "w": 90,
+        "h": 70,
+        "description": "Batu tebing bawah tanah 1"
+      },
+      {
+        "id": "rocky_ground_bot_boulder_2",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_bot_boulder_2.png",
+        "bbox": [
+          724,
+          657,
+          800,
+          725
+        ],
+        "w": 76,
+        "h": 68,
+        "description": "Batu tebing bawah tanah 2"
+      },
+      {
+        "id": "rocky_ground_bot_boulder_3",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_bot_boulder_3.png",
+        "bbox": [
+          924,
+          655,
+          1000,
+          723
+        ],
+        "w": 76,
+        "h": 68,
+        "description": "Batu tebing bawah tanah 3"
+      },
+      {
+        "id": "rocky_ground_bot_boulder_4",
+        "file": "assets/new asset/tiles/8_rocky_ground/rocky_ground_bot_boulder_4.png",
+        "bbox": [
+          828,
+          661,
+          896,
+          723
+        ],
+        "w": 68,
+        "h": 62,
+        "description": "Batu tebing bawah tanah 4"
+      }
+    ],
+    "9_root_variations": [
+      {
+        "id": "root_platform_giant_roots",
+        "file": "assets/new asset/tiles/9_root_variations/root_platform_giant_roots.png",
+        "bbox": [
+          426,
+          784,
+          496,
+          940
+        ],
+        "w": 70,
+        "h": 156,
+        "description": "Platform tanah dengan akar gantung panjang (156px)"
+      },
+      {
+        "id": "root_platform_hanging_roots_2",
+        "file": "assets/new asset/tiles/9_root_variations/root_platform_hanging_roots_2.png",
+        "bbox": [
+          600,
+          786,
+          664,
+          932
+        ],
+        "w": 64,
+        "h": 146,
+        "description": "Platform tanah dengan akar gantung menjuntai (146px)"
+      },
+      {
+        "id": "root_cliff_spire_roots",
+        "file": "assets/new asset/tiles/9_root_variations/root_cliff_spire_roots.png",
+        "bbox": [
+          682,
+          788,
+          714,
+          918
+        ],
+        "w": 32,
+        "h": 130,
+        "description": "Pilar tebing ramping dengan akar melilit (130px)"
+      },
+      {
+        "id": "root_platform_short_roots",
+        "file": "assets/new asset/tiles/9_root_variations/root_platform_short_roots.png",
+        "bbox": [
+          514,
+          786,
+          580,
+          850
+        ],
+        "w": 66,
+        "h": 64,
+        "description": "Platform tanah dengan akar pendek berlumut"
+      },
+      {
+        "id": "root_hanging_clump",
+        "file": "assets/new asset/tiles/9_root_variations/root_hanging_clump.png",
+        "bbox": [
+          524,
+          864,
+          588,
+          936
+        ],
+        "w": 64,
+        "h": 72,
+        "description": "Rumpun akar gantung menggantung di udara"
+      }
+    ],
+    "10_platforms": [
+      {
+        "id": "platform_long_grass_island",
+        "file": "assets/new asset/tiles/10_platforms/platform_long_grass_island.png",
+        "bbox": [
+          610,
+          136,
+          902,
+          192
+        ],
+        "w": 292,
+        "h": 56,
+        "description": "Pulau tanah melayang rumput panjang (292px)"
+      },
+      {
+        "id": "platform_mid_grass_island",
+        "file": "assets/new asset/tiles/10_platforms/platform_mid_grass_island.png",
+        "bbox": [
+          926,
+          142,
+          1036,
+          200
+        ],
+        "w": 110,
+        "h": 58,
+        "description": "Pulau tanah melayang rumput sedang (110px)"
+      },
+      {
+        "id": "platform_small_grass_step_1",
+        "file": "assets/new asset/tiles/10_platforms/platform_small_grass_step_1.png",
+        "bbox": [
+          1058,
+          140,
+          1126,
+          196
+        ],
+        "w": 68,
+        "h": 56,
+        "description": "Batu pijakan melayang rumput kecil (68px)"
+      },
+      {
+        "id": "platform_mid_soil_island",
+        "file": "assets/new asset/tiles/10_platforms/platform_mid_soil_island.png",
+        "bbox": [
+          610,
+          206,
+          852,
+          268
+        ],
+        "w": 242,
+        "h": 62,
+        "description": "Platform tanah lapisan kedua (242px)"
+      },
+      {
+        "id": "platform_mid_step_island",
+        "file": "assets/new asset/tiles/10_platforms/platform_mid_step_island.png",
+        "bbox": [
+          874,
+          226,
+          974,
+          276
+        ],
+        "w": 100,
+        "h": 50,
+        "description": "Platform batu pijakan sedang (100px)"
+      },
+      {
+        "id": "platform_small_stone_step",
+        "file": "assets/new asset/tiles/10_platforms/platform_small_stone_step.png",
+        "bbox": [
+          1000,
+          226,
+          1038,
+          268
+        ],
+        "w": 38,
+        "h": 42,
+        "description": "Pijakan batu melayang micro (38px)"
+      },
+      {
+        "id": "platform_wood_rope_deck_large",
+        "file": "assets/new asset/tiles/10_platforms/platform_wood_rope_deck_large.png",
+        "bbox": [
+          610,
+          288,
+          850,
+          352
+        ],
+        "w": 240,
+        "h": 64,
+        "description": "Platform balok kayu bertali dan pasak desa (240px)"
+      },
+      {
+        "id": "platform_wood_beam_deck_mid",
+        "file": "assets/new asset/tiles/10_platforms/platform_wood_beam_deck_mid.png",
+        "bbox": [
+          612,
+          356,
+          770,
+          420
+        ],
+        "w": 158,
+        "h": 64,
+        "description": "Platform balok kayu desa sedang (158px)"
+      },
+      {
+        "id": "platform_hanging_ledge_1",
+        "file": "assets/new asset/tiles/10_platforms/platform_hanging_ledge_1.png",
+        "bbox": [
+          876,
+          296,
+          980,
+          348
+        ],
+        "w": 104,
+        "h": 52,
+        "description": "Tepian batu gantung berlumut (104px)"
+      },
+      {
+        "id": "platform_floating_stone_isle",
+        "file": "assets/new asset/tiles/10_platforms/platform_floating_stone_isle.png",
+        "bbox": [
+          1068,
+          300,
+          1120,
+          368
+        ],
+        "w": 52,
+        "h": 68,
+        "description": "Pulau batu gantung tebing"
+      }
+    ],
+    "11_ruined_ground": [
+      {
+        "id": "ruined_rubble_pile_1",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_rubble_pile_1.png",
+        "bbox": [
+          1058,
+          479,
+          1142,
+          531
+        ],
+        "w": 84,
+        "h": 52,
+        "description": "Tumpukan puing batu runtuh desa 1"
+      },
+      {
+        "id": "ruined_stone_pillars",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_stone_pillars.png",
+        "bbox": [
+          1252,
+          475,
+          1326,
+          535
+        ],
+        "w": 74,
+        "h": 60,
+        "description": "Pilar batu kuno runtuh"
+      },
+      {
+        "id": "ruined_tree_stump_cliff",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_tree_stump_cliff.png",
+        "bbox": [
+          1346,
+          475,
+          1432,
+          533
+        ],
+        "w": 86,
+        "h": 58,
+        "description": "Tunggul pohon tua di atas batu"
+      },
+      {
+        "id": "ruined_stone_spires",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_stone_spires.png",
+        "bbox": [
+          1448,
+          471,
+          1502,
+          531
+        ],
+        "w": 54,
+        "h": 60,
+        "description": "Menara batu runcing bertingkat"
+      },
+      {
+        "id": "ruined_wall_block",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_wall_block.png",
+        "bbox": [
+          1158,
+          483,
+          1234,
+          533
+        ],
+        "w": 76,
+        "h": 50,
+        "description": "Puing dinding batu runtuh"
+      },
+      {
+        "id": "ruined_ground_flat_1",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_ground_flat_1.png",
+        "bbox": [
+          1058,
+          553,
+          1146,
+          597
+        ],
+        "w": 88,
+        "h": 44,
+        "description": "Permukaan tanah runtuh 1"
+      },
+      {
+        "id": "ruined_ground_flat_2",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_ground_flat_2.png",
+        "bbox": [
+          1200,
+          551,
+          1268,
+          597
+        ],
+        "w": 68,
+        "h": 46,
+        "description": "Permukaan tanah runtuh 2"
+      },
+      {
+        "id": "ruined_ground_flat_3",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_ground_flat_3.png",
+        "bbox": [
+          1286,
+          551,
+          1354,
+          597
+        ],
+        "w": 68,
+        "h": 46,
+        "description": "Permukaan tanah runtuh 3"
+      },
+      {
+        "id": "ruined_long_embankment",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_long_embankment.png",
+        "bbox": [
+          1368,
+          547,
+          1492,
+          597
+        ],
+        "w": 124,
+        "h": 50,
+        "description": "Tanggul puing batu panjang (124px)"
+      },
+      {
+        "id": "ruined_mound_wide",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_mound_wide.png",
+        "bbox": [
+          1060,
+          621,
+          1160,
+          669
+        ],
+        "w": 100,
+        "h": 48,
+        "description": "Gundukan tanah dan batu runtuh lebar"
+      },
+      {
+        "id": "ruined_mound_block_1",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_mound_block_1.png",
+        "bbox": [
+          1176,
+          621,
+          1232,
+          671
+        ],
+        "w": 56,
+        "h": 50,
+        "description": "Bongkahan batu runtuh 1"
+      },
+      {
+        "id": "ruined_mound_block_2",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_mound_block_2.png",
+        "bbox": [
+          1248,
+          625,
+          1304,
+          671
+        ],
+        "w": 56,
+        "h": 46,
+        "description": "Bongkahan batu runtuh 2"
+      },
+      {
+        "id": "ruined_mound_block_3",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_mound_block_3.png",
+        "bbox": [
+          1320,
+          621,
+          1370,
+          671
+        ],
+        "w": 50,
+        "h": 50,
+        "description": "Bongkahan batu runtuh 3"
+      },
+      {
+        "id": "ruined_mound_wide_2",
+        "file": "assets/new asset/tiles/11_ruined_ground/ruined_mound_wide_2.png",
+        "bbox": [
+          1394,
+          621,
+          1494,
+          671
+        ],
+        "w": 100,
+        "h": 50,
+        "description": "Gundukan batu bertingkat lebar"
+      }
+    ]
+  }
+}
